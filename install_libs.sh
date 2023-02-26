@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PROJECT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 TF_DIR=${PROJECT_DIR}/../tensorflow
-BLOBS_DIR=$HOME/Library/Containers/ai.solipsis.Solipsis/Data/blobs
+BLOBS_DIR=$HOME/Library/Containers/ai.solipsis.Diarist/Data/blobs
 TFLITE_IOS_DIR=$PROJECT_DIR/ios/.symlinks/plugins/tflite_flutter/ios
 
 BAZEL_VERSION=5.0.0
