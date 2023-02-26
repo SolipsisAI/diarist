@@ -1,6 +1,6 @@
 {
-    "name": "solipsis_chat",
-    "short_name": "solipsis_chat",
+    "name": "diarist",
+    "short_name": "diarist",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
