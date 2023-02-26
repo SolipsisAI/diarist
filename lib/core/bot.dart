@@ -3,13 +3,17 @@ import 'package:text_classifiers/text_classifiers.dart';
 import 'response.dart';
 
 class ChatBot {
+  late int emotionAddress;
+  late int sentimentAddress;
+
   late EmotionClassifier emotionClassifier;
   late SentimentClassifier sentimentClassifier;
 
-  ChatBot() {
+  ChatBot({this.emotionAddress = -1, this.sentimentAddress = -1}) {
     // Initialize classifiers
-    emotionClassifier = EmotionClassifier();
-    sentimentClassifier = SentimentClassifier();
+    emotionClassifier = EmotionClassifier(interpreterAddress: emotionAddress);
+    sentimentClassifier =
+        SentimentClassifier(interpreterAddress: sentimentAddress);
   }
 
   Future<ChatResponse> handleMessage(String rawText) async {
