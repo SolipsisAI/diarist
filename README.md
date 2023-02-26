@@ -1,8 +1,8 @@
-# diarist
+# solipsis_chat
 
 This is the Flutter app for Solipsis.
 
-- [solipsis\_chat](#diarist)
+- [solipsis\_chat](#solipsis_chat)
 - [Development](#development)
   - [Pre-requisites](#pre-requisites)
   - [Automated Setup](#automated-setup)
@@ -32,7 +32,7 @@ This is the Flutter app for Solipsis.
 ```shell
 # Clone the `flutter_chat_ui` fork I created and this repo to the same directory.
 git clone -b typing_indicator git@github.com:bitjockey42/flutter_chat_ui.git
-git clone git@github.com:SolipsisAI/diarist.git
+git clone git@github.com:SolipsisAI/solipsis_chat.git
 
 # Clone the `text_classifiers`
 git clone git@github.com:SolipsisAI/text_classifiers_flutter.git
@@ -41,7 +41,7 @@ git clone git@github.com:SolipsisAI/text_classifiers_flutter.git
 git clone git@github.com:SolipsisAI/tflite_flutter_plugin.git
 
 # Get dependencies
-cd diarist
+cd solipsis_chat
 flutter pub get
 ```
 

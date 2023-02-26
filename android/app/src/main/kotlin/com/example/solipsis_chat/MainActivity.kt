@@ -1,4 +1,4 @@
-package com.example.diarist
+package com.example.solipsis_chat
 
 import io.flutter.embedding.android.FlutterActivity
 

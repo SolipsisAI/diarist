@@ -1,13 +1,13 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
 AppDir:
-  path: /home/bitjockey/Projects/SolipsisAI/diarist/AppDir
+  path: /home/bitjockey/Projects/SolipsisAI/solipsis_chat/AppDir
   app_info:
     id: ai.solipsis.SolipsisChat
     name: Solipsis
     icon: application-vnd.appimage
     version: latest
-    exec: diarist
+    exec: solipsis_chat
     exec_args: $@
   apt:
     arch:
