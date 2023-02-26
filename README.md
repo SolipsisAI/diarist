@@ -2,7 +2,7 @@
 
 This is the Flutter app for Diarist.
 
-- [solipsis\_chat](#diarist)
+- [diarist](#diarist)
 - [Development](#development)
   - [Pre-requisites](#pre-requisites)
   - [Automated Setup](#automated-setup)
@@ -161,7 +161,7 @@ Building an AppImage.
 See https://bitjockey.space/Building-Flutter-apps-for-distribution#build-1.
 
 ```shell
-flutter build linux --release -v
+flutter build linux -v  # passing --release for some reason excludes the assets
 cp -r build/linux/x64/release/bundle $PWD/AppDir  # where $PWD is this root repo
 appimage-builder --recipe AppImageBuilder.yml
 ```
