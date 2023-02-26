@@ -1,4 +1,7 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -8,11 +11,18 @@ import 'models/chat_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
+  Isolate.spawn(isolateMain, rootIsolateToken);
   runApp(Diarist(isar: _isar, chatMessages: chatMessages));
+}
+
+void isolateMain(RootIsolateToken rootIsolateToken) async {
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+  print("isolate main");
 }
 
 class Diarist extends StatelessWidget {
