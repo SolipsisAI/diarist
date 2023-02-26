@@ -1,4 +1,4 @@
-name: solipsis_chat
+name: diarist
 description: Take down notes like you're talking to someone.
 
 # The following line prevents the package from being accidentally published to
@@ -68,7 +68,7 @@ dev_dependencies:
 flutter_icons:
   android: false
   ios: true
-  image_path: "assets/images/SolipsisChatIcon-1024.png"
+  image_path: "assets/images/DiaristChatIcon-1024.png"
   remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the

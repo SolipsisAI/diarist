@@ -12,11 +12,11 @@ void main() async {
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
-  runApp(SolipsisChat(isar: _isar, chatMessages: chatMessages));
+  runApp(Diarist(isar: _isar, chatMessages: chatMessages));
 }
 
-class SolipsisChat extends StatelessWidget {
-  const SolipsisChat({Key? key, required this.isar, required this.chatMessages})
+class Diarist extends StatelessWidget {
+  const Diarist({Key? key, required this.isar, required this.chatMessages})
       : super(key: key);
 
   final Isar isar;
@@ -33,7 +33,7 @@ class SolipsisChat extends StatelessWidget {
           }
         },
         child: MaterialApp(
-          title: 'SolipsisChat',
+          title: 'Diarist',
           home: ChatScreen(isar: isar, chatMessages: chatMessages),
         ));
   }

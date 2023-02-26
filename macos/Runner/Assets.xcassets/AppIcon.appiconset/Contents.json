@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "SolipsisChatIcon-520.png",
+      "filename" : "DiaristIcon-520.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "SolipsisChatIcon-519.png",
+      "filename" : "DiaristIcon-519.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "SolipsisChatIcon-518.png",
+      "filename" : "DiaristIcon-518.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "SolipsisChatIcon-517.png",
+      "filename" : "DiaristIcon-517.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "SolipsisChatIcon-515.png",
+      "filename" : "DiaristIcon-515.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "SolipsisChatIcon-516.png",
+      "filename" : "DiaristIcon-516.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "SolipsisChatIcon-514.png",
+      "filename" : "DiaristIcon-514.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "SolipsisChatIcon-513.png",
+      "filename" : "DiaristIcon-513.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "SolipsisChatIcon-512.png",
+      "filename" : "DiaristIcon-512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "SolipsisChatIcon-1024.png",
+      "filename" : "DiaristIcon-1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
