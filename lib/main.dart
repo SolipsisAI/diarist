@@ -23,19 +23,14 @@ void main() async {
   // Load interpreters
   final Interpreter emotionInterpreter =
       await Interpreter.fromAsset('models/emotion_classification.tflite');
-  final Interpreter sentimentInterpreter =
-      await Interpreter.fromAsset('models/sentiment_classification.tflite');
   final Map<String, int> interpreters = {
     'emotion': emotionInterpreter.address,
-    'sentiment': sentimentInterpreter.address
   };
 
   // Load vocab
   final vocab = <String, dynamic>{};
   final emoVocab = await loadVocab('emotion_classification.vocab.txt');
-  final sentVocab = await loadVocab('sentiment_classification.vocab.txt');
   vocab['emotion'] = emoVocab;
-  vocab['sentiment'] = sentVocab;
 
   // Initialize Isolate
   RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
