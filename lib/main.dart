@@ -20,6 +20,16 @@ void main() async {
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
 
+  // Load interpreters
+  final Interpreter emotionInterpreter =
+      await Interpreter.fromAsset('models/emotion_classification.tflite');
+  final Interpreter sentimentInterpreter =
+      await Interpreter.fromAsset('models/sentiment_classification.tflite');
+  final Map<String, int> interpreters = {
+    'emotion': emotionInterpreter.address,
+    'sentiment': sentimentInterpreter.address
+  };
+
   // Load vocab
   final vocab = <String, dynamic>{};
   final emoVocab = await loadVocab('emotion_classification.vocab.txt');
@@ -30,18 +40,6 @@ void main() async {
   // Initialize Isolate
   RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
   ReceivePort rootIsolatePort = ReceivePort();
-
-  Isolate.spawn(_isolateMain, [
-    rootIsolateToken,
-    rootIsolatePort.sendPort,
-  ]);
-
-  late Map<String, int> interpreters;
-  rootIsolatePort.listen((message) {
-    interpreters = message;
-  });
-
-  // Initialize IsolateUtils
   final IsolateUtils isolateUtils = IsolateUtils();
   await isolateUtils.start(rootIsolateToken, rootIsolatePort);
 
@@ -52,22 +50,6 @@ void main() async {
     vocab: vocab,
     isolateUtils: isolateUtils,
   ));
-}
-
-void _isolateMain(List<dynamic> args) async {
-  RootIsolateToken rootIsolateToken = args[0];
-  SendPort port = args[1];
-
-  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-  final Interpreter emotionInterpreter =
-      await Interpreter.fromAsset('models/emotion_classification.tflite');
-  final Interpreter sentimentInterpreter =
-      await Interpreter.fromAsset('models/sentiment_classification.tflite');
-
-  port.send({
-    'emotion': emotionInterpreter.address,
-    'sentiment': sentimentInterpreter.address
-  });
 }
 
 class Diarist extends StatelessWidget {
