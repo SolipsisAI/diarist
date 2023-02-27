@@ -27,12 +27,6 @@ simulator:
 run-ios: simulator
 	@fvm flutter run -d 'iphone 11'
 
-run-macos:
-	@fvm flutter run -d macos -v
-
-run-linux:
-	@fvm flutter run -d linux -v
-
 run:
 	@fvm flutter run -d $(target) -v
 
