@@ -57,8 +57,8 @@ class _ChatScreenState extends State<ChatScreen> {
     Isolate.spawn(_isolateMain, [
       rootIsolateToken,
       rootIsolatePort.sendPort,
-      chatBot.emotionAddress,
-      chatBot.sentimentAddress
+      chatBot.emotionClassifier,
+      chatBot.sentimentClassifier,
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -78,8 +78,8 @@ class _ChatScreenState extends State<ChatScreen> {
   static void _isolateMain(List<dynamic> args) async {
     RootIsolateToken rootIsolateToken = args[0];
     SendPort port = args[1];
-    int emotionAddress = args[2];
-    int sentimentAddress = args[3];
+    int emotionAddress = args[2].interpreter.address;
+    int sentimentAddress = args[3].interpreter.address;
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
     print('!!!!!!!!! EMOTION $emotionAddress');
   }

@@ -12,10 +12,8 @@ class ChatBot {
   ChatBot({this.emotionAddress = -1, this.sentimentAddress = -1}) {
     // Initialize classifiers
     emotionClassifier = EmotionClassifier(interpreterAddress: emotionAddress);
-    emotionAddress = emotionClassifier.interpreter.address;
     sentimentClassifier =
         SentimentClassifier(interpreterAddress: sentimentAddress);
-    sentimentAddress = sentimentClassifier.interpreter.address;
   }
 
   Future<ChatResponse> handleMessage(String rawText) async {
