@@ -25,13 +25,15 @@ class ChatScreen extends StatefulWidget {
       required this.isar,
       required this.chatMessages,
       required this.interpreters,
-      required this.vocab})
+      required this.vocab,
+      required this.isolateUtils})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
+  final IsolateUtils isolateUtils;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -53,7 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
   late Stream<void> messagesUpdated;
 
   late ChatBot chatBot;
-  late IsolateUtils isolateUtils;
 
   @override
   void initState() {
@@ -63,15 +64,15 @@ class _ChatScreenState extends State<ChatScreen> {
         emotionAddress: widget.interpreters['emotion'],
         sentimentAddress: widget.interpreters['sentiment']);
 
-    // Initialize isolates
-    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-    ReceivePort rootIsolatePort = ReceivePort();
+    // // Initialize isolates
+    // RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    // ReceivePort rootIsolatePort = ReceivePort();
 
-    isolateUtils.start(rootIsolateToken, rootIsolatePort);
+    // isolateUtils.start(rootIsolateToken, rootIsolatePort);
 
-    rootIsolatePort.listen((message) {
-      // TODO: Send response
-    });
+    // rootIsolatePort.listen((message) {
+    //   // TODO: Send response
+    // });
 
     // Initialize messages
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -106,7 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<Map<String, dynamic>> inference(IsolateData isolateData) async {
     ReceivePort responsePort = ReceivePort();
-    isolateUtils.sendPort
+    widget.isolateUtils.sendPort
         .send(isolateData..responsePort = responsePort.sendPort);
     var results = await responsePort.first;
     return results;

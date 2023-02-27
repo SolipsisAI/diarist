@@ -1,5 +1,8 @@
+import 'dart:isolate';
+
 import 'package:diarist/core/bot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:text_classifiers/text_classifiers.dart';
@@ -8,6 +11,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'chat_screen.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
+import 'utils/isolate_utils.dart';
 import 'utils.dart';
 
 void main() async {
@@ -35,11 +39,18 @@ void main() async {
   vocab['emotion'] = emoVocab;
   vocab['sentiment'] = sentVocab;
 
+  // Initialize Isolate
+  RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+  ReceivePort rootIsolatePort = ReceivePort();
+  final IsolateUtils isolateUtils = IsolateUtils();
+  await isolateUtils.start(rootIsolateToken, rootIsolatePort);
+
   runApp(Diarist(
     isar: _isar,
     chatMessages: chatMessages,
     interpreters: interpreters,
     vocab: vocab,
+    isolateUtils: isolateUtils,
   ));
 }
 
@@ -49,13 +60,15 @@ class Diarist extends StatelessWidget {
       required this.isar,
       required this.chatMessages,
       required this.interpreters,
-      required this.vocab})
+      required this.vocab,
+      required this.isolateUtils})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
+  final IsolateUtils isolateUtils;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +86,8 @@ class Diarist extends StatelessWidget {
               isar: isar,
               chatMessages: chatMessages,
               interpreters: interpreters,
-              vocab: vocab),
+              vocab: vocab,
+              isolateUtils: isolateUtils),
         ));
   }
 }
