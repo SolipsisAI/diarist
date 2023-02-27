@@ -432,7 +432,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--options=runtime";
 				PRODUCT_BUNDLE_IDENTIFIER = ai.solipsis.Diarist;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -562,7 +561,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--options=runtime";
 				PRODUCT_BUNDLE_IDENTIFIER = ai.solipsis.Diarist;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -586,7 +584,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--options=runtime";
 				PRODUCT_BUNDLE_IDENTIFIER = ai.solipsis.Diarist;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
