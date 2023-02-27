@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:developer' as logger;
 import 'dart:convert';
 import 'dart:isolate';
+import 'package:diarist/utils/isolate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -51,9 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late Stream<void> messagesUpdated;
 
-  Isolate? _channelIsolate;
-
   late ChatBot chatBot;
+  late IsolateUtils isolateUtils;
 
   @override
   void initState() {
@@ -63,19 +63,17 @@ class _ChatScreenState extends State<ChatScreen> {
         emotionAddress: widget.interpreters['emotion'],
         sentimentAddress: widget.interpreters['sentiment']);
 
+    // Initialize isolates
     RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
     ReceivePort rootIsolatePort = ReceivePort();
-    Isolate.spawn(_isolateMain, [
-      rootIsolateToken,
-      rootIsolatePort.sendPort,
-      widget.interpreters['emotion'],
-      widget.interpreters['sentiment'],
-    ]).then((value) => _channelIsolate = value);
+
+    isolateUtils.start(rootIsolateToken, rootIsolatePort);
 
     rootIsolatePort.listen((message) {
-      debugPrint('EMO ${message["emo"]}');
+      // TODO: Send response
     });
 
+    // Initialize messages
     for (var i = 0; i < widget.chatMessages.length; i++) {
       setState(() {
         _messages.insert(
@@ -91,34 +89,27 @@ class _ChatScreenState extends State<ChatScreen> {
     initStateAsync();
   }
 
-  static void _isolateMain(List<dynamic> args) async {
-    RootIsolateToken rootIsolateToken = args[0];
-    SendPort port = args[1];
-    int emotionAddress = args[2];
-    int sentimentAddress = args[3];
-
-    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-    final Interpreter emotionInterpreter =
-        Interpreter.fromAddress(emotionAddress);
-    final Interpreter sentimentInterpreter =
-        Interpreter.fromAddress(sentimentAddress);
-
-    port.send({
-      'emo': emotionInterpreter.address,
-      'sent': sentimentInterpreter.address
-    });
-  }
-
   void initStateAsync() async {
     messagesUpdated = widget.isar.chatMessages.watchLazy();
 
-    messagesUpdated.listen((event) {
-      print('messages added');
-      if (_userMessages.isNotEmpty && !_userIsTyping) {
+    messagesUpdated.listen((event) async {
+      if (_userMessages.isNotEmpty) {
         final rawText = _userMessages.last;
-        _debouncer.run(() => _handleBotResponse(rawText));
+        final IsolateData isolateData = IsolateData(
+            rawText, widget.interpreters['emotion']!, widget.vocab['emotion']);
+        print('rawText: $rawText');
+        final result = await inference(isolateData);
+        print(result);
       }
     });
+  }
+
+  Future<Map<String, dynamic>> inference(IsolateData isolateData) async {
+    ReceivePort responsePort = ReceivePort();
+    isolateUtils.sendPort
+        .send(isolateData..responsePort = responsePort.sendPort);
+    var results = await responsePort.first;
+    return results;
   }
 
   void _handleUserTyping(String text) {
