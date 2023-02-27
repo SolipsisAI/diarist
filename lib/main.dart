@@ -22,7 +22,7 @@ void main() async {
       await Interpreter.fromAsset('models/emotion_classification.tflite');
   final Interpreter sentimentInterpreter =
       await Interpreter.fromAsset('models/sentiment_classification.tflite');
-  final Map<String, int> classifiers = {
+  final Map<String, int> interpreters = {
     'emotion': emotionInterpreter.address,
     'sentiment': sentimentInterpreter.address
   };
@@ -30,7 +30,7 @@ void main() async {
   runApp(Diarist(
     isar: _isar,
     chatMessages: chatMessages,
-    classifiers: classifiers,
+    interpreters: interpreters,
   ));
 }
 
@@ -39,12 +39,12 @@ class Diarist extends StatelessWidget {
       {Key? key,
       required this.isar,
       required this.chatMessages,
-      required this.classifiers})
+      required this.interpreters})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
-  final Map<String, int> classifiers;
+  final Map<String, int> interpreters;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,9 @@ class Diarist extends StatelessWidget {
         child: MaterialApp(
           title: 'Diarist',
           home: ChatScreen(
-              isar: isar, chatMessages: chatMessages, classifiers: classifiers),
+              isar: isar,
+              chatMessages: chatMessages,
+              interpreters: interpreters),
         ));
   }
 }

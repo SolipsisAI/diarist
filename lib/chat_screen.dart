@@ -23,12 +23,12 @@ class ChatScreen extends StatefulWidget {
       {Key? key,
       required this.isar,
       required this.chatMessages,
-      required this.classifiers})
+      required this.interpreters})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
-  final Map<String, int> classifiers;
+  final Map<String, int> interpreters;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -58,16 +58,16 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
 
     chatBot = ChatBot(
-        emotionAddress: widget.classifiers['emotion'],
-        sentimentAddress: widget.classifiers['sentiment']);
+        emotionAddress: widget.interpreters['emotion'],
+        sentimentAddress: widget.interpreters['sentiment']);
 
     RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
     ReceivePort rootIsolatePort = ReceivePort();
     Isolate.spawn(_isolateMain, [
       rootIsolateToken,
       rootIsolatePort.sendPort,
-      widget.classifiers['emotion'],
-      widget.classifiers['sentiment'],
+      widget.interpreters['emotion'],
+      widget.interpreters['sentiment'],
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {
