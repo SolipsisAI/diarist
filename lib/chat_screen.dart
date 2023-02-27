@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:core';
 import 'dart:developer' as logger;
 import 'dart:convert';
+import 'dart:isolate';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:bubble/bubble.dart';
@@ -42,9 +44,17 @@ class _ChatScreenState extends State<ChatScreen> {
   late ChatBot chatBot;
   late Stream<void> messagesUpdated;
 
+  Isolate? _channelIsolate;
+
   @override
   void initState() {
     super.initState();
+
+    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    ReceivePort rootIsolatePort = ReceivePort();
+    Isolate.spawn(_isolateMain, [rootIsolateToken, rootIsolatePort.sendPort])
+        .then((value) => _channelIsolate = value);
+
     chatBot = ChatBot();
     for (var i = 0; i < widget.chatMessages.length; i++) {
       setState(() {
@@ -58,6 +68,12 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
     initStateAsync();
+  }
+
+  static void _isolateMain(List<dynamic> args) async {
+    RootIsolateToken rootIsolateToken = args[0];
+    SendPort port = args[1];
+    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
   }
 
   void initStateAsync() async {
