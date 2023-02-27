@@ -7,6 +7,12 @@ TIMESTAMP=$(shell date --iso=seconds)
 ARCHIVE_DIR=$(TMP_DIR)/$(TIMESTAMP)
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 
+ifeq ($(OS_NAME),darwin)
+  target=macos
+else
+  target=linux
+endif
+
 os:
 	@echo $(OS_NAME)
 
@@ -26,6 +32,9 @@ run-macos:
 
 run-linux:
 	@fvm flutter run -d linux -v
+
+run:
+	@fvm flutter run -d $(target) -v
 
 devices:
 	@fvm flutter devices
