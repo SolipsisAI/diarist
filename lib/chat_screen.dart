@@ -153,7 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     final String rawText = _userMessages.last;
-    final ChatResponse response = await chatBot.handleMessage(rawText);
+    final ChatResponse response = await widget.chatBot.handleMessage(rawText);
     final types.TextMessage message = types.TextMessage(
         id: randomString(),
         author: _bot,
