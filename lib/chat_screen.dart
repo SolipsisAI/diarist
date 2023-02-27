@@ -54,25 +54,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late Stream<void> messagesUpdated;
 
-  late ChatBot chatBot;
-
   @override
   void initState() {
     super.initState();
-
-    chatBot = ChatBot(
-        emotionAddress: widget.interpreters['emotion'],
-        sentimentAddress: widget.interpreters['sentiment']);
-
-    // // Initialize isolates
-    // RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-    // ReceivePort rootIsolatePort = ReceivePort();
-
-    // isolateUtils.start(rootIsolateToken, rootIsolatePort);
-
-    // rootIsolatePort.listen((message) {
-    //   // TODO: Send response
-    // });
 
     // Initialize messages
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -98,10 +82,24 @@ class _ChatScreenState extends State<ChatScreen> {
         final rawText = _userMessages.last;
         final IsolateData isolateData = IsolateData(
             rawText, widget.interpreters['emotion']!, widget.vocab['emotion']);
-        print('rawText: $rawText');
         final result = await inference(isolateData);
-        print(result);
+        _handleBotResponse(result);
       }
+    });
+  }
+
+  Future<void> _handleBotResponse(
+    String responseText,
+  ) async {
+    final types.TextMessage message = types.TextMessage(
+        id: randomString(),
+        author: _bot,
+        text: responseText,
+        createdAt: currentTimestamp());
+
+    setState(() {
+      _addMessage(message);
+      _userMessages.removeAt(0);
     });
   }
 
@@ -159,26 +157,6 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messages = [..._messages, ...messages];
       _page = _page + 1;
-    });
-  }
-
-  Future<void> _handleBotResponse(String text) async {
-    if (_userIsTyping) {
-      return;
-    }
-
-    final String rawText = _userMessages.last;
-    final ChatResponse response = await chatBot.handleMessage(rawText);
-    final types.TextMessage message = types.TextMessage(
-        id: randomString(),
-        author: _bot,
-        text: response.text,
-        createdAt: currentTimestamp());
-    print(response.text);
-
-    setState(() {
-      _addMessage(message);
-      _userMessages.removeAt(0);
     });
   }
 
