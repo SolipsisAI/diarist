@@ -1,4 +1,4 @@
-.PHONY: clean macos ios linux simulator devices install
+.PHONY: clean ios run simulator devices install os build-linux
 
 ROOT_DIR=$(shell pwd)
 APP_DIR=$(ROOT_DIR)/AppDir
