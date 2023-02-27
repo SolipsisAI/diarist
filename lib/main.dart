@@ -2,6 +2,7 @@ import 'package:diarist/core/bot.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:text_classifiers/text_classifiers.dart';
 
 import 'chat_screen.dart';
 import 'models/chat_message.dart';
@@ -14,7 +15,14 @@ void main() async {
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
-  final chatBot = ChatBot();
+
+  final EmotionClassifier emotionClassifier = EmotionClassifier();
+  final int emotionAddress = emotionClassifier.interpreter.address;
+  final SentimentClassifier sentimentClassifier = SentimentClassifier();
+  final int sentimentAddress = sentimentClassifier.interpreter.address;
+
+  final ChatBot chatBot = ChatBot(
+      emotionAddress: emotionAddress, sentimentAddress: sentimentAddress);
 
   runApp(Diarist(isar: _isar, chatMessages: chatMessages, chatBot: chatBot));
 }
