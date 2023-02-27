@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:text_classifiers/text_classifiers.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'chat_screen.dart';
 import 'models/chat_message.dart';
@@ -15,16 +16,24 @@ void main() async {
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
+  final Interpreter interpreter =
+      await Interpreter.fromAsset('models/emotion_classification.tflite');
 
-  runApp(Diarist(isar: _isar, chatMessages: chatMessages));
+  runApp(Diarist(
+      isar: _isar, chatMessages: chatMessages, address: interpreter.address));
 }
 
 class Diarist extends StatelessWidget {
-  const Diarist({Key? key, required this.isar, required this.chatMessages})
+  const Diarist(
+      {Key? key,
+      required this.isar,
+      required this.chatMessages,
+      required this.address})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
+  final int address;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +47,8 @@ class Diarist extends StatelessWidget {
         },
         child: MaterialApp(
           title: 'Diarist',
-          home: ChatScreen(isar: isar, chatMessages: chatMessages),
+          home: ChatScreen(
+              isar: isar, chatMessages: chatMessages, address: address),
         ));
   }
 }

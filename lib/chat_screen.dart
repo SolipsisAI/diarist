@@ -19,11 +19,16 @@ import 'utils.dart';
 import 'debouncer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key, required this.isar, required this.chatMessages})
+  const ChatScreen(
+      {Key? key,
+      required this.isar,
+      required this.chatMessages,
+      required this.address})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
+  final int address;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -59,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
     Isolate.spawn(_isolateMain, [
       rootIsolateToken,
       rootIsolatePort.sendPort,
-      chatBot.emotionClassifier.address,
+      widget.address,
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -83,8 +88,8 @@ class _ChatScreenState extends State<ChatScreen> {
     print('address $address');
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
     print('isolate main after init');
-    final Interpreter interpreter = Interpreter.fromAddress(address);
-    print('loading from interpreter ${interpreter.address}');
+    // final Interpreter interpreter = Interpreter.fromAddress(address);
+    // print('loading from interpreter ${interpreter.address}');
   }
 
   void initStateAsync() async {
