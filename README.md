@@ -2,7 +2,7 @@
 
 This is the Flutter app for Diarist.
 
-- [solipsis\_chat](#diarist)
+- [diarist](#diarist)
 - [Development](#development)
   - [Pre-requisites](#pre-requisites)
   - [Automated Setup](#automated-setup)
@@ -31,11 +31,8 @@ This is the Flutter app for Diarist.
 
 ```shell
 # Clone the `flutter_chat_ui` fork I created and this repo to the same directory.
-git clone -b typing_indicator git@github.com:bitjockey42/flutter_chat_ui.git
+git clone git@github.com:SolipsisAI/flutter_chat_ui.git
 git clone git@github.com:SolipsisAI/diarist.git
-
-# Clone the `text_classifiers`
-git clone git@github.com:SolipsisAI/text_classifiers_flutter.git
 
 # Clone `tflite_flutter_plugin` which is a dep of the above
 git clone git@github.com:SolipsisAI/tflite_flutter_plugin.git
@@ -45,19 +42,15 @@ cd diarist
 flutter pub get
 ```
 
-Then run the script:
+Then run the scripts:
 ```shell
 # INSTALL LIBRARIES FOR DESKTOP
 bash ./install_libs.sh
 
 # INSTALL LIBRARIES FOR IOS
 INCLUDE_IOS=true bash ./install_libs.sh
-```
 
-In the `text_classifiers_flutter`:
-```shell
-cd ../text_classifiers_flutter
-# Download model file and vocab text
+# DOWNLOAD ASSETS
 bash ./download_assets.sh
 ```
 
@@ -85,6 +78,8 @@ fvm flutter pub get
 ```
 
 ### Linux
+
+NOTE: If your Linux version doesn't match what this pre-built `*.so` was built in, this will not work and you will need to compile from source.
 
 Download [libtensorflowlite_c-linux.so](https://solipsis-data.s3.us-east-2.amazonaws.com/blobs/libtensorflowlite_c-linux.so) and place in `blobs/`:
 
@@ -161,7 +156,7 @@ Building an AppImage.
 See https://bitjockey.space/Building-Flutter-apps-for-distribution#build-1.
 
 ```shell
-flutter build linux --release -v
+flutter build linux -v  # passing --release for some reason excludes the assets
 cp -r build/linux/x64/release/bundle $PWD/AppDir  # where $PWD is this root repo
 appimage-builder --recipe AppImageBuilder.yml
 ```

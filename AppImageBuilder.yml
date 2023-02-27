@@ -1,10 +1,13 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
+script:
+ - rm -rf AppDir || true
+ - cp -r build/linux/x64/release/bundle AppDir
 AppDir:
   path: /home/bitjockey/Projects/SolipsisAI/diarist/AppDir
   app_info:
     id: ai.solipsis.Diarist
-    name: Solipsis
+    name: Diarist
     icon: application-vnd.appimage
     version: latest
     exec: diarist

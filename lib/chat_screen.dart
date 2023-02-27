@@ -1,26 +1,33 @@
-import 'dart:async';
 import 'dart:core';
 import 'dart:developer' as logger;
 import 'dart:convert';
+import 'dart:isolate';
+import 'package:diarist/utils/isolate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:bubble/bubble.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
-import 'package:diarist/core/response.dart';
 
 import 'models/chat_message.dart';
-import 'core/bot.dart';
 import 'utils.dart';
-import 'debouncer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key, required this.isar, required this.chatMessages})
+  const ChatScreen(
+      {Key? key,
+      required this.isar,
+      required this.chatMessages,
+      required this.interpreters,
+      required this.vocab,
+      required this.isolateUtils})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
+  final Map<String, int> interpreters;
+  final Map<String, dynamic> vocab;
+  final IsolateUtils isolateUtils;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -30,22 +37,20 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _showTyping = false;
   int _page = 0;
   bool _userIsTyping = false;
-  final Debouncer _debouncer = Debouncer(delay: 5 * 1000);
-  final Stopwatch _stopwatch = Stopwatch();
 
   List<types.Message> _messages = [];
-  List<String> _userMessages = [];
+  final List<String> _userMessages = [];
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
 
-  late ChatBot chatBot;
   late Stream<void> messagesUpdated;
 
   @override
   void initState() {
     super.initState();
-    chatBot = ChatBot();
+
+    // Initialize messages
     for (var i = 0; i < widget.chatMessages.length; i++) {
       setState(() {
         _messages.insert(
@@ -57,19 +62,45 @@ class _ChatScreenState extends State<ChatScreen> {
                 text: widget.chatMessages[i].text));
       });
     }
+
     initStateAsync();
   }
 
   void initStateAsync() async {
     messagesUpdated = widget.isar.chatMessages.watchLazy();
 
-    messagesUpdated.listen((event) {
-      print('messages added');
-      if (_userMessages.isNotEmpty && !_userIsTyping) {
+    messagesUpdated.listen((event) async {
+      if (_userMessages.isNotEmpty) {
         final rawText = _userMessages.last;
-        _debouncer.run(() => _handleBotResponse(rawText));
+        final IsolateData isolateData = IsolateData(
+            rawText, widget.interpreters['emotion']!, widget.vocab['emotion']);
+        final result = await inference(isolateData);
+        _handleBotResponse(result);
       }
     });
+  }
+
+  Future<void> _handleBotResponse(
+    String responseText,
+  ) async {
+    final types.TextMessage message = types.TextMessage(
+        id: randomString(),
+        author: _bot,
+        text: responseText,
+        createdAt: currentTimestamp());
+
+    setState(() {
+      _addMessage(message);
+      _userMessages.removeAt(0);
+    });
+  }
+
+  Future<String> inference(IsolateData isolateData) async {
+    ReceivePort responsePort = ReceivePort();
+    widget.isolateUtils.sendPort
+        .send(isolateData..responsePort = responsePort.sendPort);
+    var results = await responsePort.first;
+    return results;
   }
 
   void _handleUserTyping(String text) {
@@ -82,19 +113,6 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _userIsTyping = !_userIsTyping;
     });
-  }
-
-  void toggleStopwatch() {
-    if (!_userIsTyping) {
-      _stopwatch.reset();
-      print('reset');
-    } else if (!_stopwatch.isRunning) {
-      _stopwatch.start();
-      print('started');
-    } else if (_stopwatch.isRunning) {
-      _stopwatch.stop();
-      print('stopped. elapsed: ${_stopwatch.elapsed}');
-    }
   }
 
   Future<void> _handleEndReached() async {
@@ -118,26 +136,6 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messages = [..._messages, ...messages];
       _page = _page + 1;
-    });
-  }
-
-  Future<void> _handleBotResponse(String text) async {
-    if (_userIsTyping) {
-      return;
-    }
-
-    final String rawText = _userMessages.last;
-    final ChatResponse response = await chatBot.handleMessage(rawText);
-    final types.TextMessage message = types.TextMessage(
-        id: randomString(),
-        author: _bot,
-        text: response.text,
-        createdAt: currentTimestamp());
-    print(response.text);
-
-    setState(() {
-      _addMessage(message);
-      _userMessages.removeAt(0);
     });
   }
 

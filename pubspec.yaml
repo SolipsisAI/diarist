@@ -38,8 +38,6 @@ dependencies:
   uuid: ^3.0.5
   flutter_chat_ui:
     path: ../flutter_chat_ui
-  text_classifiers:
-    path: ../text_classifiers_flutter
 
   isar: 2.5.0
   isar_flutter_libs: 2.5.0
@@ -88,7 +86,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/
-    # - assets/models/
+    - assets/models/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
