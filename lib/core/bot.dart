@@ -11,10 +11,9 @@ class ChatBot {
 
   ChatBot({this.emotionAddress = -1, this.sentimentAddress = -1}) {
     // Initialize classifiers
-    emotionClassifier = EmotionClassifier(interpreterAddress: emotionAddress);
+    emotionClassifier = EmotionClassifier(address: emotionAddress);
     emotionAddress = emotionClassifier.address;
-    sentimentClassifier =
-        SentimentClassifier(interpreterAddress: sentimentAddress);
+    sentimentClassifier = SentimentClassifier(address: sentimentAddress);
     sentimentAddress = sentimentClassifier.address;
   }
 

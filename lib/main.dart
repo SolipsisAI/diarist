@@ -17,9 +17,9 @@ void main() async {
   final chatMessages = await _isar.chatMessages.where().findAll();
 
   final EmotionClassifier emotionClassifier = EmotionClassifier();
-  final int emotionAddress = emotionClassifier.interpreter.address;
+  final int emotionAddress = emotionClassifier.address;
   final SentimentClassifier sentimentClassifier = SentimentClassifier();
-  final int sentimentAddress = sentimentClassifier.interpreter.address;
+  final int sentimentAddress = sentimentClassifier.address;
 
   final ChatBot chatBot = ChatBot(
       emotionAddress: emotionAddress, sentimentAddress: sentimentAddress);
