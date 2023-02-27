@@ -11,6 +11,7 @@ import 'package:bubble/bubble.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
 import 'package:diarist/core/response.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'models/chat_message.dart';
 import 'core/bot.dart';
@@ -18,16 +19,11 @@ import 'utils.dart';
 import 'debouncer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen(
-      {Key? key,
-      required this.isar,
-      required this.chatMessages,
-      required this.chatBot})
+  const ChatScreen({Key? key, required this.isar, required this.chatMessages})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
-  final ChatBot chatBot;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -50,17 +46,20 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Isolate? _channelIsolate;
 
+  late ChatBot chatBot;
+
   @override
   void initState() {
     super.initState();
+
+    chatBot = ChatBot();
 
     RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
     ReceivePort rootIsolatePort = ReceivePort();
     Isolate.spawn(_isolateMain, [
       rootIsolateToken,
       rootIsolatePort.sendPort,
-      widget.chatBot.sentimentAddress,
-      widget.chatBot.emotionAddress,
+      chatBot.emotionClassifier.address,
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -80,10 +79,12 @@ class _ChatScreenState extends State<ChatScreen> {
   static void _isolateMain(List<dynamic> args) async {
     RootIsolateToken rootIsolateToken = args[0];
     SendPort port = args[1];
-    int emotionAddress = await args[2];
-    int sentimentAddress = await args[3];
+    int address = args[2];
+    print('address $address');
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-    print('!!!!!!!!! EMOTION $emotionAddress');
+    print('isolate main after init');
+    final Interpreter interpreter = Interpreter.fromAddress(address);
+    print('loading from interpreter ${interpreter.address}');
   }
 
   void initStateAsync() async {
@@ -153,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     final String rawText = _userMessages.last;
-    final ChatResponse response = await widget.chatBot.handleMessage(rawText);
+    final ChatResponse response = await chatBot.handleMessage(rawText);
     final types.TextMessage message = types.TextMessage(
         id: randomString(),
         author: _bot,

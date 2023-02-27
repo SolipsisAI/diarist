@@ -12,7 +12,7 @@ class ChatBot {
   ChatBot({this.emotionAddress, this.sentimentAddress}) {
     // Initialize classifiers
     emotionClassifier = EmotionClassifier(address: emotionAddress);
-    sentimentClassifier = SentimentClassifier(address: sentimentAddress);
+    //sentimentClassifier = SentimentClassifier(address: sentimentAddress);
   }
 
   Future<ChatResponse> handleMessage(String rawText) async {
