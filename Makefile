@@ -5,6 +5,10 @@ APP_DIR=$(ROOT_DIR)/AppDir
 TMP_DIR=$(ROOT_DIR)/tmp
 TIMESTAMP=$(shell date --iso=seconds)
 ARCHIVE_DIR=$(TMP_DIR)/$(TIMESTAMP)
+OS_NAME := $(shell uname -s | tr A-Z a-z)
+
+os:
+	@echo $(OS_NAME)
 
 install:
 	@bash ./install_libs.sh
