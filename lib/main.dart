@@ -8,6 +8,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'chat_screen.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
+import 'utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +28,18 @@ void main() async {
     'sentiment': sentimentInterpreter.address
   };
 
+  // Load vocab
+  final vocab = <String, dynamic>{};
+  final emoVocab = await loadVocab('emotion_classification.vocab.txt');
+  final sentVocab = await loadVocab('sentiment_classification.vocab.txt');
+  vocab['emotion'] = emoVocab;
+  vocab['sentiment'] = sentVocab;
+
   runApp(Diarist(
     isar: _isar,
     chatMessages: chatMessages,
     interpreters: interpreters,
+    vocab: vocab,
   ));
 }
 
@@ -39,12 +48,14 @@ class Diarist extends StatelessWidget {
       {Key? key,
       required this.isar,
       required this.chatMessages,
-      required this.interpreters})
+      required this.interpreters,
+      required this.vocab})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
   final Map<String, int> interpreters;
+  final Map<String, dynamic> vocab;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +72,8 @@ class Diarist extends StatelessWidget {
           home: ChatScreen(
               isar: isar,
               chatMessages: chatMessages,
-              interpreters: interpreters),
+              interpreters: interpreters,
+              vocab: vocab),
         ));
   }
 }

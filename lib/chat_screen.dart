@@ -23,12 +23,14 @@ class ChatScreen extends StatefulWidget {
       {Key? key,
       required this.isar,
       required this.chatMessages,
-      required this.interpreters})
+      required this.interpreters,
+      required this.vocab})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
   final Map<String, int> interpreters;
+  final Map<String, dynamic> vocab;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -38,11 +40,11 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _showTyping = false;
   int _page = 0;
   bool _userIsTyping = false;
-  final Debouncer _debouncer = Debouncer(delay: 5 * 1000);
+  final Debouncer _debouncer = Debouncer(delay: 5 * 1000); // 5 seconds
   final Stopwatch _stopwatch = Stopwatch();
 
   List<types.Message> _messages = [];
-  List<String> _userMessages = [];
+  final List<String> _userMessages = [];
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
@@ -85,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 text: widget.chatMessages[i].text));
       });
     }
+
     initStateAsync();
   }
 

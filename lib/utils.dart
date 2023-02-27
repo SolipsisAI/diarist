@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -34,4 +35,19 @@ int messageDelay(types.TextMessage message) {
 
 int currentTimestamp() {
   return DateTime.now().millisecondsSinceEpoch;
+}
+
+Future<Map<String, int>> loadVocab(String vocabFile) async {
+  final vocab = await rootBundle.loadString('assets/models/$vocabFile');
+
+  var tempDict = <String, int>{};
+
+  final vocabList = vocab.split('\n');
+
+  for (var i = 0; i < vocabList.length; i++) {
+    var entry = vocabList[i].trim().split(' ');
+    tempDict[entry[0]] = int.parse(entry[1]);
+  }
+
+  return tempDict;
 }
