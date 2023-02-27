@@ -18,11 +18,16 @@ import 'utils.dart';
 import 'debouncer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key, required this.isar, required this.chatMessages})
+  const ChatScreen(
+      {Key? key,
+      required this.isar,
+      required this.chatMessages,
+      required this.chatBot})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
+  final ChatBot chatBot;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -41,7 +46,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
 
-  late ChatBot chatBot;
   late Stream<void> messagesUpdated;
 
   Isolate? _channelIsolate;
@@ -50,15 +54,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
-    chatBot = ChatBot();
-
     RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
     ReceivePort rootIsolatePort = ReceivePort();
     Isolate.spawn(_isolateMain, [
       rootIsolateToken,
       rootIsolatePort.sendPort,
-      chatBot.emotionClassifier,
-      chatBot.sentimentClassifier,
+      widget.chatBot.emotionClassifier,
+      widget.chatBot.sentimentClassifier,
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {

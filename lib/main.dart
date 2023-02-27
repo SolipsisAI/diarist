@@ -1,3 +1,4 @@
+import 'package:diarist/core/bot.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,16 +14,22 @@ void main() async {
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
+  final chatBot = ChatBot();
 
-  runApp(Diarist(isar: _isar, chatMessages: chatMessages));
+  runApp(Diarist(isar: _isar, chatMessages: chatMessages, chatBot: chatBot));
 }
 
 class Diarist extends StatelessWidget {
-  const Diarist({Key? key, required this.isar, required this.chatMessages})
+  const Diarist(
+      {Key? key,
+      required this.isar,
+      required this.chatMessages,
+      required this.chatBot})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
+  final ChatBot chatBot;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +43,8 @@ class Diarist extends StatelessWidget {
         },
         child: MaterialApp(
           title: 'Diarist',
-          home: ChatScreen(isar: isar, chatMessages: chatMessages),
+          home: ChatScreen(
+              isar: isar, chatMessages: chatMessages, chatBot: chatBot),
         ));
   }
 }
