@@ -1,23 +1,17 @@
-import 'dart:async';
 import 'dart:core';
 import 'dart:developer' as logger;
 import 'dart:convert';
 import 'dart:isolate';
 import 'package:diarist/utils/isolate_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:bubble/bubble.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
-import 'package:diarist/core/response.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'models/chat_message.dart';
-import 'core/bot.dart';
 import 'utils.dart';
-import 'debouncer.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(
@@ -43,8 +37,6 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _showTyping = false;
   int _page = 0;
   bool _userIsTyping = false;
-  final Debouncer _debouncer = Debouncer(delay: 5 * 1000); // 5 seconds
-  final Stopwatch _stopwatch = Stopwatch();
 
   List<types.Message> _messages = [];
   final List<String> _userMessages = [];
@@ -121,19 +113,6 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _userIsTyping = !_userIsTyping;
     });
-  }
-
-  void toggleStopwatch() {
-    if (!_userIsTyping) {
-      _stopwatch.reset();
-      print('reset');
-    } else if (!_stopwatch.isRunning) {
-      _stopwatch.start();
-      print('started');
-    } else if (_stopwatch.isRunning) {
-      _stopwatch.stop();
-      print('stopped. elapsed: ${_stopwatch.elapsed}');
-    }
   }
 
   Future<void> _handleEndReached() async {

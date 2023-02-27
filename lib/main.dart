@@ -1,11 +1,9 @@
 import 'dart:isolate';
 
-import 'package:diarist/core/bot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:text_classifiers/text_classifiers.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'chat_screen.dart';
