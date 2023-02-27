@@ -1,4 +1,4 @@
-.PHONY: clean macos ios simulator devices install_deps
+.PHONY: clean macos ios linux simulator devices install
 
 ROOT_DIR=$(shell pwd)
 APP_DIR=$(ROOT_DIR)/AppDir
@@ -30,7 +30,7 @@ generate:
 	@fvm flutter pub run build_runner build
 
 build-linux:
-	@fvm flutter build linux -v
+	@fvm flutter build linux --release -v
 	@appimage-builder --recipe AppImageBuilder.yml
 
 clean:
