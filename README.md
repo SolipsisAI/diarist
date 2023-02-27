@@ -42,19 +42,15 @@ cd diarist
 flutter pub get
 ```
 
-Then run the script:
+Then run the scripts:
 ```shell
 # INSTALL LIBRARIES FOR DESKTOP
 bash ./install_libs.sh
 
 # INSTALL LIBRARIES FOR IOS
 INCLUDE_IOS=true bash ./install_libs.sh
-```
 
-In the `text_classifiers_flutter`:
-```shell
-cd ../text_classifiers_flutter
-# Download model file and vocab text
+# DOWNLOAD ASSETS
 bash ./download_assets.sh
 ```
 
@@ -82,6 +78,8 @@ fvm flutter pub get
 ```
 
 ### Linux
+
+NOTE: If your Linux version doesn't match what this pre-built `*.so` was built in, this will not work and you will need to compile from source.
 
 Download [libtensorflowlite_c-linux.so](https://solipsis-data.s3.us-east-2.amazonaws.com/blobs/libtensorflowlite_c-linux.so) and place in `blobs/`:
 

@@ -14,13 +14,13 @@ install:
 simulator:
 	@open -a Simulator.app
 
-ios: simulator
+run-ios: simulator
 	@fvm flutter run -d 'iphone 11'
 
-macos:
+run-macos:
 	@fvm flutter run -d macos -v
 
-linux:
+run-linux:
 	@fvm flutter run -d linux -v
 
 devices:
@@ -29,15 +29,9 @@ devices:
 generate:
 	@fvm flutter pub run build_runner build
 
-build-linux: linux-archive
+build-linux:
 	@fvm flutter build linux -v
-	@cp -r build/linux/x64/release/bundle $(APP_DIR)
 	@appimage-builder --recipe AppImageBuilder.yml
-
-linux-archive:
-	@mkdir -p $(ARCHIVE_DIR)
-	if test -f *.AppImage*; then mv *.AppImage* $(ARCHIVE_DIR); fi
-	if test -d $(APP_DIR); then mv $(APP_DIR) $(ARCHIVE_DIR); fi
 
 clean:
 	@fvm flutter clean
