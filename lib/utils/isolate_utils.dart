@@ -4,6 +4,7 @@ Source: https://github.com/am15h/object_detection_flutter/blob/master/lib/utils/
 * */
 
 import 'dart:isolate';
+import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../nlp/bert.dart';
@@ -13,19 +14,19 @@ class IsolateUtils {
   static const String DEBUG_NAME = "InferenceIsolate";
 
   late Isolate _isolate;
-  final ReceivePort _receivePort = ReceivePort();
   late SendPort _sendPort;
 
   SendPort get sendPort => _sendPort;
 
-  Future<void> start() async {
+  Future<void> start(
+      RootIsolateToken rootIsolateToken, ReceivePort rootIsolatePort) async {
     _isolate = await Isolate.spawn<SendPort>(
       entryPoint,
-      _receivePort.sendPort,
+      rootIsolatePort.sendPort,
       debugName: DEBUG_NAME,
     );
 
-    _sendPort = await _receivePort.first;
+    _sendPort = await rootIsolatePort.first;
   }
 
   static void entryPoint(SendPort sendPort) async {
