@@ -53,3 +53,4 @@ AppDir/
 venv/
 appimage-build/
 *.AppImage*
+TensorFlowLiteC.framework.zip
