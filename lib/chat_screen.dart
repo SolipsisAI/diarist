@@ -70,6 +70,10 @@ class _ChatScreenState extends State<ChatScreen> {
       widget.interpreters['sentiment'],
     ]).then((value) => _channelIsolate = value);
 
+    rootIsolatePort.listen((message) {
+      debugPrint('EMO ${message["emo"]}');
+    });
+
     for (var i = 0; i < widget.chatMessages.length; i++) {
       setState(() {
         _messages.insert(
@@ -89,13 +93,17 @@ class _ChatScreenState extends State<ChatScreen> {
     SendPort port = args[1];
     int emotionAddress = args[2];
     int sentimentAddress = args[3];
+
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
     final Interpreter emotionInterpreter =
         Interpreter.fromAddress(emotionAddress);
     final Interpreter sentimentInterpreter =
         Interpreter.fromAddress(sentimentAddress);
-    print('loading from interpreter ${emotionInterpreter.address}');
-    print('loading from interpreter ${sentimentInterpreter.address}');
+
+    port.send({
+      'emo': emotionInterpreter.address,
+      'sent': sentimentInterpreter.address
+    });
   }
 
   void initStateAsync() async {
