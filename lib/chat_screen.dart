@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future<Map<String, dynamic>> inference(IsolateData isolateData) async {
+  Future<String> inference(IsolateData isolateData) async {
     ReceivePort responsePort = ReceivePort();
     widget.isolateUtils.sendPort
         .send(isolateData..responsePort = responsePort.sendPort);
