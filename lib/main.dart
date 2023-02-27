@@ -16,13 +16,7 @@ void main() async {
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
 
-  final EmotionClassifier emotionClassifier = EmotionClassifier();
-  final int emotionAddress = emotionClassifier.address;
-  final SentimentClassifier sentimentClassifier = SentimentClassifier();
-  final int sentimentAddress = sentimentClassifier.address;
-
-  final ChatBot chatBot = ChatBot(
-      emotionAddress: emotionAddress, sentimentAddress: sentimentAddress);
+  final ChatBot chatBot = ChatBot();
 
   runApp(Diarist(isar: _isar, chatMessages: chatMessages, chatBot: chatBot));
 }
