@@ -88,8 +88,8 @@ class _ChatScreenState extends State<ChatScreen> {
     print('address $address');
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
     print('isolate main after init');
-    // final Interpreter interpreter = Interpreter.fromAddress(address);
-    // print('loading from interpreter ${interpreter.address}');
+    final Interpreter interpreter = Interpreter.fromAddress(address);
+    print('loading from interpreter ${interpreter.address}');
   }
 
   void initStateAsync() async {
