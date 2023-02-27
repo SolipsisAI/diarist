@@ -57,7 +57,9 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
-    chatBot = ChatBot(emotionAddress: widget.classifiers['emotion']);
+    chatBot = ChatBot(
+        emotionAddress: widget.classifiers['emotion'],
+        sentimentAddress: widget.classifiers['sentiment']);
 
     RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
     ReceivePort rootIsolatePort = ReceivePort();
@@ -65,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
       rootIsolateToken,
       rootIsolatePort.sendPort,
       widget.classifiers['emotion'],
+      widget.classifiers['sentiment'],
     ]).then((value) => _channelIsolate = value);
 
     for (var i = 0; i < widget.chatMessages.length; i++) {
@@ -84,12 +87,15 @@ class _ChatScreenState extends State<ChatScreen> {
   static void _isolateMain(List<dynamic> args) async {
     RootIsolateToken rootIsolateToken = args[0];
     SendPort port = args[1];
-    int address = args[2];
-    print('address $address');
+    int emotionAddress = args[2];
+    int sentimentAddress = args[3];
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-    print('isolate main after init');
-    final Interpreter interpreter = Interpreter.fromAddress(address);
-    print('loading from interpreter ${interpreter.address}');
+    final Interpreter emotionInterpreter =
+        Interpreter.fromAddress(emotionAddress);
+    final Interpreter sentimentInterpreter =
+        Interpreter.fromAddress(sentimentAddress);
+    print('loading from interpreter ${emotionInterpreter.address}');
+    print('loading from interpreter ${sentimentInterpreter.address}');
   }
 
   void initStateAsync() async {
