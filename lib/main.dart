@@ -16,11 +16,22 @@ void main() async {
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
-  final Interpreter interpreter =
+
+  // Load interpreters
+  final Interpreter emotionInterpreter =
       await Interpreter.fromAsset('models/emotion_classification.tflite');
+  final Interpreter sentimentInterpreter =
+      await Interpreter.fromAsset('models/sentiment_classification.tflite');
+  final Map<String, int> classifiers = {
+    'emotion': emotionInterpreter.address,
+    'sentiment': sentimentInterpreter.address
+  };
 
   runApp(Diarist(
-      isar: _isar, chatMessages: chatMessages, address: interpreter.address));
+    isar: _isar,
+    chatMessages: chatMessages,
+    classifiers: classifiers,
+  ));
 }
 
 class Diarist extends StatelessWidget {
@@ -28,12 +39,12 @@ class Diarist extends StatelessWidget {
       {Key? key,
       required this.isar,
       required this.chatMessages,
-      required this.address})
+      required this.classifiers})
       : super(key: key);
 
   final Isar isar;
   final List<ChatMessage> chatMessages;
-  final int address;
+  final Map<String, int> classifiers;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +59,7 @@ class Diarist extends StatelessWidget {
         child: MaterialApp(
           title: 'Diarist',
           home: ChatScreen(
-              isar: isar, chatMessages: chatMessages, address: address),
+              isar: isar, chatMessages: chatMessages, classifiers: classifiers),
         ));
   }
 }
