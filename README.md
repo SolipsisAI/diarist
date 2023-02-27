@@ -31,11 +31,8 @@ This is the Flutter app for Diarist.
 
 ```shell
 # Clone the `flutter_chat_ui` fork I created and this repo to the same directory.
-git clone -b typing_indicator git@github.com:bitjockey42/flutter_chat_ui.git
+git clone git@github.com:SolipsisAI/flutter_chat_ui.git
 git clone git@github.com:SolipsisAI/diarist.git
-
-# Clone the `text_classifiers`
-git clone git@github.com:SolipsisAI/text_classifiers_flutter.git
 
 # Clone `tflite_flutter_plugin` which is a dep of the above
 git clone git@github.com:SolipsisAI/tflite_flutter_plugin.git
