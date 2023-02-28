@@ -1,5 +1,6 @@
 .PHONY: clean ios run simulator devices install os build-linux
 
+FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter
 ROOT_DIR=$(shell pwd)
 APP_DIR=$(ROOT_DIR)/AppDir
 TMP_DIR=$(ROOT_DIR)/tmp
@@ -19,26 +20,29 @@ os:
 install:
 	@bash ./install_libs.sh
 	@bash ./download_assets.sh
-	@fvm flutter pub get
+	@$(FLUTTER_CMD) pub get
 
 simulator:
 	@open -a Simulator.app
 
 run-ios: simulator
-	@fvm flutter run -d 'iphone 11'
+	@$(FLUTTER_CMD) run -d 'iphone 11'
 
 run:
-	@fvm flutter run -d $(target) -v
+	@$(FLUTTER_CMD) run -d $(target) -v
 
 devices:
-	@fvm flutter devices
+	@$(FLUTTER_CMD) devices
 
 generate:
-	@fvm flutter pub run build_runner build
+	@$(FLUTTER_CMD) pub run build_runner build
 
 build-linux:
-	@fvm flutter build linux --release -v
+	@$(FLUTTER_CMD) build linux --release -v
 	@appimage-builder --recipe AppImageBuilder.yml
+
+build-macos:
+	@$(FLUTTER_CMD) build macos
 
 clean:
 	@fvm flutter clean
