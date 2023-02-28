@@ -7,7 +7,8 @@ import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import '../nlp/emotion.dart';
+import '../nlp/emotion.dart' as emotion;
+import '../nlp/sentiment.dart' as sentiment;
 
 /// Manages separate Isolate instance for inference
 class IsolateUtils {
@@ -34,12 +35,18 @@ class IsolateUtils {
     sendPort.send(port.sendPort);
 
     await for (final IsolateData isolateData in port) {
-      Interpreter interpreter =
-          Interpreter.fromAddress(isolateData.interpreterAddress);
-      final result =
-          await classify(interpreter, isolateData.rawText, isolateData.dict);
+      Interpreter emotionInterpreter =
+          Interpreter.fromAddress(isolateData.emotionAddress);
+      Interpreter sentimentInterpreter =
+          Interpreter.fromAddress(isolateData.sentimentAddress);
 
-      isolateData.responsePort.send(result);
+      final emotionLabel = await emotion.classify(
+          emotionInterpreter, isolateData.rawText, isolateData.emotionDict);
+      final sentimentLabel = await sentiment.classify(
+          sentimentInterpreter, isolateData.rawText, isolateData.sentimentDict);
+
+      isolateData.responsePort
+          .send('Emotion: $emotionLabel Sentiment: $sentimentLabel');
     }
   }
 }
@@ -47,9 +54,12 @@ class IsolateUtils {
 /// Bundles data to pass between Isolate
 class IsolateData {
   final String rawText;
-  late int interpreterAddress;
-  late Map<String, int> dict;
+  late int emotionAddress;
+  late int sentimentAddress;
+  late Map<String, int> emotionDict;
+  late Map<String, int> sentimentDict;
   late SendPort responsePort;
 
-  IsolateData(this.rawText, this.interpreterAddress, this.dict);
+  IsolateData(this.rawText, this.emotionAddress, this.sentimentAddress,
+      this.emotionDict, this.sentimentDict);
 }

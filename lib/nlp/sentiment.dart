@@ -9,7 +9,7 @@ const String start = '<START>';
 const String pad = '<PAD>';
 const String unk = '<UNKNOWN>';
 
-Future<int> classify(
+Future<String> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // tokenizeInputText returns List<List<double>>
   // of shape [1, 256].
@@ -22,14 +22,12 @@ Future<int> classify(
   // store the resulting values in output.
   interpreter.run(input, output);
 
-  var result = 0;
+  var result = "POSITIVE";
 
   // If value of first element in output is greater than second,
   // then the sentence is negative
   if ((output[0][0] as double) > (output[0][1] as double)) {
-    result = 0;
-  } else {
-    result = 1;
+    result = "NEGATIVE";
   }
 
   return result;

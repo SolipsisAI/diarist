@@ -74,7 +74,11 @@ class _ChatScreenState extends State<ChatScreen> {
         _showTyping = true;
         final rawText = _userMessages.last;
         final IsolateData isolateData = IsolateData(
-            rawText, widget.interpreters['emotion']!, widget.vocab['emotion']);
+            rawText,
+            widget.interpreters['emotion']!,
+            widget.interpreters['sentiment']!,
+            widget.vocab['emotion'],
+            widget.vocab['sentiment']);
         final result = await inference(isolateData);
         _handleBotResponse(result);
         _showTyping = false;
