@@ -130,4 +130,6 @@ if [ ! -f  "$BLOBS_DIR/$dest_filename" ]; then
     build_binaries
     copy_to_project
     echo "[SUCCESS] $dest_filename copied to $BLOBS_DIR"
+else
+    echo "[SKIP] dependencies already built"
 fi
