@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 PROJECT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 TF_DIR=${PROJECT_DIR}/../tensorflow
-BLOBS_DIR=$HOME/Library/Containers/ai.solipsis.Diarist/Data/blobs
+# BLOBS_DIR=$HOME/Library/Containers/ai.solipsis.Diarist/Data/blobs
+BLOBS_DIR=${PROJECT_DIR}/blobs
 TFLITE_IOS_DIR=$PROJECT_DIR/ios/.symlinks/plugins/tflite_flutter/ios
 
 BAZEL_VERSION=5.0.0
@@ -101,11 +102,11 @@ if [[ "$unamestr" == 'linux' ]]; then
     src_filename="${BASE_LIB_FILENAME}.so"
     dest_filename="${BASE_LIB_FILENAME}-linux.so"
     BLOBS_DIR=${PROJECT_DIR}/blobs
-    mkdir -p $BLOBS_DIR
+    mkdir -p "$BLOBS_DIR"
 elif [[ "$unamestr" == 'darwin' ]]; then
     echo "macos"
     src_filename="${BASE_LIB_FILENAME}.dylib"
-    dest_filename="${BASE_LIB_FILENAME}-mac.so" # the tflite_flutter plugin looks for a *.so file
+    dest_filename="${BASE_LIB_FILENAME}-mac.dylib"
 else
     echo "Unsupported"
     exit 1
