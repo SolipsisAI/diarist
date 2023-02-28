@@ -71,11 +71,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
     messagesUpdated.listen((event) async {
       if (_userMessages.isNotEmpty) {
+        _showTyping = true;
         final rawText = _userMessages.last;
         final IsolateData isolateData = IsolateData(
             rawText, widget.interpreters['emotion']!, widget.vocab['emotion']);
         final result = await inference(isolateData);
         _handleBotResponse(result);
+        _showTyping = false;
       }
     });
   }
