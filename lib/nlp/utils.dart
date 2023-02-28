@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,6 +25,11 @@ int argmax(Vector input) {
     }
   }
   return index;
+}
+
+List<String> splitText(String text) {
+  LineSplitter splitter = const LineSplitter();
+  return splitter.convert(text);
 }
 
 String sanitizeString(String text, bool stripPunctuation) {

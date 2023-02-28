@@ -1,4 +1,5 @@
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:ml_linalg/linalg.dart';
 
 import 'utils.dart';
 
@@ -19,22 +20,38 @@ final List<String> labels = [
 
 Future<String> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
-  // tokenizeInputText returns List<List<double>>
-  // of shape [1, 256].
-  List<List<int>> input = tokenizeInputText(rawText, dict);
+  // Split by newline
+  List<String> texts = splitText(rawText);
 
-  // output of shape [1,6]
-  // example: [[-1.434808373451233, -0.602688729763031, 4.8783135414123535, -1.720102071762085, -0.9065110087394714, -1.056220293045044]]
-  var output = List<double>.filled(6, 0).reshape([1, 6]);
+  // Keep track of counts
+  var labelIndexes = List<int>.filled(6, 0);
 
-  // The run method will run inference and
-  // store the resulting values in output.
-  interpreter.run(input, output);
+  for (var text in texts) {
+    // tokenizeInputText returns List<List<double>>
+    // of shape [1, 256].
+    List<List<int>> input = tokenizeInputText(text, dict);
 
-  // Compute the softmax
-  final result = softmax(output[0]);
-  final labelIndex = argmax(result);
-  return labels[labelIndex];
+    // output of shape [1,6]
+    // example: [[-1.434808373451233, -0.602688729763031, 4.8783135414123535, -1.720102071762085, -0.9065110087394714, -1.056220293045044]]
+    var output = List<double>.filled(6, 0).reshape([1, 6]);
+
+    // The run method will run inference and
+    // store the resulting values in output.
+    interpreter.run(input, output);
+
+    // Compute the softmax
+    final result = softmax(output[0]);
+    final labelIndex = argmax(result);
+
+    labelIndexes[labelIndex] += 1;
+  }
+
+  print('labelIndexes: $labelIndexes');
+
+  var labelIndexesVector = Vector.fromList(labelIndexes);
+  final mostFreqLabelIndex = argmax(labelIndexesVector);
+
+  return labels[mostFreqLabelIndex];
 }
 
 List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
