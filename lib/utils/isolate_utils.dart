@@ -7,7 +7,7 @@ import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import '../nlp/bert.dart';
+import '../nlp/emotion.dart';
 
 /// Manages separate Isolate instance for inference
 class IsolateUtils {
