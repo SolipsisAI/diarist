@@ -42,6 +42,12 @@ cd diarist
 flutter pub get
 ```
 
+In the `tensorflow` repo, change `TFL_MINIMUM_OS_VERSION` to `"12.0"` in `lite/ios/ios.bzl`:
+
+```
+TFL_MINIMUM_OS_VERSION = "12.0"
+```
+
 Then run the scripts:
 ```shell
 # INSTALL LIBRARIES FOR DESKTOP
