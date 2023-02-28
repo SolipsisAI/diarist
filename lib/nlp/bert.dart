@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:ml_linalg/linalg.dart';
 
@@ -21,7 +22,8 @@ final List<String> labels = [
 Future<String> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // Split by newline
-  List<String> texts = splitText(rawText);
+  List<String> texts = splitText(rawText, maxLen: _sentenceLen);
+  debugPrint('texts: $texts');
 
   // Keep track of counts
   var labelIndexes = List<int>.filled(6, 0);
@@ -46,7 +48,7 @@ Future<String> classify(
     labelIndexes[labelIndex] += 1;
   }
 
-  print('labelIndexes: $labelIndexes');
+  debugPrint('labelIndexes: $labelIndexes');
 
   var labelIndexesVector = Vector.fromList(labelIndexes);
   final mostFreqLabelIndex = argmax(labelIndexesVector);
