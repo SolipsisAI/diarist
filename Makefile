@@ -42,7 +42,7 @@ devices:
 	@$(FLUTTER_CMD) devices
 
 generate:
-	@$(FLUTTER_CMD) pub run build_runner build
+	@$(FLUTTER_CMD) pub run build_runner build --delete-conflicting-outputs
 
 clean:
 	@$(FLUTTER_CMD) clean
