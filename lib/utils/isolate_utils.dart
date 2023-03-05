@@ -45,8 +45,11 @@ class IsolateUtils {
       final sentimentLabel = await sentiment.classify(
           sentimentInterpreter, isolateData.rawText, isolateData.sentimentDict);
 
-      isolateData.responsePort
-          .send('Emotion: $emotionLabel Sentiment: $sentimentLabel');
+      isolateData.responsePort.send({
+        'chatMessageId': isolateData.chatMessageId,
+        'emotion': emotionLabel,
+        'sentiment': sentimentLabel
+      });
     }
   }
 }
@@ -54,12 +57,13 @@ class IsolateUtils {
 /// Bundles data to pass between Isolate
 class IsolateData {
   final String rawText;
+  late int chatMessageId;
   late int emotionAddress;
   late int sentimentAddress;
   late Map<String, int> emotionDict;
   late Map<String, int> sentimentDict;
   late SendPort responsePort;
 
-  IsolateData(this.rawText, this.emotionAddress, this.sentimentAddress,
-      this.emotionDict, this.sentimentDict);
+  IsolateData(this.rawText, this.chatMessageId, this.emotionAddress,
+      this.sentimentAddress, this.emotionDict, this.sentimentDict);
 }

@@ -72,23 +72,36 @@ class _ChatScreenState extends State<ChatScreen> {
     messagesUpdated.listen((event) async {
       if (_userMessages.isNotEmpty) {
         _showTyping = true;
+
         final rawText = _userMessages.last;
+        final lastMessage = widget.chatMessages.last;
+
         final IsolateData isolateData = IsolateData(
             rawText,
+            lastMessage.id!,
             widget.interpreters['emotion']!,
             widget.interpreters['sentiment']!,
             widget.vocab['emotion'],
             widget.vocab['sentiment']);
+
         final result = await inference(isolateData);
+
         _handleBotResponse(result);
+
         _showTyping = false;
       }
     });
   }
 
   Future<void> _handleBotResponse(
-    String responseText,
+    Map<String, Object> result,
   ) async {
+    final String emotionLabel = result['emotion']! as String;
+    final String sentimentLabel = result['sentiment']! as String;
+
+    final String responseText =
+        'It sounds like you are feeling $emotionLabel and that your general sentiment is $sentimentLabel.';
+
     final types.TextMessage message = types.TextMessage(
         id: randomString(),
         author: _bot,
@@ -101,12 +114,12 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future<String> inference(IsolateData isolateData) async {
+  Future<Map<String, Object>> inference(IsolateData isolateData) async {
     ReceivePort responsePort = ReceivePort();
     widget.isolateUtils.sendPort
         .send(isolateData..responsePort = responsePort.sendPort);
-    var results = await responsePort.first;
-    return results;
+    var result = await responsePort.first;
+    return result;
   }
 
   void _handleUserTyping(String text) {
