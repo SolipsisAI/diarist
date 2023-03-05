@@ -9,6 +9,6 @@ class Prediction {
 
   late int chatMessageId;
   late int createdAt;
-  late double sentiment;
-  late double emotion;
+  late String sentiment;
+  late String emotion;
 }

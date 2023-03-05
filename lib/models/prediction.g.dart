@@ -15,7 +15,7 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"Double"},{"name":"sentiment","type":"Double"}],"indexes":[],"links":[]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"sentiment","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'chatMessageId': 0,
@@ -70,9 +70,11 @@ void _predictionSerializeNative(
   final value1 = object.createdAt;
   final _createdAt = value1;
   final value2 = object.emotion;
-  final _emotion = value2;
+  final _emotion = IsarBinaryWriter.utf8Encoder.convert(value2);
+  dynamicSize += (_emotion.length) as int;
   final value3 = object.sentiment;
-  final _sentiment = value3;
+  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value3);
+  dynamicSize += (_sentiment.length) as int;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -81,8 +83,8 @@ void _predictionSerializeNative(
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeLong(offsets[0], _chatMessageId);
   writer.writeLong(offsets[1], _createdAt);
-  writer.writeDouble(offsets[2], _emotion);
-  writer.writeDouble(offsets[3], _sentiment);
+  writer.writeBytes(offsets[2], _emotion);
+  writer.writeBytes(offsets[3], _sentiment);
 }
 
 Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
@@ -90,9 +92,9 @@ Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
   final object = Prediction();
   object.chatMessageId = reader.readLong(offsets[0]);
   object.createdAt = reader.readLong(offsets[1]);
-  object.emotion = reader.readDouble(offsets[2]);
+  object.emotion = reader.readString(offsets[2]);
   object.id = id;
-  object.sentiment = reader.readDouble(offsets[3]);
+  object.sentiment = reader.readString(offsets[3]);
   return object;
 }
 
@@ -106,9 +108,9 @@ P _predictionDeserializePropNative<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
   }
@@ -132,11 +134,9 @@ Prediction _predictionDeserializeWeb(
       IsarNative.jsObjectGet(jsObj, 'chatMessageId') ?? double.negativeInfinity;
   object.createdAt =
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
-  object.emotion =
-      IsarNative.jsObjectGet(jsObj, 'emotion') ?? double.negativeInfinity;
+  object.emotion = IsarNative.jsObjectGet(jsObj, 'emotion') ?? '';
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.sentiment =
-      IsarNative.jsObjectGet(jsObj, 'sentiment') ?? double.negativeInfinity;
+  object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '';
   return object;
 }
 
@@ -149,13 +149,11 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') ??
           double.negativeInfinity) as P;
     case 'emotion':
-      return (IsarNative.jsObjectGet(jsObj, 'emotion') ??
-          double.negativeInfinity) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'emotion') ?? '') as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
     case 'sentiment':
-      return (IsarNative.jsObjectGet(jsObj, 'sentiment') ??
-          double.negativeInfinity) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '') as P;
     default:
       throw 'Illegal propertyName';
   }
@@ -328,34 +326,107 @@ extension PredictionQueryFilter
     ));
   }
 
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      emotionGreaterThan(double value) {
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: false,
+      type: ConditionType.eq,
       property: 'emotion',
       value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      emotionGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
     ));
   }
 
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionLessThan(
-      double value) {
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
-      include: false,
+      include: include,
       property: 'emotion',
       value: value,
+      caseSensitive: caseSensitive,
     ));
   }
 
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionBetween(
-      double lower, double upper) {
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
     return addFilterConditionInternal(FilterCondition.between(
       property: 'emotion',
       lower: lower,
-      includeLower: false,
+      includeLower: includeLower,
       upper: upper,
-      includeUpper: false,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> emotionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'emotion',
+      value: pattern,
+      caseSensitive: caseSensitive,
     ));
   }
 
@@ -415,34 +486,108 @@ extension PredictionQueryFilter
     ));
   }
 
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      sentimentGreaterThan(double value) {
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: false,
+      type: ConditionType.eq,
       property: 'sentiment',
       value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      sentimentGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
     ));
   }
 
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentLessThan(
-      double value) {
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
-      include: false,
+      include: include,
       property: 'sentiment',
       value: value,
+      caseSensitive: caseSensitive,
     ));
   }
 
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentBetween(
-      double lower, double upper) {
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
     return addFilterConditionInternal(FilterCondition.between(
       property: 'sentiment',
       lower: lower,
-      includeLower: false,
+      includeLower: includeLower,
       upper: upper,
-      includeUpper: false,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      sentimentStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'sentiment',
+      value: pattern,
+      caseSensitive: caseSensitive,
     ));
   }
 }
@@ -546,16 +691,18 @@ extension PredictionQueryWhereDistinct
     return addDistinctByInternal('createdAt');
   }
 
-  QueryBuilder<Prediction, Prediction, QDistinct> distinctByEmotion() {
-    return addDistinctByInternal('emotion');
+  QueryBuilder<Prediction, Prediction, QDistinct> distinctByEmotion(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('emotion', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<Prediction, Prediction, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<Prediction, Prediction, QDistinct> distinctBySentiment() {
-    return addDistinctByInternal('sentiment');
+  QueryBuilder<Prediction, Prediction, QDistinct> distinctBySentiment(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('sentiment', caseSensitive: caseSensitive);
   }
 }
 
@@ -569,7 +716,7 @@ extension PredictionQueryProperty
     return addPropertyNameInternal('createdAt');
   }
 
-  QueryBuilder<Prediction, double, QQueryOperations> emotionProperty() {
+  QueryBuilder<Prediction, String, QQueryOperations> emotionProperty() {
     return addPropertyNameInternal('emotion');
   }
 
@@ -577,7 +724,7 @@ extension PredictionQueryProperty
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<Prediction, double, QQueryOperations> sentimentProperty() {
+  QueryBuilder<Prediction, String, QQueryOperations> sentimentProperty() {
     return addPropertyNameInternal('sentiment');
   }
 }
