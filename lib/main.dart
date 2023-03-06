@@ -9,6 +9,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'chat_screen.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
+import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
 import 'utils.dart';
 
@@ -17,7 +18,8 @@ void main() async {
 
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
-      schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
+      schemas: [ChatMessageSchema, ChatUserSchema, PredictionSchema],
+      directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
 
   // Load interpreters

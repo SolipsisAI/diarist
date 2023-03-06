@@ -117,9 +117,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _addPrediction(Map<String, Object> result) async {
-    final String emotionLabel = result['emotion']! as String;
-    final String sentimentLabel = result['sentiment']! as String;
-    final int chatMessageId = result['chatMessageId']! as int;
+    final String emotionLabel = result['emotion'] as String;
+    final String sentimentLabel = result['sentiment'] as String;
+    final int chatMessageId = result['chatMessageId'] as int;
 
     final newPrediction = Prediction()
       ..createdAt = currentTimestamp()
