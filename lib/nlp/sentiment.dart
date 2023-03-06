@@ -4,7 +4,7 @@ import 'package:ml_linalg/linalg.dart';
 
 import 'utils.dart';
 
-const int sentenceLen = 256;
+const int sentenceLen = 512;
 const String start = '<START>';
 const String pad = '<PAD>';
 const String unk = '<UNKNOWN>';
@@ -71,8 +71,10 @@ List<List<double>> tokenizeInputText(String text, Map<String, int> dict) {
     if (index > sentenceLen) {
       break;
     }
-    vec[index++] =
-        dict.containsKey(tok) ? dict[tok]!.toDouble() : dict[unk]!.toDouble();
+    var sanitizedWord = sanitizeString(tok, true);
+    vec[index++] = dict.containsKey(sanitizedWord)
+        ? dict[sanitizedWord]!.toDouble()
+        : dict[unk]!.toDouble();
   }
 
   // returning List<List<double>> as our interpreter input tensor expects the shape, [1,256]

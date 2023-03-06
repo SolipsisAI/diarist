@@ -6,7 +6,7 @@ import 'package:ml_linalg/linalg.dart';
 
 import 'utils.dart';
 
-const int _sentenceLen = 256;
+const int _sentenceLen = 512;
 const String start = '[CLS]';
 const String pad = '[PAD]';
 const String unk = '[UNK]';
