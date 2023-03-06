@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
     ReceivePort responsePort = ReceivePort();
     widget.isolateUtils.sendPort
         .send(isolateData..responsePort = responsePort.sendPort);
-    var result = await responsePort.first;
+    final result = await responsePort.first;
     return result;
   }
 

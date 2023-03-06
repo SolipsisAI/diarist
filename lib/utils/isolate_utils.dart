@@ -40,15 +40,18 @@ class IsolateUtils {
       Interpreter sentimentInterpreter =
           Interpreter.fromAddress(isolateData.sentimentAddress);
 
+      // Emotion
       final emotionResult = await emotion.classify(
           emotionInterpreter, isolateData.rawText, isolateData.emotionDict);
+
+      // Sentiment
       final sentimentLabel = await sentiment.classify(
           sentimentInterpreter, isolateData.rawText, isolateData.sentimentDict);
 
       isolateData.responsePort.send({
         'chatMessageId': isolateData.chatMessageId,
-        'emotion': emotionResult['label'],
-        'emotionScore': emotionResult['score'],
+        'emotion': emotionResult['label']!,
+        'emotionScore': emotionResult['score']!,
         'sentiment': sentimentLabel
       });
     }
