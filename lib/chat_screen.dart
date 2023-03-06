@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:developer' as logger;
 import 'dart:convert';
 import 'dart:isolate';
+import 'package:diarist/models/prediction.dart';
 import 'package:diarist/utils/isolate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -110,7 +111,24 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       _addMessage(message);
+      _addPrediction(result);
       _userMessages.removeAt(0);
+    });
+  }
+
+  void _addPrediction(Map<String, Object> result) async {
+    final String emotionLabel = result['emotion']! as String;
+    final String sentimentLabel = result['sentiment']! as String;
+    final int chatMessageId = result['chatMessageId']! as int;
+
+    final newPrediction = Prediction()
+      ..createdAt = currentTimestamp()
+      ..chatMessageId = chatMessageId
+      ..emotion = emotionLabel
+      ..sentiment = sentimentLabel;
+
+    await widget.isar.writeTxn((isar) async {
+      await isar.predictions.put(newPrediction);
     });
   }
 
