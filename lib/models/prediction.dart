@@ -11,4 +11,5 @@ class Prediction {
   late int createdAt;
   late String sentiment;
   late String emotion;
+  late double emotionScore;
 }

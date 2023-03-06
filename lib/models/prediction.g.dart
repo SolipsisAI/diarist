@@ -15,13 +15,14 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"sentiment","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'chatMessageId': 0,
     'createdAt': 1,
     'emotion': 2,
-    'sentiment': 3
+    'emotionScore': 3,
+    'sentiment': 4
   },
   listProperties: {},
   indexIds: {},
@@ -72,8 +73,10 @@ void _predictionSerializeNative(
   final value2 = object.emotion;
   final _emotion = IsarBinaryWriter.utf8Encoder.convert(value2);
   dynamicSize += (_emotion.length) as int;
-  final value3 = object.sentiment;
-  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value3);
+  final value3 = object.emotionScore;
+  final _emotionScore = value3;
+  final value4 = object.sentiment;
+  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value4);
   dynamicSize += (_sentiment.length) as int;
   final size = staticSize + dynamicSize;
 
@@ -84,7 +87,8 @@ void _predictionSerializeNative(
   writer.writeLong(offsets[0], _chatMessageId);
   writer.writeLong(offsets[1], _createdAt);
   writer.writeBytes(offsets[2], _emotion);
-  writer.writeBytes(offsets[3], _sentiment);
+  writer.writeDouble(offsets[3], _emotionScore);
+  writer.writeBytes(offsets[4], _sentiment);
 }
 
 Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
@@ -93,8 +97,9 @@ Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
   object.chatMessageId = reader.readLong(offsets[0]);
   object.createdAt = reader.readLong(offsets[1]);
   object.emotion = reader.readString(offsets[2]);
+  object.emotionScore = reader.readDouble(offsets[3]);
   object.id = id;
-  object.sentiment = reader.readString(offsets[3]);
+  object.sentiment = reader.readString(offsets[4]);
   return object;
 }
 
@@ -110,6 +115,8 @@ P _predictionDeserializePropNative<P>(
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
+      return (reader.readDouble(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -122,6 +129,7 @@ dynamic _predictionSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'chatMessageId', object.chatMessageId);
   IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
   IsarNative.jsObjectSet(jsObj, 'emotion', object.emotion);
+  IsarNative.jsObjectSet(jsObj, 'emotionScore', object.emotionScore);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'sentiment', object.sentiment);
   return jsObj;
@@ -135,6 +143,8 @@ Prediction _predictionDeserializeWeb(
   object.createdAt =
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
   object.emotion = IsarNative.jsObjectGet(jsObj, 'emotion') ?? '';
+  object.emotionScore =
+      IsarNative.jsObjectGet(jsObj, 'emotionScore') ?? double.negativeInfinity;
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
   object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '';
   return object;
@@ -150,6 +160,9 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
           double.negativeInfinity) as P;
     case 'emotion':
       return (IsarNative.jsObjectGet(jsObj, 'emotion') ?? '') as P;
+    case 'emotionScore':
+      return (IsarNative.jsObjectGet(jsObj, 'emotionScore') ??
+          double.negativeInfinity) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
     case 'sentiment':
@@ -430,6 +443,37 @@ extension PredictionQueryFilter
     ));
   }
 
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      emotionScoreGreaterThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'emotionScore',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      emotionScoreLessThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'emotionScore',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      emotionScoreBetween(double lower, double upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'emotionScore',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
+  }
+
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -621,6 +665,14 @@ extension PredictionQueryWhereSortBy
     return addSortByInternal('emotion', Sort.desc);
   }
 
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByEmotionScore() {
+    return addSortByInternal('emotionScore', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByEmotionScoreDesc() {
+    return addSortByInternal('emotionScore', Sort.desc);
+  }
+
   QueryBuilder<Prediction, Prediction, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -664,6 +716,14 @@ extension PredictionQueryWhereSortThenBy
     return addSortByInternal('emotion', Sort.desc);
   }
 
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByEmotionScore() {
+    return addSortByInternal('emotionScore', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByEmotionScoreDesc() {
+    return addSortByInternal('emotionScore', Sort.desc);
+  }
+
   QueryBuilder<Prediction, Prediction, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -696,6 +756,10 @@ extension PredictionQueryWhereDistinct
     return addDistinctByInternal('emotion', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<Prediction, Prediction, QDistinct> distinctByEmotionScore() {
+    return addDistinctByInternal('emotionScore');
+  }
+
   QueryBuilder<Prediction, Prediction, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
@@ -718,6 +782,10 @@ extension PredictionQueryProperty
 
   QueryBuilder<Prediction, String, QQueryOperations> emotionProperty() {
     return addPropertyNameInternal('emotion');
+  }
+
+  QueryBuilder<Prediction, double, QQueryOperations> emotionScoreProperty() {
+    return addPropertyNameInternal('emotionScore');
   }
 
   QueryBuilder<Prediction, int?, QQueryOperations> idProperty() {

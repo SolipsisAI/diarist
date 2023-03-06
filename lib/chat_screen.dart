@@ -120,11 +120,13 @@ class _ChatScreenState extends State<ChatScreen> {
     final String emotionLabel = result['emotion'] as String;
     final String sentimentLabel = result['sentiment'] as String;
     final int chatMessageId = result['chatMessageId'] as int;
+    final double emotionScore = result['emotionScore'] as double;
 
     final newPrediction = Prediction()
       ..createdAt = currentTimestamp()
       ..chatMessageId = chatMessageId
       ..emotion = emotionLabel
+      ..emotionScore = emotionScore
       ..sentiment = sentimentLabel;
 
     await widget.isar.writeTxn((isar) async {
