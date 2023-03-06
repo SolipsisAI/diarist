@@ -130,6 +130,9 @@ class _ChatScreenState extends State<ChatScreen> {
     await widget.isar.writeTxn((isar) async {
       await isar.predictions.put(newPrediction);
     });
+
+    logger.log(
+        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion}, sentiment: ${newPrediction.sentiment}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
