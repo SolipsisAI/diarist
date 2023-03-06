@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     logger.log(
-        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion}, sentiment: ${newPrediction.sentiment}');
+        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
