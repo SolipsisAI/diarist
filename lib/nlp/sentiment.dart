@@ -12,7 +12,12 @@ const String unk = '<UNKNOWN>';
 final List<String> labels = ['NEGATIVE', 'POSITIVE'];
 
 Future<Map<String, Object>> classify(
-    Interpreter interpreter, String rawText, Map<String, int> dict) async {
+    Interpreter interpreter, String rawText, Map<String, int> dict,
+    {bool split = false}) async {
+  if (!split) {
+    return classifyNoSplit(interpreter, rawText, dict);
+  }
+
   List<String> texts = splitText(rawText, maxLen: sentenceLen);
 
   var labelIndexes = List<int>.filled(labels.length, 0);
@@ -52,6 +57,33 @@ Future<Map<String, Object>> classify(
           .mean();
 
   return {'label': labels[mostFreqLabelIndex], 'score': avgScore};
+}
+
+Future<Map<String, Object>> classifyNoSplit(
+    Interpreter interpreter, String rawText, Map<String, int> dict) async {
+  // tokenizeInputText returns List<List<double>>
+  // of shape [1, 256].
+  List<List<double>> input = tokenizeInputText(rawText, dict);
+
+  // output of shape [1,2].
+  var output =
+      List<double>.filled(labels.length, 0).reshape([1, labels.length]);
+
+  // The run method will run inference and
+  // store the resulting values in output.
+  interpreter.run(input, output);
+
+  var labelIndex = 1;
+  // If value of first element in output is greater than second,
+  // then the sentence is negative
+  if ((output[0][0] as double) > (output[0][1] as double)) {
+    labelIndex = 0;
+  }
+
+  return {
+    'label': labels[labelIndex],
+    'score': output[0][labelIndex] as double
+  };
 }
 
 List<List<double>> tokenizeInputText(String text, Map<String, int> dict) {
