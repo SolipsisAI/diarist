@@ -9,28 +9,49 @@ const String start = '<START>';
 const String pad = '<PAD>';
 const String unk = '<UNKNOWN>';
 
-Future<String> classify(
+final List<String> labels = ['NEGATIVE', 'POSITIVE'];
+
+Future<Map<String, Object>> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
-  // tokenizeInputText returns List<List<double>>
-  // of shape [1, 256].
-  List<List<double>> input = tokenizeInputText(rawText, dict);
+  List<String> texts = splitText(rawText, maxLen: sentenceLen);
 
-  // output of shape [1,2].
-  var output = List<double>.filled(2, 0).reshape([1, 2]);
+  var labelIndexes = List<int>.filled(labels.length, 0);
+  var scores = List.generate(
+      labels.length, (i) => List<double>.filled(texts.length, 0),
+      growable: false);
 
-  // The run method will run inference and
-  // store the resulting values in output.
-  interpreter.run(input, output);
+  for (var i = 0; i < texts.length; i++) {
+    // tokenizeInputText returns List<List<double>>
+    // of shape [1, 256].
+    List<List<double>> input = tokenizeInputText(rawText, dict);
 
-  var result = "POSITIVE";
+    // output of shape [1,2].
+    var output =
+        List<double>.filled(labels.length, 0).reshape([1, labels.length]);
 
-  // If value of first element in output is greater than second,
-  // then the sentence is negative
-  if ((output[0][0] as double) > (output[0][1] as double)) {
-    result = "NEGATIVE";
+    // The run method will run inference and
+    // store the resulting values in output.
+    interpreter.run(input, output);
+
+    // If value of first element in output is greater than second,
+    // then the sentence is negative
+    var labelIndex = 1;
+    if ((output[0][0] as double) > (output[0][1] as double)) {
+      labelIndex = 0;
+    }
+
+    labelIndexes[labelIndex] += 1;
+
+    scores[labelIndex][i] = output[0][labelIndex] as double;
   }
 
-  return result;
+  var labelIndexesVector = Vector.fromList(labelIndexes);
+  final mostFreqLabelIndex = argmax(labelIndexesVector);
+  final avgScore =
+      Vector.fromList(scores[mostFreqLabelIndex].where((e) => e > 0).toList())
+          .mean();
+
+  return {'label': labels[mostFreqLabelIndex], 'score': avgScore};
 }
 
 List<List<double>> tokenizeInputText(String text, Map<String, int> dict) {

@@ -121,20 +121,22 @@ class _ChatScreenState extends State<ChatScreen> {
     final String sentimentLabel = result['sentiment'] as String;
     final int chatMessageId = result['chatMessageId'] as int;
     final double emotionScore = result['emotionScore'] as double;
+    final double sentimentScore = result['sentimentScore'] as double;
 
     final newPrediction = Prediction()
       ..createdAt = currentTimestamp()
       ..chatMessageId = chatMessageId
       ..emotion = emotionLabel
       ..emotionScore = emotionScore
-      ..sentiment = sentimentLabel;
+      ..sentiment = sentimentLabel
+      ..sentimentScore = sentimentScore;
 
     await widget.isar.writeTxn((isar) async {
       await isar.predictions.put(newPrediction);
     });
 
     logger.log(
-        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment}');
+        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment} [${newPrediction.sentimentScore}]');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {

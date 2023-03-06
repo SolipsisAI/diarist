@@ -15,14 +15,15 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'chatMessageId': 0,
     'createdAt': 1,
     'emotion': 2,
     'emotionScore': 3,
-    'sentiment': 4
+    'sentiment': 4,
+    'sentimentScore': 5
   },
   listProperties: {},
   indexIds: {},
@@ -78,6 +79,8 @@ void _predictionSerializeNative(
   final value4 = object.sentiment;
   final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value4);
   dynamicSize += (_sentiment.length) as int;
+  final value5 = object.sentimentScore;
+  final _sentimentScore = value5;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -89,6 +92,7 @@ void _predictionSerializeNative(
   writer.writeBytes(offsets[2], _emotion);
   writer.writeDouble(offsets[3], _emotionScore);
   writer.writeBytes(offsets[4], _sentiment);
+  writer.writeDouble(offsets[5], _sentimentScore);
 }
 
 Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
@@ -100,6 +104,7 @@ Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
   object.emotionScore = reader.readDouble(offsets[3]);
   object.id = id;
   object.sentiment = reader.readString(offsets[4]);
+  object.sentimentScore = reader.readDouble(offsets[5]);
   return object;
 }
 
@@ -118,6 +123,8 @@ P _predictionDeserializePropNative<P>(
       return (reader.readDouble(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readDouble(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
   }
@@ -132,6 +139,7 @@ dynamic _predictionSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'emotionScore', object.emotionScore);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'sentiment', object.sentiment);
+  IsarNative.jsObjectSet(jsObj, 'sentimentScore', object.sentimentScore);
   return jsObj;
 }
 
@@ -147,6 +155,8 @@ Prediction _predictionDeserializeWeb(
       IsarNative.jsObjectGet(jsObj, 'emotionScore') ?? double.negativeInfinity;
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
   object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '';
+  object.sentimentScore = IsarNative.jsObjectGet(jsObj, 'sentimentScore') ??
+      double.negativeInfinity;
   return object;
 }
 
@@ -167,6 +177,9 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
     case 'sentiment':
       return (IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '') as P;
+    case 'sentimentScore':
+      return (IsarNative.jsObjectGet(jsObj, 'sentimentScore') ??
+          double.negativeInfinity) as P;
     default:
       throw 'Illegal propertyName';
   }
@@ -634,6 +647,37 @@ extension PredictionQueryFilter
       caseSensitive: caseSensitive,
     ));
   }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      sentimentScoreGreaterThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'sentimentScore',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      sentimentScoreLessThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'sentimentScore',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      sentimentScoreBetween(double lower, double upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'sentimentScore',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
+  }
 }
 
 extension PredictionQueryLinks
@@ -688,6 +732,15 @@ extension PredictionQueryWhereSortBy
   QueryBuilder<Prediction, Prediction, QAfterSortBy> sortBySentimentDesc() {
     return addSortByInternal('sentiment', Sort.desc);
   }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortBySentimentScore() {
+    return addSortByInternal('sentimentScore', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy>
+      sortBySentimentScoreDesc() {
+    return addSortByInternal('sentimentScore', Sort.desc);
+  }
 }
 
 extension PredictionQueryWhereSortThenBy
@@ -739,6 +792,15 @@ extension PredictionQueryWhereSortThenBy
   QueryBuilder<Prediction, Prediction, QAfterSortBy> thenBySentimentDesc() {
     return addSortByInternal('sentiment', Sort.desc);
   }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenBySentimentScore() {
+    return addSortByInternal('sentimentScore', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy>
+      thenBySentimentScoreDesc() {
+    return addSortByInternal('sentimentScore', Sort.desc);
+  }
 }
 
 extension PredictionQueryWhereDistinct
@@ -768,6 +830,10 @@ extension PredictionQueryWhereDistinct
       {bool caseSensitive = true}) {
     return addDistinctByInternal('sentiment', caseSensitive: caseSensitive);
   }
+
+  QueryBuilder<Prediction, Prediction, QDistinct> distinctBySentimentScore() {
+    return addDistinctByInternal('sentimentScore');
+  }
 }
 
 extension PredictionQueryProperty
@@ -794,5 +860,9 @@ extension PredictionQueryProperty
 
   QueryBuilder<Prediction, String, QQueryOperations> sentimentProperty() {
     return addPropertyNameInternal('sentiment');
+  }
+
+  QueryBuilder<Prediction, double, QQueryOperations> sentimentScoreProperty() {
+    return addPropertyNameInternal('sentimentScore');
   }
 }
