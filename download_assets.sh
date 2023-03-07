@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-TF_VERSION=2.5
-
 ASSETS_DIR="assets"
 MODELS_DIR="${ASSETS_DIR}/models"
 MODELS=("emotion_classification" "sentiment_classification")
@@ -15,6 +13,11 @@ mkdir -p $(pwd)/${MODELS_DIR}
 
 for i in "${MODELS[@]}"
 do
-    download "${i}.tflite" "${BASE_URL}/${i}.tflite"
-    download "${i}.vocab.txt" "${BASE_URL}/${i}.vocab.txt"
+    if [ ! -f "${i}.tflite" ]; then
+        download "${i}.tflite" "${BASE_URL}/${i}.tflite"
+    fi
+
+    if [ ! -f "{i}.vocab.txt" ]; then
+        download "${i}.vocab.txt" "${BASE_URL}/${i}.vocab.txt"
+    fi
 done

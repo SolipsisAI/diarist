@@ -15,20 +15,19 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"chatMessageId","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[{"name":"chatMessage","target":"ChatMessage"}]}',
   idName: 'id',
   propertyIds: {
-    'chatMessageId': 0,
-    'createdAt': 1,
-    'emotion': 2,
-    'emotionScore': 3,
-    'sentiment': 4,
-    'sentimentScore': 5
+    'createdAt': 0,
+    'emotion': 1,
+    'emotionScore': 2,
+    'sentiment': 3,
+    'sentimentScore': 4
   },
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
-  linkIds: {},
+  linkIds: {'chatMessage': 0},
   backlinkLinkNames: {},
   getId: _predictionGetId,
   setId: _predictionSetId,
@@ -56,7 +55,7 @@ void _predictionSetId(Prediction object, int id) {
 }
 
 List<IsarLinkBase> _predictionGetLinks(Prediction object) {
-  return [];
+  return [object.chatMessage];
 }
 
 void _predictionSerializeNative(
@@ -67,44 +66,41 @@ void _predictionSerializeNative(
     List<int> offsets,
     AdapterAlloc alloc) {
   var dynamicSize = 0;
-  final value0 = object.chatMessageId;
-  final _chatMessageId = value0;
-  final value1 = object.createdAt;
-  final _createdAt = value1;
-  final value2 = object.emotion;
-  final _emotion = IsarBinaryWriter.utf8Encoder.convert(value2);
+  final value0 = object.createdAt;
+  final _createdAt = value0;
+  final value1 = object.emotion;
+  final _emotion = IsarBinaryWriter.utf8Encoder.convert(value1);
   dynamicSize += (_emotion.length) as int;
-  final value3 = object.emotionScore;
-  final _emotionScore = value3;
-  final value4 = object.sentiment;
-  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value4);
+  final value2 = object.emotionScore;
+  final _emotionScore = value2;
+  final value3 = object.sentiment;
+  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value3);
   dynamicSize += (_sentiment.length) as int;
-  final value5 = object.sentimentScore;
-  final _sentimentScore = value5;
+  final value4 = object.sentimentScore;
+  final _sentimentScore = value4;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
   rawObj.buffer_length = size;
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeLong(offsets[0], _chatMessageId);
-  writer.writeLong(offsets[1], _createdAt);
-  writer.writeBytes(offsets[2], _emotion);
-  writer.writeDouble(offsets[3], _emotionScore);
-  writer.writeBytes(offsets[4], _sentiment);
-  writer.writeDouble(offsets[5], _sentimentScore);
+  writer.writeLong(offsets[0], _createdAt);
+  writer.writeBytes(offsets[1], _emotion);
+  writer.writeDouble(offsets[2], _emotionScore);
+  writer.writeBytes(offsets[3], _sentiment);
+  writer.writeDouble(offsets[4], _sentimentScore);
 }
 
 Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
     int id, IsarBinaryReader reader, List<int> offsets) {
   final object = Prediction();
-  object.chatMessageId = reader.readLong(offsets[0]);
-  object.createdAt = reader.readLong(offsets[1]);
-  object.emotion = reader.readString(offsets[2]);
-  object.emotionScore = reader.readDouble(offsets[3]);
+  object.createdAt = reader.readLong(offsets[0]);
+  object.emotion = reader.readString(offsets[1]);
+  object.emotionScore = reader.readDouble(offsets[2]);
   object.id = id;
-  object.sentiment = reader.readString(offsets[4]);
-  object.sentimentScore = reader.readDouble(offsets[5]);
+  object.sentiment = reader.readString(offsets[3]);
+  object.sentimentScore = reader.readDouble(offsets[4]);
+  _predictionAttachLinks(collection, id, object);
   return object;
 }
 
@@ -116,14 +112,12 @@ P _predictionDeserializePropNative<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
       return (reader.readDouble(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readString(offset)) as P;
-    case 5:
+    case 4:
       return (reader.readDouble(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -133,7 +127,6 @@ P _predictionDeserializePropNative<P>(
 dynamic _predictionSerializeWeb(
     IsarCollection<Prediction> collection, Prediction object) {
   final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, 'chatMessageId', object.chatMessageId);
   IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
   IsarNative.jsObjectSet(jsObj, 'emotion', object.emotion);
   IsarNative.jsObjectSet(jsObj, 'emotionScore', object.emotionScore);
@@ -146,8 +139,6 @@ dynamic _predictionSerializeWeb(
 Prediction _predictionDeserializeWeb(
     IsarCollection<Prediction> collection, dynamic jsObj) {
   final object = Prediction();
-  object.chatMessageId =
-      IsarNative.jsObjectGet(jsObj, 'chatMessageId') ?? double.negativeInfinity;
   object.createdAt =
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
   object.emotion = IsarNative.jsObjectGet(jsObj, 'emotion') ?? '';
@@ -157,14 +148,13 @@ Prediction _predictionDeserializeWeb(
   object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '';
   object.sentimentScore = IsarNative.jsObjectGet(jsObj, 'sentimentScore') ??
       double.negativeInfinity;
+  _predictionAttachLinks(
+      collection, IsarNative.jsObjectGet(jsObj, 'id'), object);
   return object;
 }
 
 P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
-    case 'chatMessageId':
-      return (IsarNative.jsObjectGet(jsObj, 'chatMessageId') ??
-          double.negativeInfinity) as P;
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') ??
           double.negativeInfinity) as P;
@@ -185,7 +175,9 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _predictionAttachLinks(IsarCollection col, int id, Prediction object) {}
+void _predictionAttachLinks(IsarCollection col, int id, Prediction object) {
+  object.chatMessage.attach(col, col.isar.chatMessages, 'chatMessage', id);
+}
 
 extension PredictionQueryWhereSort
     on QueryBuilder<Prediction, Prediction, QWhere> {
@@ -252,57 +244,6 @@ extension PredictionQueryWhere
 
 extension PredictionQueryFilter
     on QueryBuilder<Prediction, Prediction, QFilterCondition> {
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      chatMessageIdEqualTo(int value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'chatMessageId',
-      value: value,
-    ));
-  }
-
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      chatMessageIdGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'chatMessageId',
-      value: value,
-    ));
-  }
-
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      chatMessageIdLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'chatMessageId',
-      value: value,
-    ));
-  }
-
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
-      chatMessageIdBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'chatMessageId',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
-  }
-
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> createdAtEqualTo(
       int value) {
     return addFilterConditionInternal(FilterCondition(
@@ -681,18 +622,19 @@ extension PredictionQueryFilter
 }
 
 extension PredictionQueryLinks
-    on QueryBuilder<Prediction, Prediction, QFilterCondition> {}
+    on QueryBuilder<Prediction, Prediction, QFilterCondition> {
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> chatMessage(
+      FilterQuery<ChatMessage> q) {
+    return linkInternal(
+      isar.chatMessages,
+      q,
+      'chatMessage',
+    );
+  }
+}
 
 extension PredictionQueryWhereSortBy
     on QueryBuilder<Prediction, Prediction, QSortBy> {
-  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByChatMessageId() {
-    return addSortByInternal('chatMessageId', Sort.asc);
-  }
-
-  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByChatMessageIdDesc() {
-    return addSortByInternal('chatMessageId', Sort.desc);
-  }
-
   QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -745,14 +687,6 @@ extension PredictionQueryWhereSortBy
 
 extension PredictionQueryWhereSortThenBy
     on QueryBuilder<Prediction, Prediction, QSortThenBy> {
-  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByChatMessageId() {
-    return addSortByInternal('chatMessageId', Sort.asc);
-  }
-
-  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByChatMessageIdDesc() {
-    return addSortByInternal('chatMessageId', Sort.desc);
-  }
-
   QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -805,10 +739,6 @@ extension PredictionQueryWhereSortThenBy
 
 extension PredictionQueryWhereDistinct
     on QueryBuilder<Prediction, Prediction, QDistinct> {
-  QueryBuilder<Prediction, Prediction, QDistinct> distinctByChatMessageId() {
-    return addDistinctByInternal('chatMessageId');
-  }
-
   QueryBuilder<Prediction, Prediction, QDistinct> distinctByCreatedAt() {
     return addDistinctByInternal('createdAt');
   }
@@ -838,10 +768,6 @@ extension PredictionQueryWhereDistinct
 
 extension PredictionQueryProperty
     on QueryBuilder<Prediction, Prediction, QQueryProperty> {
-  QueryBuilder<Prediction, int, QQueryOperations> chatMessageIdProperty() {
-    return addPropertyNameInternal('chatMessageId');
-  }
-
   QueryBuilder<Prediction, int, QQueryOperations> createdAtProperty() {
     return addPropertyNameInternal('createdAt');
   }

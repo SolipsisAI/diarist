@@ -40,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _userIsTyping = false;
 
   List<types.Message> _messages = [];
-  final List<String> _userMessages = [];
+  final List<ChatMessage> _userMessages = [];
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
@@ -74,11 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_userMessages.isNotEmpty) {
         _showTyping = true;
 
-        final rawText = _userMessages.last;
-        final lastMessage = widget.chatMessages.last;
+        final ChatMessage lastMessage = _userMessages.last;
 
         final IsolateData isolateData = IsolateData(
-            rawText,
+            lastMessage.text,
             lastMessage.id!,
             widget.interpreters['emotion']!,
             widget.interpreters['sentiment']!,
@@ -87,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
         final result = await inference(isolateData);
 
-        _handleBotResponse(result);
+        _handleBotResponse(result, lastMessage);
 
         _showTyping = false;
       }
@@ -95,8 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _handleBotResponse(
-    Map<String, Object> result,
-  ) async {
+      Map<String, Object> result, ChatMessage chatMessage) async {
     final String emotionLabel = result['emotion']! as String;
     final String sentimentLabel = result['sentiment']! as String;
 
@@ -111,21 +109,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       _addMessage(message);
-      _addPrediction(result);
+      _addPrediction(result, chatMessage);
       _userMessages.removeAt(0);
     });
   }
 
-  void _addPrediction(Map<String, Object> result) async {
+  void _addPrediction(
+      Map<String, Object> result, ChatMessage chatMessage) async {
     final String emotionLabel = result['emotion'] as String;
     final String sentimentLabel = result['sentiment'] as String;
-    final int chatMessageId = result['chatMessageId'] as int;
     final double emotionScore = result['emotionScore'] as double;
     final double sentimentScore = result['sentimentScore'] as double;
 
     final newPrediction = Prediction()
+      ..chatMessage.value = chatMessage
       ..createdAt = currentTimestamp()
-      ..chatMessageId = chatMessageId
       ..emotion = emotionLabel
       ..emotionScore = emotionScore
       ..sentiment = sentimentLabel
@@ -136,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     logger.log(
-        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessageId}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment} [${newPrediction.sentimentScore}]');
+        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessage.value?.id}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment} [${newPrediction.sentimentScore}]');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -183,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _addMessage(types.TextMessage message) async {
+  Future<ChatMessage> _addMessage(types.TextMessage message) async {
     final newMessage = ChatMessage()
       ..createdAt = message.createdAt!
       ..userUuid = message.author.id
@@ -198,6 +196,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.insert(0, message);
     });
     logger.log('data: $message');
+
+    return newMessage;
   }
 
   void _handleSendPressed(types.PartialText message) async {
@@ -208,10 +208,10 @@ class _ChatScreenState extends State<ChatScreen> {
       text: message.text,
     );
 
-    _addMessage(textMessage);
+    final newMessage = await _addMessage(textMessage);
 
     setState(() {
-      _userMessages.add(message.text);
+      _userMessages.add(newMessage);
     });
 
     toggleUserIsTyping();
