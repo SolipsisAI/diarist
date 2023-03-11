@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:ml_linalg/linalg.dart';
 
 import 'utils.dart';
 
-const int _sentenceLen = 256;
+const int _sentenceLen = 512;
 const String start = '[CLS]';
 const String pad = '[PAD]';
 const String unk = '[UNK]';
@@ -19,7 +21,7 @@ final List<String> labels = [
   "surprise"
 ];
 
-Future<String> classify(
+Future<Map<String, Object>> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // Split by newline
   List<String> texts = splitText(rawText, maxLen: _sentenceLen);
@@ -27,8 +29,13 @@ Future<String> classify(
 
   // Keep track of counts
   var labelIndexes = List<int>.filled(6, 0);
+  // var scores = List<double>.filled(texts.length, 0).reshape([1, texts.length]);
+  var scores = List.generate(6, (i) => List<double>.filled(texts.length, 0),
+      growable: false);
 
-  for (var text in texts) {
+  for (var i = 0; i < texts.length; i++) {
+    var text = texts[i];
+
     // tokenizeInputText returns List<List<double>>
     // of shape [1, 256].
     List<List<int>> input = tokenizeInputText(text, dict);
@@ -42,18 +49,25 @@ Future<String> classify(
     interpreter.run(input, output);
 
     // Compute the softmax
-    final result = softmax(output[0]);
-    final labelIndex = argmax(result);
+    final Vector result = softmax(output[0]);
 
+    // Get label
+    final int labelIndex = argmax(result);
     labelIndexes[labelIndex] += 1;
+
+    // Get scores
+    scores[labelIndex][i] = result.max();
   }
 
   debugPrint('labelIndexes: $labelIndexes');
 
   var labelIndexesVector = Vector.fromList(labelIndexes);
   final mostFreqLabelIndex = argmax(labelIndexesVector);
+  final avgScore =
+      Vector.fromList(scores[mostFreqLabelIndex].where((e) => e > 0).toList())
+          .mean();
 
-  return labels[mostFreqLabelIndex];
+  return {'label': labels[mostFreqLabelIndex], 'score': avgScore};
 }
 
 List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {

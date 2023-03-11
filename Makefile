@@ -1,4 +1,9 @@
-.PHONY: install simulator run-ios run build build-ios devices generate clean
+ifneq (,$(wildcard ./.env))
+  include .env
+  export
+endif
+
+.PHONY: timestamp install simulator run-ios run build build-ios devices generate clean
 
 FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter
 OPT_CMD=
@@ -6,7 +11,7 @@ OPT_CMD=
 ROOT_DIR=$(shell pwd)
 APP_DIR=$(ROOT_DIR)/AppDir
 TMP_DIR=$(ROOT_DIR)/tmp
-TIMESTAMP=$(shell date --iso=seconds)
+TIMESTAMP=`date +'%Y-%m-%d_%H:%M:%S'`
 ARCHIVE_DIR=$(TMP_DIR)/$(TIMESTAMP)
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 
@@ -17,6 +22,9 @@ else
   OPT_CMD=appimage-builder --recipe AppImageBuilder.yml
 endif
 
+timestamp:
+	echo $(TIMESTAMP)
+
 install:
 	@bash ./install_libs.sh
 	@bash ./download_assets.sh
@@ -26,7 +34,7 @@ simulator:
 	@open -a Simulator.app
 
 run-ios: simulator
-	@$(FLUTTER_CMD) run -d 'iphone 11' -v
+	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v
 
 run:
 	@$(FLUTTER_CMD) run -d $(target) -v
@@ -42,7 +50,7 @@ devices:
 	@$(FLUTTER_CMD) devices
 
 generate:
-	@$(FLUTTER_CMD) pub run build_runner build
+	@$(FLUTTER_CMD) pub run build_runner build --delete-conflicting-outputs
 
 clean:
 	@$(FLUTTER_CMD) clean

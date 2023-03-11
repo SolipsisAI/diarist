@@ -1,7 +1,9 @@
 import 'dart:core';
 import 'dart:developer' as logger;
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:isolate';
+import 'package:diarist/models/prediction.dart';
 import 'package:diarist/utils/isolate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -39,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _userIsTyping = false;
 
   List<types.Message> _messages = [];
-  final List<String> _userMessages = [];
+  final Queue _userMessages = Queue<ChatMessage>();
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
@@ -72,23 +74,34 @@ class _ChatScreenState extends State<ChatScreen> {
     messagesUpdated.listen((event) async {
       if (_userMessages.isNotEmpty) {
         _showTyping = true;
-        final rawText = _userMessages.last;
+
+        final ChatMessage lastMessage = _userMessages.last;
+
         final IsolateData isolateData = IsolateData(
-            rawText,
+            lastMessage.text,
+            lastMessage.id!,
             widget.interpreters['emotion']!,
             widget.interpreters['sentiment']!,
             widget.vocab['emotion'],
             widget.vocab['sentiment']);
+
         final result = await inference(isolateData);
-        _handleBotResponse(result);
+
+        _handleBotResponse(result, lastMessage);
+
         _showTyping = false;
       }
     });
   }
 
   Future<void> _handleBotResponse(
-    String responseText,
-  ) async {
+      Map<String, Object> result, ChatMessage chatMessage) async {
+    final String emotionLabel = result['emotion']! as String;
+    final String sentimentLabel = result['sentiment']! as String;
+
+    final String responseText =
+        'It sounds like you are feeling $emotionLabel and that your general sentiment is $sentimentLabel.';
+
     final types.TextMessage message = types.TextMessage(
         id: randomString(),
         author: _bot,
@@ -97,16 +110,40 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       _addMessage(message);
-      _userMessages.removeAt(0);
+      _addPrediction(result, chatMessage);
+      _userMessages.removeFirst();
     });
   }
 
-  Future<String> inference(IsolateData isolateData) async {
+  void _addPrediction(
+      Map<String, Object> result, ChatMessage chatMessage) async {
+    final String emotionLabel = result['emotion'] as String;
+    final String sentimentLabel = result['sentiment'] as String;
+    final double emotionScore = result['emotionScore'] as double;
+    final double sentimentScore = result['sentimentScore'] as double;
+
+    final newPrediction = Prediction()
+      ..chatMessage.value = chatMessage
+      ..createdAt = currentTimestamp()
+      ..emotion = emotionLabel
+      ..emotionScore = emotionScore
+      ..sentiment = sentimentLabel
+      ..sentimentScore = sentimentScore;
+
+    await widget.isar.writeTxn((isar) async {
+      await isar.predictions.put(newPrediction);
+    });
+
+    logger.log(
+        'prediction ${newPrediction.id} (ChatMessage ${newPrediction.chatMessage.value?.id}): emotion: ${newPrediction.emotion} [${newPrediction.emotionScore}], sentiment: ${newPrediction.sentiment} [${newPrediction.sentimentScore}]');
+  }
+
+  Future<Map<String, Object>> inference(IsolateData isolateData) async {
     ReceivePort responsePort = ReceivePort();
     widget.isolateUtils.sendPort
         .send(isolateData..responsePort = responsePort.sendPort);
-    var results = await responsePort.first;
-    return results;
+    final result = await responsePort.first;
+    return result;
   }
 
   void _handleUserTyping(String text) {
@@ -145,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _addMessage(types.TextMessage message) async {
+  Future<ChatMessage> _addMessage(types.TextMessage message) async {
     final newMessage = ChatMessage()
       ..createdAt = message.createdAt!
       ..userUuid = message.author.id
@@ -160,6 +197,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.insert(0, message);
     });
     logger.log('data: $message');
+
+    return newMessage;
   }
 
   void _handleSendPressed(types.PartialText message) async {
@@ -170,10 +209,10 @@ class _ChatScreenState extends State<ChatScreen> {
       text: message.text,
     );
 
-    _addMessage(textMessage);
+    final newMessage = await _addMessage(textMessage);
 
     setState(() {
-      _userMessages.add(message.text);
+      _userMessages.add(newMessage);
     });
 
     toggleUserIsTyping();
