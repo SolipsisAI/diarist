@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:developer' as logger;
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:isolate';
 import 'package:diarist/models/prediction.dart';
@@ -40,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _userIsTyping = false;
 
   List<types.Message> _messages = [];
-  final List<ChatMessage> _userMessages = [];
+  final Queue _userMessages = Queue<ChatMessage>();
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
@@ -110,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _addMessage(message);
       _addPrediction(result, chatMessage);
-      _userMessages.removeAt(0);
+      _userMessages.removeFirst();
     });
   }
 
