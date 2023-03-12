@@ -27,36 +27,22 @@ Future<Map<String, Object>> classify(
   List<String> texts = splitText(rawText, maxLen: _sentenceLen);
   debugPrint('texts: $texts');
 
+  if (texts.length == 1) {
+    return _classify(interpreter, rawText, dict);
+  }
+
   // Keep track of counts
   var labelIndexes = List<int>.filled(6, 0);
-  // var scores = List<double>.filled(texts.length, 0).reshape([1, texts.length]);
-  var scores = List.generate(6, (i) => List<double>.filled(texts.length, 0),
+  var scores = List.generate(
+      labels.length, (i) => List<double>.filled(texts.length, 0),
       growable: false);
 
   for (var i = 0; i < texts.length; i++) {
-    var text = texts[i];
-
-    // tokenizeInputText returns List<List<double>>
-    // of shape [1, 256].
-    List<List<int>> input = tokenizeInputText(text, dict);
-
-    // output of shape [1,6]
-    // example: [[-1.434808373451233, -0.602688729763031, 4.8783135414123535, -1.720102071762085, -0.9065110087394714, -1.056220293045044]]
-    var output = List<double>.filled(6, 0).reshape([1, 6]);
-
-    // The run method will run inference and
-    // store the resulting values in output.
-    interpreter.run(input, output);
-
-    // Compute the softmax
-    final Vector result = softmax(output[0]);
-
-    // Get label
-    final int labelIndex = argmax(result);
+    final result = await _classify(interpreter, texts[i], dict);
+    final labelIndex = result['labelIndex'] as int;
+    final score = result['score'] as double;
     labelIndexes[labelIndex] += 1;
-
-    // Get scores
-    scores[labelIndex][i] = result.max();
+    scores[labelIndex][i] = score;
   }
 
   debugPrint('labelIndexes: $labelIndexes');
@@ -73,7 +59,34 @@ Future<Map<String, Object>> classify(
     label = labels[mostFreqLabelIndex];
   }
 
-  return {'label': label, 'score': avgScore};
+  return {'labelIndex': mostFreqLabelIndex, 'label': label, 'score': avgScore};
+}
+
+Future<Map<String, Object>> _classify(
+    Interpreter interpreter, String text, Map<String, int> dict) async {
+  // tokenizeInputText returns List<List<double>>
+  // of shape [1, 256].
+  List<List<int>> input = tokenizeInputText(text, dict);
+
+  // output of shape [1,6]
+  // example: [[-1.434808373451233, -0.602688729763031, 4.8783135414123535, -1.720102071762085, -0.9065110087394714, -1.056220293045044]]
+  var output = List<double>.filled(6, 0).reshape([1, 6]);
+
+  // The run method will run inference and
+  // store the resulting values in output.
+  interpreter.run(input, output);
+
+  // Compute the softmax
+  final Vector result = softmax(output[0]);
+
+  // Get label
+  final int labelIndex = argmax(result);
+
+  return {
+    'labelIndex': labelIndex,
+    'label': labels[labelIndex],
+    'score': result.max()
+  };
 }
 
 List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
