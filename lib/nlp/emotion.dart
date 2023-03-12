@@ -67,7 +67,13 @@ Future<Map<String, Object>> classify(
       Vector.fromList(scores[mostFreqLabelIndex].where((e) => e > 0).toList())
           .mean();
 
-  return {'label': labels[mostFreqLabelIndex], 'score': avgScore};
+  String label = "neutral";
+
+  if (avgScore > 0.5) {
+    label = labels[mostFreqLabelIndex];
+  }
+
+  return {'label': label, 'score': avgScore};
 }
 
 List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
