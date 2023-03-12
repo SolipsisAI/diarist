@@ -23,8 +23,8 @@ void main() async {
   final chatMessages = await _isar.chatMessages.where().findAll();
 
   // Load interpreters
-  final Interpreter emotionInterpreter =
-      await Interpreter.fromAsset('models/emotion_classification.tflite');
+  final Interpreter emotionInterpreter = await Interpreter.fromAsset(
+      'models/emotion_classification.finetuned.tflite');
   final Interpreter sentimentInterpreter =
       await Interpreter.fromAsset('models/sentiment_classification.tflite');
   final Map<String, int> interpreters = {
@@ -34,7 +34,8 @@ void main() async {
 
   // Load vocab
   final vocab = <String, dynamic>{};
-  final emotionVocab = await loadVocab('emotion_classification.vocab.txt');
+  final emotionVocab =
+      await loadVocab('emotion_classification.finetuned.vocab.txt');
   final sentimentVocab = await loadVocab('sentiment_classification.vocab.txt');
   vocab['emotion'] = emotionVocab;
   vocab['sentiment'] = sentimentVocab;
