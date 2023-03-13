@@ -25,8 +25,8 @@ void main() async {
   // Load interpreters
   final Interpreter emotionInterpreter = await Interpreter.fromAsset(
       'models/emotion_classification.finetuned.tflite');
-  final Interpreter sentimentInterpreter =
-      await Interpreter.fromAsset('models/sentiment_classification.tflite');
+  final Interpreter sentimentInterpreter = await Interpreter.fromAsset(
+      'models/sentiment_classification.distilbert.tflite');
   final Map<String, int> interpreters = {
     'emotion': emotionInterpreter.address,
     'sentiment': sentimentInterpreter.address,
@@ -36,7 +36,8 @@ void main() async {
   final vocab = <String, dynamic>{};
   final emotionVocab =
       await loadVocab('emotion_classification.finetuned.vocab.txt');
-  final sentimentVocab = await loadVocab('sentiment_classification.vocab.txt');
+  final sentimentVocab =
+      await loadVocab('sentiment_classification.distilbert.vocab.txt');
   vocab['emotion'] = emotionVocab;
   vocab['sentiment'] = sentimentVocab;
 

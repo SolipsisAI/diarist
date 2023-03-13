@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ASSETS_DIR="assets"
 MODELS_DIR="${ASSETS_DIR}/models"
-MODELS=("emotion_classification.finetuned" "emotion_classification" "sentiment_classification")
+MODELS=("emotion_classification.finetuned" "sentiment_classification.distilbert")
 
 BASE_URL='https://solipsis-data.s3.us-east-2.amazonaws.com/models' 
 
