@@ -12,8 +12,8 @@ import 'package:bubble/bubble.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
 
-import 'models/chat_message.dart';
-import 'utils.dart';
+import '../models/chat_message.dart';
+import '../utils.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(
