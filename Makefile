@@ -5,7 +5,8 @@ endif
 
 .PHONY: timestamp install simulator run-ios run build build-ios devices generate clean
 
-FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter
+#FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter  # There is an issue with fvm currently
+FLUTTER_CMD=flutter
 OPT_CMD=
 
 ROOT_DIR=$(shell pwd)
