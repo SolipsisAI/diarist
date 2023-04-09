@@ -56,3 +56,5 @@ appimage-build/
 TensorFlowLiteC.framework.zip
 *.dmg
 .env
+*.AppDir
+tmp/
