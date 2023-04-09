@@ -20,7 +20,7 @@ ifeq ($(OS_NAME),darwin)
   target=macos
 else
   target=linux
-  # OPT_CMD=appimage-builder --recipe AppImageBuilder.yml
+  OPT_CMD=bash ./build-linux.sh
 endif
 
 timestamp:
