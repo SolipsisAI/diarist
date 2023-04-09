@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
 
 import '../models/chat_message.dart';
-import '../utils.dart';
+import '../utils/helpers.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(

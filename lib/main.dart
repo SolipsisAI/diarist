@@ -11,7 +11,7 @@ import 'models/chat_message.dart';
 import 'models/chat_user.dart';
 import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
-import 'utils.dart';
+import 'utils/helpers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
