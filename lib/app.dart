@@ -5,7 +5,6 @@ import 'components/common_ui.dart';
 import 'components/sidebar.dart';
 import 'views/home_screen.dart';
 import 'models/note.dart';
-import 'models/note_prediction.dart';
 import 'utils/isolate_utils.dart';
 
 class DiaristApp extends StatelessWidget {
@@ -73,6 +72,11 @@ class DiaristApp extends StatelessWidget {
                     child: HomeScreen(
                       controller: _controller,
                       isSmallScreen: isSmallScreen,
+                      isar: isar,
+                      notes: notes,
+                      interpreters: interpreters,
+                      vocab: vocab,
+                      isolateUtils: isolateUtils,
                     ),
                   ),
                 ),
