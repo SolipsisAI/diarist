@@ -1,3 +1,4 @@
+import 'package:diarist/views/notes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -38,7 +39,14 @@ class HomeScreen extends StatelessWidget {
             return const Text("Home");
           case 1:
             // Main text-editing view
-            return Text("Placeholder");
+            return NotesScreen(
+                controller: controller,
+                isSmallScreen: isSmallScreen,
+                isar: isar,
+                notes: notes,
+                interpreters: interpreters,
+                vocab: vocab,
+                isolateUtils: isolateUtils);
           default:
             return Text(
               pageTitle,
