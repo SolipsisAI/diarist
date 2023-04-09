@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'components/common_ui.dart';
 import 'components/sidebar.dart';

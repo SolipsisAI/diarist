@@ -7,9 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'app.dart';
-import 'models/chat_message.dart';
-import 'models/chat_user.dart';
-import 'models/prediction.dart';
+import 'models/note.dart';
+import 'models/note_prediction.dart';
 import 'utils/isolate_utils.dart';
 import 'utils/helpers.dart';
 
@@ -18,9 +17,8 @@ void main() async {
 
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
-      schemas: [ChatMessageSchema, ChatUserSchema, PredictionSchema],
-      directory: dir.path);
-  final chatMessages = await _isar.chatMessages.where().findAll();
+      schemas: [NoteSchema, NotePredictionSchema], directory: dir.path);
+  final notes = await _isar.notes.where().findAll();
 
   // Load interpreters
   final Interpreter emotionInterpreter =
@@ -47,7 +45,7 @@ void main() async {
 
   runApp(Diarist(
     isar: _isar,
-    chatMessages: chatMessages,
+    notes: notes,
     interpreters: interpreters,
     vocab: vocab,
     isolateUtils: isolateUtils,
@@ -58,14 +56,14 @@ class Diarist extends StatelessWidget {
   const Diarist(
       {Key? key,
       required this.isar,
-      required this.chatMessages,
+      required this.notes,
       required this.interpreters,
       required this.vocab,
       required this.isolateUtils})
       : super(key: key);
 
   final Isar isar;
-  final List<ChatMessage> chatMessages;
+  final List<Note> notes;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
