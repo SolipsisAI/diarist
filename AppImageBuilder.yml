@@ -2,8 +2,13 @@
 version: 1
 script:
  - rm -rf AppDir || true
- - cp -r build/linux/x64/release/bundle AppDir
+ - mkdir AppDir
 AppDir:
+  after_bundle:
+    - cp build/linux/x64/release/bundle/diarist AppDir
+    - cp -r build/linux/x64/release/bundle/lib/. AppDir/lib
+    - cp -r build/linux/x64/release/bundle/data AppDir
+    - cp -r build/linux/x64/release/bundle/blobs/. AppDir/blobs
   path: /home/bitjockey/Projects/SolipsisAI/diarist/AppDir
   app_info:
     id: ai.solipsis.Diarist
@@ -43,18 +48,23 @@ AppDir:
     fedora-30:
       image: appimagecrafters/tests-env:fedora-30
       command: ./AppRun
+      use_host_x: true
     debian-stable:
       image: appimagecrafters/tests-env:debian-stable
       command: ./AppRun
+      use_host_x: true
     archlinux-latest:
       image: appimagecrafters/tests-env:archlinux-latest
       command: ./AppRun
+      use_host_x: true
     centos-7:
       image: appimagecrafters/tests-env:centos-7
       command: ./AppRun
+      use_host_x: true
     ubuntu-xenial:
       image: appimagecrafters/tests-env:ubuntu-xenial
       command: ./AppRun
+      use_host_x: true
 AppImage:
   arch: x86_64
   update-information: guess
