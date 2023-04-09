@@ -6,12 +6,12 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'chat_screen.dart';
+import 'views/chat_screen.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
 import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
-import 'utils.dart';
+import 'utils/helpers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
