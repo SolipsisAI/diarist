@@ -6,7 +6,7 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'views/chat_screen.dart';
+import 'app.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
 import 'models/prediction.dart';
@@ -80,14 +80,6 @@ class Diarist extends StatelessWidget {
             currentFocus.unfocus();
           }
         },
-        child: MaterialApp(
-          title: 'Diarist',
-          home: ChatScreen(
-              isar: isar,
-              chatMessages: chatMessages,
-              interpreters: interpreters,
-              vocab: vocab,
-              isolateUtils: isolateUtils),
-        ));
+        child: MaterialApp(title: 'Diarist', home: DiaristApp()));
   }
 }
