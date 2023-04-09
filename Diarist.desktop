@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Diarist
+Exec=diarist %u
+Icon=diarist
+Categories=Utility;
