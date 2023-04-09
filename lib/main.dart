@@ -78,6 +78,14 @@ class Diarist extends StatelessWidget {
             currentFocus.unfocus();
           }
         },
-        child: MaterialApp(title: 'Diarist', home: DiaristApp()));
+        child: MaterialApp(
+            title: 'Diarist',
+            home: DiaristApp(
+              isar: isar,
+              notes: notes,
+              interpreters: interpreters,
+              vocab: vocab,
+              isolateUtils: isolateUtils,
+            )));
   }
 }

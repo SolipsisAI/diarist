@@ -4,9 +4,25 @@ import 'package:sidebarx/sidebarx.dart';
 import 'components/common_ui.dart';
 import 'components/sidebar.dart';
 import 'views/home_screen.dart';
+import 'models/note.dart';
+import 'models/note_prediction.dart';
+import 'utils/isolate_utils.dart';
 
 class DiaristApp extends StatelessWidget {
-  DiaristApp({Key? key}) : super(key: key);
+  DiaristApp(
+      {Key? key,
+      required this.isar,
+      required this.notes,
+      required this.interpreters,
+      required this.vocab,
+      required this.isolateUtils})
+      : super(key: key);
+
+  final Isar isar;
+  final List<Note> notes;
+  final Map<String, int> interpreters;
+  final Map<String, dynamic> vocab;
+  final IsolateUtils isolateUtils;
 
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
