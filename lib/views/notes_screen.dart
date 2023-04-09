@@ -31,7 +31,21 @@ class NotesScreen extends StatelessWidget {
   final IsolateUtils isolateUtils;
 
   void onTextChange(String text) {
-    debugPrint("Entered $text");
+    addNote(text);
+  }
+
+  Future<void> addNote(String text) async {
+    final newNote = Note()
+      ..createdAt = currentTimestamp()
+      ..updatedAt = currentTimestamp()
+      ..uuid = randomString()
+      ..text = text;
+
+    await isar.writeTxn((_isar) async {
+      await _isar.notes.put(newNote);
+    });
+
+    debugPrint('Added note ${newNote.id}');
   }
 
   @override
