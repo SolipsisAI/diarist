@@ -15,7 +15,7 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[{"name":"chatMessage","target":"ChatMessage"}]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[{"name":"note","target":"Note"}]}',
   idName: 'id',
   propertyIds: {
     'createdAt': 0,
@@ -27,7 +27,7 @@ const PredictionSchema = CollectionSchema(
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
-  linkIds: {'chatMessage': 0},
+  linkIds: {'note': 0},
   backlinkLinkNames: {},
   getId: _predictionGetId,
   setId: _predictionSetId,
@@ -55,7 +55,7 @@ void _predictionSetId(Prediction object, int id) {
 }
 
 List<IsarLinkBase> _predictionGetLinks(Prediction object) {
-  return [object.chatMessage];
+  return [object.note];
 }
 
 void _predictionSerializeNative(
@@ -176,7 +176,7 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
 }
 
 void _predictionAttachLinks(IsarCollection col, int id, Prediction object) {
-  object.chatMessage.attach(col, col.isar.chatMessages, 'chatMessage', id);
+  object.note.attach(col, col.isar.notes, 'note', id);
 }
 
 extension PredictionQueryWhereSort
@@ -623,12 +623,12 @@ extension PredictionQueryFilter
 
 extension PredictionQueryLinks
     on QueryBuilder<Prediction, Prediction, QFilterCondition> {
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> chatMessage(
-      FilterQuery<ChatMessage> q) {
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> note(
+      FilterQuery<Note> q) {
     return linkInternal(
-      isar.chatMessages,
+      isar.notes,
       q,
-      'chatMessage',
+      'note',
     );
   }
 }

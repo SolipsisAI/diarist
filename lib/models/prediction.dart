@@ -1,4 +1,4 @@
-import 'package:diarist/models/chat_message.dart';
+import 'package:diarist/models/note.dart';
 import 'package:isar/isar.dart';
 
 part 'prediction.g.dart';
@@ -14,5 +14,5 @@ class Prediction {
   late String emotion;
   late double emotionScore;
 
-  final chatMessage = IsarLink<ChatMessage>();
+  final note = IsarLink<Note>();
 }
