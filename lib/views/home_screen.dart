@@ -25,21 +25,35 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider<NotesProvider>(
-      create: (_) => NotesProvider(),
+    final theme = Theme.of(context);
+    return AnimatedBuilder(
+      animation: controller,
       builder: (context, child) {
-        return NotesScreen(
-          notes: context.watch<NotesProvider>().notes,
-          controller: controller,
-          isSmallScreen: isSmallScreen,
-          interpreters: interpreters,
-          vocab: vocab,
-          isolateUtils: isolateUtils,
-          onAdd: () {
-            context.read<NotesProvider>().addNote();
-          },
-          onUpdate: () {},
-        );
+        final pageTitle = getTitleByIndex(controller.selectedIndex);
+        switch (controller.selectedIndex) {
+          case 0:
+            // TODO: Show list of entries here
+            return const Text("Home");
+          case 1:
+            // Main text-editing view
+            return NotesScreen(
+              notes: context.watch<NotesProvider>().notes,
+              controller: controller,
+              isSmallScreen: isSmallScreen,
+              interpreters: interpreters,
+              vocab: vocab,
+              isolateUtils: isolateUtils,
+              onAdd: () {
+                context.read<NotesProvider>().addNote();
+              },
+              onUpdate: () {},
+            );
+          default:
+            return Text(
+              pageTitle,
+              style: theme.textTheme.headlineSmall,
+            );
+        }
       },
     );
   }
