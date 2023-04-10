@@ -87,6 +87,7 @@ class _NotesScreenState extends State<NotesScreen> {
     debugPrint('updated ${item.id}');
 
     final note = item.toNote();
+    note.updatedAt = currentTimestamp();
 
     await widget.isar.writeTxn((_isar) async {
       await _isar.notes.put(note);

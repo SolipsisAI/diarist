@@ -18,7 +18,7 @@ void main() async {
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
       schemas: [NoteSchema, NotePredictionSchema], directory: dir.path);
-  final notes = await _isar.notes.where().findAll();
+  final notes = await _isar.notes.where().sortByCreatedAtDesc().findAll();
 
   // Load interpreters
   final Interpreter emotionInterpreter =
