@@ -1,13 +1,15 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../models/note.dart';
+import '../models/note_prediction.dart';
 import '../utils/helpers.dart';
 import '../utils/isolate_utils.dart';
 import '../components/common_ui.dart';
-import '../components/text_editor.dart';
 import '../components/notes_list.dart';
 import '../components/note_view.dart';
 import '../components/two_columns.dart';
@@ -58,9 +60,49 @@ class _NotesScreenState extends State<NotesScreen> {
 
     notesChanged.listen((event) async {
       // Watch for latest updated 
-      final newNote = await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
-      debugPrint('CHANGED ${newNote!.id}');
+      final updatedNote = await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
+
+      final IsolateData isolateData = IsolateData(
+        updatedNote!.text,
+        updatedNote.id!,
+        widget.interpreters['emotion']!,
+        widget.interpreters['sentiment']!,
+        widget.vocab['emotion'],
+        widget.vocab['sentiment'],
+      );
+
+      final result = await inference(isolateData);
+      final String emotionLabel = result['emotion'] as String;
+
+      debugPrint("emotion: $emotionLabel");
     });
+  }
+
+  void addPrediction(Map<String, Object> result, Note note) async {
+    final String emotionLabel = result['emotion'] as String;
+    final String sentimentLabel = result['sentiment'] as String;
+    final double emotionScore = result['emotionScore'] as double;
+    final double sentimentScore = result['sentimentScore'] as double;
+
+    final newPrediction = NotePrediction()
+      ..note.value = note
+      ..createdAt = currentTimestamp()
+      ..emotion = emotionLabel
+      ..emotionScore = emotionScore
+      ..sentiment = sentimentLabel
+      ..sentimentScore = sentimentScore;
+
+    await widget.isar.writeTxn((isar) async {
+      await isar.notePredictions.put(newPrediction);
+    });
+  }
+
+  Future<Map<String, Object>> inference(IsolateData isolateData) async {
+    ReceivePort responsePort = ReceivePort();
+    widget.isolateUtils.sendPort
+        .send(isolateData..responsePort = responsePort.sendPort);
+    final result = await responsePort.first;
+    return result;
   }
 
   Future<void> addNote() async {
