@@ -52,7 +52,7 @@ class _NotesScreenState extends State<NotesScreen> {
     setState(() {
       noteItems = widget.notes.map((Note note) => note.toItem()).toList();
     });
-    initStateAsync();
+    //initStateAsync();
   }
 
   void initStateAsync() async {
@@ -62,22 +62,22 @@ class _NotesScreenState extends State<NotesScreen> {
       // Watch for latest updated
       final updatedNote =
           await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
-      makePrediction(updatedNote!);
+      final IsolateData isolateData = IsolateData(
+        updatedNote!.text,
+        updatedNote.id!,
+        widget.interpreters['emotion']!,
+        widget.interpreters['sentiment']!,
+        widget.vocab['emotion'],
+        widget.vocab['sentiment'],
+      );
+
+      final result = await inference(isolateData);
+      updatePrediction(result, updatedNote);
     });
   }
 
-  void makePrediction(Note note) async {
-    final IsolateData isolateData = IsolateData(
-      note.text,
-      note.id!,
-      widget.interpreters['emotion']!,
-      widget.interpreters['sentiment']!,
-      widget.vocab['emotion'],
-      widget.vocab['sentiment'],
-    );
-
-    final result = await inference(isolateData);
-    updatePrediction(result, note);
+  void makePrediction() {
+    print('makePrediction');
   }
 
   void updatePrediction(Map<String, Object> result, Note note) async {
@@ -150,6 +150,9 @@ class _NotesScreenState extends State<NotesScreen> {
     setState(() {
       isEditing = !isEditing;
     });
+    if (!isEditing) {
+      makePrediction();
+    }
   }
 
   @override
