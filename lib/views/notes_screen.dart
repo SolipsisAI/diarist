@@ -51,7 +51,7 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   void initStateAsync() async {
-    notesChanged = widget.isar.notes.where().sortByCreatedAtDesc().watchLazy();
+    notesChanged = widget.isar.notes.watchLazy();
 
     notesChanged.listen((event) async {
       final newNote = await widget.isar.notes.where().sortByCreatedAtDesc().findFirst();
