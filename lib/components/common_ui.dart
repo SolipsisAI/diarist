@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color(0xFF685BFF);
-const canvasColor = Color(0xFF2E2E48);
-const scaffoldBackgroundColor = Color(0xFF464667);
-const accentCanvasColor = Color(0xFF3E3E61);
+const primaryColor = Color.fromARGB(255, 56, 243, 9);
+const canvasColor = Color.fromARGB(255, 151, 93, 226);
+const scaffoldBackgroundColor = Color.fromARGB(255, 37, 50, 55);
+const accentCanvasColor = Color.fromARGB(255, 49, 66, 73);
 const white = Colors.white;
 const gray = Colors.white60;
-const borderColor = Color(0xff393959);
-final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
+const borderColor = Color.fromARGB(255, 34, 34, 37);
+final actionColor = Color.fromARGB(255, 37, 50, 55);
 
 final divider = Divider(color: white.withOpacity(0.3), height: 1);
 
