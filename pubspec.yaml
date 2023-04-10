@@ -36,8 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   bubble: ^1.2.1
   uuid: ^3.0.7
-  flutter_chat_ui:
-    path: ../flutter_chat_ui
 
   isar: 2.5.0
   isar_flutter_libs: 2.5.0
@@ -47,6 +45,8 @@ dependencies:
   ml_linalg: ^13.11.20
   queue: ^3.1.0+2
   sidebarx: ^0.15.0
+  http: ^0.13.5
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +88,7 @@ flutter:
   assets:
     - assets/
     - assets/models/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
