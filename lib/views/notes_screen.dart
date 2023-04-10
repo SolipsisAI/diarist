@@ -37,8 +37,8 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  final ValueNotifier<Note?> selected = ValueNotifier(null);
-  void selectValue(Note? item) => selected.value = item;
+  final ValueNotifier<NoteItem?> selected = ValueNotifier(null);
+  void selectValue(NoteItem? item) => selected.value = item;
   void clearValue() => selected.value = null;
 
   void onTextChange(String text) {
@@ -59,12 +59,33 @@ class _NotesScreenState extends State<NotesScreen> {
     debugPrint('Added note ${newNote.id}');
   }
 
+  Future<void> updateNote(NoteItem item) async {
+    final note = item.toNote();
+
+    await widget.isar.writeTxn((_isar) async {
+      await _isar.notes.put(note);
+    });
+  }
+
+  void refreshNotes() {
+    debugPrint('Refresh');
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
         animation: widget.controller,
         builder: (context, child) {
-          return NotesView(items: items, isSmallScreen: isSmallScreen, onAdd: onAdd, onUpdate: onUpdate, onSelect: onSelect, onClear: onClear, selected: selected, onRefresh: onRefresh);
+          return NotesView(
+            items: widget.notes.map((Note note) => note.toItem()).toList(),
+            isSmallScreen: widget.isSmallScreen,
+            onAdd: addNote,
+            onUpdate: updateNote,
+            onSelect: selectValue,
+            onClear: clearValue,
+            selected: selected,
+            onRefresh: refreshNotes,
+            );
         });
   }
 }

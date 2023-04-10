@@ -1,3 +1,4 @@
+import 'package:diarist/components/notes_list.dart';
 import 'package:isar/isar.dart';
 
 part 'note.g.dart';
@@ -11,4 +12,8 @@ class Note {
   late int updatedAt;
   late String text;
   late String uuid;
+
+  NoteItem toItem() {
+    return NoteItem(id!, createdAt, updatedAt, text, uuid);
+  }
 }
