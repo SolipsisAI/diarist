@@ -8,17 +8,21 @@ import 'text_editor.dart';
 class NoteView extends StatefulWidget {
   final Key noteKey;
 
-  const NoteView({
-    Key? key,
-    required this.noteKey,
-    required this.noteItem,
-    required this.isSmallScreen,
-    required this.onUpdate,
-  }) : super(key: noteKey);
+  const NoteView(
+      {Key? key,
+      required this.noteKey,
+      required this.noteItem,
+      required this.isSmallScreen,
+      required this.onUpdate,
+      required this.onToggle,
+      required this.isEditing})
+      : super(key: noteKey);
 
   final bool isSmallScreen;
   final NoteItem noteItem;
   final Function onUpdate;
+  final Function onToggle;
+  final bool isEditing;
 
   @override
   NoteViewState createState() => NoteViewState();
@@ -26,18 +30,11 @@ class NoteView extends StatefulWidget {
 
 class NoteViewState extends State<NoteView> {
   late NoteItem _noteItem;
-  bool _isOn = false;
 
   @override
   void initState() {
     super.initState();
     _noteItem = widget.noteItem;
-  }
-
-  void toggle() {
-    setState(() {
-      _isOn = !_isOn;
-    });
   }
 
   void onTextChange(text) {
@@ -52,12 +49,12 @@ class NoteViewState extends State<NoteView> {
             preferredSize: const Size.fromHeight(40.0),
             child: ToggleAppBar(
               title: toDateString(_noteItem.createdAt),
-              isOn: _isOn,
+              isOn: widget.isEditing,
               onToggle: (e) {
-                toggle();
+                widget.onToggle();
               },
             )),
-        body: _isOn
+        body: widget.isEditing
             ? TextEditor(
                 onTextChange: onTextChange,
                 isSmallScreen: widget.isSmallScreen,

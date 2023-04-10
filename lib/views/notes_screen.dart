@@ -38,6 +38,7 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
+  bool isEditing = false;
   final ValueNotifier<NoteItem?> selected = ValueNotifier(null);
   void selectValue(NoteItem? item) => selected.value = item;
   void clearValue() => selected.value = null;
@@ -58,8 +59,9 @@ class _NotesScreenState extends State<NotesScreen> {
     notesChanged = widget.isar.notes.watchLazy();
 
     notesChanged.listen((event) async {
-      // Watch for latest updated 
-      final updatedNote = await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
+      // Watch for latest updated
+      final updatedNote =
+          await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
       final IsolateData isolateData = IsolateData(
         updatedNote!.text,
         updatedNote.id!,
@@ -93,7 +95,8 @@ class _NotesScreenState extends State<NotesScreen> {
       await isar.predictions.put(prediction);
     });
 
-    debugPrint('P ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
+    debugPrint(
+        'P ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -139,6 +142,13 @@ class _NotesScreenState extends State<NotesScreen> {
     debugPrint('Refresh');
   }
 
+  void toggleEditing() {
+    setState(() {
+      isEditing = !isEditing;
+    });
+    debugPrint('isEditing: $isEditing');
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -153,7 +163,9 @@ class _NotesScreenState extends State<NotesScreen> {
             onClear: clearValue,
             selected: selected,
             onRefresh: refreshNotes,
-            );
+            onToggle: toggleEditing,
+            isEditing: isEditing,
+          );
         });
   }
 }
@@ -168,7 +180,9 @@ class NotesView extends StatelessWidget {
       required this.onSelect,
       required this.onClear,
       required this.selected,
-      required this.onRefresh})
+      required this.onRefresh,
+      required this.onToggle,
+      required this.isEditing})
       : super(key: key);
 
   final List<NoteItem> items;
@@ -179,6 +193,8 @@ class NotesView extends StatelessWidget {
   final Function onClear;
   final Function onRefresh;
   final ValueNotifier<NoteItem?> selected;
+  final Function onToggle;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +221,8 @@ class NotesView extends StatelessWidget {
                     noteItem: selected.value!,
                     isSmallScreen: isSmallScreen,
                     onUpdate: onUpdate,
+                    isEditing: isEditing,
+                    onToggle: onToggle,
                   )
                 : const Center(
                     child: Text('ThoughtLog',
