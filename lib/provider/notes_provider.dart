@@ -44,13 +44,17 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<void> updateNote(Note note) async {
+  Future<Note> updateNote(Note note) async {
     note.updatedAt = currentTimestamp();
 
     await isar!.writeTxn((isar) async {
       await isar.notes.put(note);
     });
 
+    final n = _notes[note.id! - 1];
+    print('${n.text}');
+
     notifyListeners();
+    return note;
   }
 }
