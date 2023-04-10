@@ -42,11 +42,14 @@ class _NotesScreenState extends State<NotesScreen> {
   void clearValue() => selected.value = null;
 
   late Stream<void> notesChanged;
-  final List<NoteItem> noteItems = [];
+  late List<NoteItem> noteItems;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      noteItems = widget.notes.map((Note note) => note.toItem()).toList();
+    });
     initStateAsync();
   }
 
