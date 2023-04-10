@@ -5,12 +5,10 @@ import 'package:sidebarx/sidebarx.dart';
 
 import '../models/note.dart';
 import '../utils/helpers.dart';
-
-import '../components/common_ui.dart';
 import '../components/text_editor.dart';
 import '../utils/isolate_utils.dart';
 
-class NotesScreen extends StatelessWidget {
+class NotesScreen extends StatefulWidget {
   const NotesScreen(
       {Key? key,
       required this.controller,
@@ -30,6 +28,15 @@ class NotesScreen extends StatelessWidget {
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
 
+  @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  final ValueNotifier<Note?> selected = ValueNotifier(null);
+  void selectValue(Note? note) => selected.value = note;
+  void clearValue() => selected.value = null;
+
   void onTextChange(String text) {
     addNote(text);
   }
@@ -41,7 +48,7 @@ class NotesScreen extends StatelessWidget {
       ..uuid = randomString()
       ..text = text;
 
-    await isar.writeTxn((_isar) async {
+    await widget.isar.writeTxn((_isar) async {
       await _isar.notes.put(newNote);
     });
 
@@ -51,10 +58,10 @@ class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: controller,
+        animation: widget.controller,
         builder: (context, child) {
           return TextEditor(
-              onTextChange: onTextChange, isSmallScreen: isSmallScreen);
+              onTextChange: onTextChange, isSmallScreen: widget.isSmallScreen);
         });
   }
 }

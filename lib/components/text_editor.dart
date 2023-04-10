@@ -3,7 +3,7 @@ import '../utils/debouncer.dart';
 import 'common_ui.dart';
 
 class TextEditor extends StatefulWidget {
-  TextEditor(
+  const TextEditor(
       {Key? key,
       required this.onTextChange,
       required this.isSmallScreen,
