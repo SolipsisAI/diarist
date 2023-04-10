@@ -1,12 +1,11 @@
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../models/note.dart';
-import '../models/note_prediction.dart';
+import '../models/prediction.dart';
 import '../utils/helpers.dart';
 import '../utils/isolate_utils.dart';
 import '../components/common_ui.dart';
@@ -72,9 +71,8 @@ class _NotesScreenState extends State<NotesScreen> {
       );
 
       final result = await inference(isolateData);
-      final String emotionLabel = result['emotion'] as String;
+      addPrediction(result, updatedNote);
 
-      debugPrint("emotion: $emotionLabel");
     });
   }
 
@@ -84,17 +82,19 @@ class _NotesScreenState extends State<NotesScreen> {
     final double emotionScore = result['emotionScore'] as double;
     final double sentimentScore = result['sentimentScore'] as double;
 
-    final newPrediction = NotePrediction()
-      ..note.value = note
+    note.prediction.value = Prediction()
       ..createdAt = currentTimestamp()
       ..emotion = emotionLabel
       ..emotionScore = emotionScore
       ..sentiment = sentimentLabel
-      ..sentimentScore = sentimentScore;
+      ..sentimentScore = sentimentScore
+      ..note.value = note;
 
     await widget.isar.writeTxn((isar) async {
-      await isar.notePredictions.put(newPrediction);
+      await note.prediction.save();
     });
+
+    debugPrint('P ${note.prediction.value!.id}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {

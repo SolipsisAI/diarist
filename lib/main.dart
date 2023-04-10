@@ -8,7 +8,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'app.dart';
 import 'models/note.dart';
-import 'models/note_prediction.dart';
+import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
 import 'utils/helpers.dart';
 
@@ -17,7 +17,7 @@ void main() async {
 
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
-      schemas: [NoteSchema, NotePredictionSchema], directory: dir.path);
+      schemas: [NoteSchema, PredictionSchema], directory: dir.path);
   final notes = await _isar.notes.where().sortByCreatedAtDesc().findAll();
 
   // Load interpreters
