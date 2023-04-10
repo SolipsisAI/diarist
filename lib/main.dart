@@ -15,11 +15,6 @@ import 'utils/helpers.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final dir = await getApplicationSupportDirectory();
-  final Isar _isar = await Isar.open(
-      schemas: [NoteSchema, PredictionSchema], directory: dir.path);
-  final notes = await _isar.notes.where().sortByCreatedAtDesc().findAll();
-
   // Load interpreters
   final Interpreter emotionInterpreter =
       await Interpreter.fromAsset('models/emotion_classification.tflite');
@@ -44,8 +39,6 @@ void main() async {
   await isolateUtils.start(rootIsolateToken, rootIsolatePort);
 
   runApp(Diarist(
-    isar: _isar,
-    notes: notes,
     interpreters: interpreters,
     vocab: vocab,
     isolateUtils: isolateUtils,
@@ -55,15 +48,11 @@ void main() async {
 class Diarist extends StatelessWidget {
   const Diarist(
       {Key? key,
-      required this.isar,
-      required this.notes,
       required this.interpreters,
       required this.vocab,
       required this.isolateUtils})
       : super(key: key);
 
-  final Isar isar;
-  final List<Note> notes;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
@@ -82,8 +71,6 @@ class Diarist extends StatelessWidget {
             title: 'Diarist',
             debugShowCheckedModeBanner: false,
             home: DiaristApp(
-              isar: isar,
-              notes: notes,
               interpreters: interpreters,
               vocab: vocab,
               isolateUtils: isolateUtils,

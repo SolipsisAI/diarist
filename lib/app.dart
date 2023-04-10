@@ -10,15 +10,11 @@ import 'utils/isolate_utils.dart';
 class DiaristApp extends StatelessWidget {
   DiaristApp(
       {Key? key,
-      required this.isar,
-      required this.notes,
       required this.interpreters,
       required this.vocab,
       required this.isolateUtils})
       : super(key: key);
 
-  final Isar isar;
-  final List<Note> notes;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
@@ -72,8 +68,6 @@ class DiaristApp extends StatelessWidget {
                     child: HomeScreen(
                       controller: _controller,
                       isSmallScreen: isSmallScreen,
-                      isar: isar,
-                      notes: notes,
                       interpreters: interpreters,
                       vocab: vocab,
                       isolateUtils: isolateUtils,

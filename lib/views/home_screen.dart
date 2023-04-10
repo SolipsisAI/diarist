@@ -1,9 +1,10 @@
 import 'package:diarist/views/notes_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:provider/provider.dart';
 import '../components/common_ui.dart';
 import '../models/note.dart';
+import '../provider/notes_provider.dart';
 import '../utils/isolate_utils.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,8 +12,6 @@ class HomeScreen extends StatelessWidget {
       {Key? key,
       required this.controller,
       required this.isSmallScreen,
-      required this.isar,
-      required this.notes,
       required this.interpreters,
       required this.vocab,
       required this.isolateUtils})
@@ -20,8 +19,6 @@ class HomeScreen extends StatelessWidget {
 
   final SidebarXController controller;
   final bool isSmallScreen;
-  final Isar isar;
-  final List<Note> notes;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
@@ -40,13 +37,17 @@ class HomeScreen extends StatelessWidget {
           case 1:
             // Main text-editing view
             return NotesScreen(
-                controller: controller,
-                isSmallScreen: isSmallScreen,
-                isar: isar,
-                notes: notes,
-                interpreters: interpreters,
-                vocab: vocab,
-                isolateUtils: isolateUtils);
+              notes: context.watch<NotesProvider>().notes,
+              controller: controller,
+              isSmallScreen: isSmallScreen,
+              interpreters: interpreters,
+              vocab: vocab,
+              isolateUtils: isolateUtils,
+              onAdd: () {
+                context.read<NotesProvider>().addNote();
+              },
+              onUpdate: () {},
+            );
           default:
             return Text(
               pageTitle,
