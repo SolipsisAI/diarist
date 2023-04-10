@@ -41,16 +41,31 @@ class _NotesScreenState extends State<NotesScreen> {
   void selectValue(NoteItem? item) => selected.value = item;
   void clearValue() => selected.value = null;
 
-  void onTextChange(String text) {
-    addNote(text);
+  late Stream<void> notesChanged;
+  final List<NoteItem> noteItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initStateAsync(); 
   }
 
-  Future<void> addNote(String text) async {
+  void initStateAsync() async {
+    notesChanged = widget.isar.notes.watchLazy();
+
+    notesChanged.listen((event) {
+      debugPrint('Note added');
+    });
+  }
+
+  Future<void> addNote() async {
+    final timestamp = currentTimestamp();
     final newNote = Note()
-      ..createdAt = currentTimestamp()
-      ..updatedAt = currentTimestamp()
+      ..createdAt = timestamp
+      ..updatedAt = timestamp
       ..uuid = randomString()
-      ..text = text;
+      ..text = ""
+      ..title = toDateString(timestamp);
 
     await widget.isar.writeTxn((_isar) async {
       await _isar.notes.put(newNote);
@@ -77,7 +92,7 @@ class _NotesScreenState extends State<NotesScreen> {
         animation: widget.controller,
         builder: (context, child) {
           return NotesView(
-            items: widget.notes.map((Note note) => note.toItem()).toList(),
+            items: noteItems,
             isSmallScreen: widget.isSmallScreen,
             onAdd: addNote,
             onUpdate: updateNote,
