@@ -15,9 +15,15 @@ extension GetNoteCollection on Isar {
 const NoteSchema = CollectionSchema(
   name: 'Note',
   schema:
-      '{"name":"Note","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"text","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Note","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"text","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
-  propertyIds: {'createdAt': 0, 'text': 1, 'updatedAt': 2, 'uuid': 3},
+  propertyIds: {
+    'createdAt': 0,
+    'text': 1,
+    'title': 2,
+    'updatedAt': 3,
+    'uuid': 4
+  },
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
@@ -60,10 +66,13 @@ void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
   final value1 = object.text;
   final _text = IsarBinaryWriter.utf8Encoder.convert(value1);
   dynamicSize += (_text.length) as int;
-  final value2 = object.updatedAt;
-  final _updatedAt = value2;
-  final value3 = object.uuid;
-  final _uuid = IsarBinaryWriter.utf8Encoder.convert(value3);
+  final value2 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value2);
+  dynamicSize += (_title.length) as int;
+  final value3 = object.updatedAt;
+  final _updatedAt = value3;
+  final value4 = object.uuid;
+  final _uuid = IsarBinaryWriter.utf8Encoder.convert(value4);
   dynamicSize += (_uuid.length) as int;
   final size = staticSize + dynamicSize;
 
@@ -73,8 +82,9 @@ void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeLong(offsets[0], _createdAt);
   writer.writeBytes(offsets[1], _text);
-  writer.writeLong(offsets[2], _updatedAt);
-  writer.writeBytes(offsets[3], _uuid);
+  writer.writeBytes(offsets[2], _title);
+  writer.writeLong(offsets[3], _updatedAt);
+  writer.writeBytes(offsets[4], _uuid);
 }
 
 Note _noteDeserializeNative(IsarCollection<Note> collection, int id,
@@ -83,8 +93,9 @@ Note _noteDeserializeNative(IsarCollection<Note> collection, int id,
   object.createdAt = reader.readLong(offsets[0]);
   object.id = id;
   object.text = reader.readString(offsets[1]);
-  object.updatedAt = reader.readLong(offsets[2]);
-  object.uuid = reader.readString(offsets[3]);
+  object.title = reader.readString(offsets[2]);
+  object.updatedAt = reader.readLong(offsets[3]);
+  object.uuid = reader.readString(offsets[4]);
   return object;
 }
 
@@ -98,8 +109,10 @@ P _noteDeserializePropNative<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
+      return (reader.readLong(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -111,6 +124,7 @@ dynamic _noteSerializeWeb(IsarCollection<Note> collection, Note object) {
   IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'text', object.text);
+  IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(jsObj, 'updatedAt', object.updatedAt);
   IsarNative.jsObjectSet(jsObj, 'uuid', object.uuid);
   return jsObj;
@@ -122,6 +136,7 @@ Note _noteDeserializeWeb(IsarCollection<Note> collection, dynamic jsObj) {
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
   object.text = IsarNative.jsObjectGet(jsObj, 'text') ?? '';
+  object.title = IsarNative.jsObjectGet(jsObj, 'title') ?? '';
   object.updatedAt =
       IsarNative.jsObjectGet(jsObj, 'updatedAt') ?? double.negativeInfinity;
   object.uuid = IsarNative.jsObjectGet(jsObj, 'uuid') ?? '';
@@ -137,6 +152,8 @@ P _noteDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
     case 'text':
       return (IsarNative.jsObjectGet(jsObj, 'text') ?? '') as P;
+    case 'title':
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
     case 'updatedAt':
       return (IsarNative.jsObjectGet(jsObj, 'updatedAt') ??
           double.negativeInfinity) as P;
@@ -414,6 +431,107 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     ));
   }
 
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'title',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleContains(String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'title',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -590,6 +708,14 @@ extension NoteQueryWhereSortBy on QueryBuilder<Note, Note, QSortBy> {
     return addSortByInternal('text', Sort.desc);
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTitle() {
+    return addSortByInternal('title', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTitleDesc() {
+    return addSortByInternal('title', Sort.desc);
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedAt() {
     return addSortByInternal('updatedAt', Sort.asc);
   }
@@ -632,6 +758,14 @@ extension NoteQueryWhereSortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
     return addSortByInternal('text', Sort.desc);
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTitle() {
+    return addSortByInternal('title', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTitleDesc() {
+    return addSortByInternal('title', Sort.desc);
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedAt() {
     return addSortByInternal('updatedAt', Sort.asc);
   }
@@ -663,6 +797,11 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
     return addDistinctByInternal('text', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<Note, Note, QDistinct> distinctByTitle(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('title', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<Note, Note, QDistinct> distinctByUpdatedAt() {
     return addDistinctByInternal('updatedAt');
   }
@@ -684,6 +823,10 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
 
   QueryBuilder<Note, String, QQueryOperations> textProperty() {
     return addPropertyNameInternal('text');
+  }
+
+  QueryBuilder<Note, String, QQueryOperations> titleProperty() {
+    return addPropertyNameInternal('title');
   }
 
   QueryBuilder<Note, int, QQueryOperations> updatedAtProperty() {

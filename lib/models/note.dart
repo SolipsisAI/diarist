@@ -10,10 +10,11 @@ class Note {
 
   late int createdAt;
   late int updatedAt;
+  late String title;
   late String text;
   late String uuid;
 
   NoteItem toItem() {
-    return NoteItem(id!, createdAt, updatedAt, text, uuid);
+    return NoteItem(id!, createdAt, updatedAt, title, text, uuid);
   }
 }

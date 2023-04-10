@@ -108,15 +108,16 @@ class NoteItem implements ListItem {
   final int id;
   final String? uuid;
   String text;
+  String title;
   final int? createdAt;
   final int? updatedAt;
 
   NoteItem(
-      this.id, this.createdAt, this.updatedAt, this.text, this.uuid);
+      this.id, this.createdAt, this.updatedAt, this.title, this.text, this.uuid);
 
   @override
   Widget buildTitle(BuildContext context) => Text(
-        toDateString(currentTimestamp()),
+        title,
         style: const TextStyle(
           fontWeight: FontWeight.w600,
         ),
@@ -126,13 +127,14 @@ class NoteItem implements ListItem {
   Widget buildSubtitle(BuildContext context) => Text(getExcerpt(text, 20));
 
   @override
-  String toString() => 'NOTEITEM id: $id, uuid: $uuid, text: $text';
+  String toString() => 'NOTEITEM id: $id, uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
     return Note()
       ..createdAt = createdAt ?? currentTimestamp()
       ..updatedAt = updatedAt ?? currentTimestamp()
       ..uuid = randomString()
-      ..text = text;
+      ..text = text
+      ..title = title;
   }
 }
