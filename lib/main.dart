@@ -80,6 +80,7 @@ class Diarist extends StatelessWidget {
         },
         child: MaterialApp(
             title: 'Diarist',
+            debugShowCheckedModeBanner: false,
             home: DiaristApp(
               isar: isar,
               notes: notes,
