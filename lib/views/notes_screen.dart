@@ -60,7 +60,6 @@ class _NotesScreenState extends State<NotesScreen> {
     notesChanged.listen((event) async {
       // Watch for latest updated 
       final updatedNote = await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
-
       final IsolateData isolateData = IsolateData(
         updatedNote!.text,
         updatedNote.id!,
@@ -71,30 +70,30 @@ class _NotesScreenState extends State<NotesScreen> {
       );
 
       final result = await inference(isolateData);
-      addPrediction(result, updatedNote);
-
+      updatePrediction(result, updatedNote);
     });
   }
 
-  void addPrediction(Map<String, Object> result, Note note) async {
+  void updatePrediction(Map<String, Object> result, Note note) async {
     final String emotionLabel = result['emotion'] as String;
     final String sentimentLabel = result['sentiment'] as String;
     final double emotionScore = result['emotionScore'] as double;
     final double sentimentScore = result['sentimentScore'] as double;
 
-    note.prediction.value = Prediction()
+    final prediction = Prediction()
+      ..id = note.id
       ..createdAt = currentTimestamp()
       ..emotion = emotionLabel
       ..emotionScore = emotionScore
       ..sentiment = sentimentLabel
       ..sentimentScore = sentimentScore
-      ..note.value = note;
+      ..noteUuid = note.uuid;
 
     await widget.isar.writeTxn((isar) async {
-      await note.prediction.save();
+      await isar.predictions.put(prediction);
     });
 
-    debugPrint('P ${note.prediction.value!.id}');
+    debugPrint('P ${prediction.id}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {

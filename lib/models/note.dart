@@ -15,9 +15,6 @@ class Note {
   late String text;
   late String uuid;
 
-  @Backlink(to: 'note')
-  final prediction = IsarLink<Prediction>();
-
   NoteItem toItem() {
     return NoteItem(id!, createdAt, updatedAt, title, text, uuid);
   }

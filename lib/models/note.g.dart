@@ -27,8 +27,8 @@ const NoteSchema = CollectionSchema(
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
-  linkIds: {'prediction': 0},
-  backlinkLinkNames: {'prediction': 'note'},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _noteGetId,
   setId: _noteSetId,
   getLinks: _noteGetLinks,
@@ -55,7 +55,7 @@ void _noteSetId(Note object, int id) {
 }
 
 List<IsarLinkBase> _noteGetLinks(Note object) {
-  return [object.prediction];
+  return [];
 }
 
 void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
@@ -96,7 +96,6 @@ Note _noteDeserializeNative(IsarCollection<Note> collection, int id,
   object.title = reader.readString(offsets[2]);
   object.updatedAt = reader.readLong(offsets[3]);
   object.uuid = reader.readString(offsets[4]);
-  _noteAttachLinks(collection, id, object);
   return object;
 }
 
@@ -141,7 +140,6 @@ Note _noteDeserializeWeb(IsarCollection<Note> collection, dynamic jsObj) {
   object.updatedAt =
       IsarNative.jsObjectGet(jsObj, 'updatedAt') ?? double.negativeInfinity;
   object.uuid = IsarNative.jsObjectGet(jsObj, 'uuid') ?? '';
-  _noteAttachLinks(collection, IsarNative.jsObjectGet(jsObj, 'id'), object);
   return object;
 }
 
@@ -166,9 +164,7 @@ P _noteDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _noteAttachLinks(IsarCollection col, int id, Note object) {
-  object.prediction.attach(col, col.isar.predictions, 'prediction', id);
-}
+void _noteAttachLinks(IsarCollection col, int id, Note object) {}
 
 extension NoteQueryWhereSort on QueryBuilder<Note, Note, QWhere> {
   QueryBuilder<Note, Note, QAfterWhere> anyId() {
@@ -685,16 +681,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 }
 
-extension NoteQueryLinks on QueryBuilder<Note, Note, QFilterCondition> {
-  QueryBuilder<Note, Note, QAfterFilterCondition> prediction(
-      FilterQuery<Prediction> q) {
-    return linkInternal(
-      isar.predictions,
-      q,
-      'prediction',
-    );
-  }
-}
+extension NoteQueryLinks on QueryBuilder<Note, Note, QFilterCondition> {}
 
 extension NoteQueryWhereSortBy on QueryBuilder<Note, Note, QSortBy> {
   QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedAt() {

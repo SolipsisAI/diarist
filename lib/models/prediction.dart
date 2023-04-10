@@ -1,4 +1,3 @@
-import 'package:diarist/models/note.dart';
 import 'package:isar/isar.dart';
 
 part 'prediction.g.dart';
@@ -13,6 +12,5 @@ class Prediction {
   late double sentimentScore;
   late String emotion;
   late double emotionScore;
-
-  final note = IsarLink<Note>();
+  late String noteUuid;
 }
