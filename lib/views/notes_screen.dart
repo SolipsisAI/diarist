@@ -56,6 +56,9 @@ class _NotesScreenState extends State<NotesScreen> {
     notesChanged.listen((event) async {
       final newNote = await widget.isar.notes.where().sortByCreatedAtDesc().findFirst();
       debugPrint('NEW NOTE ADDED ${newNote!.id}');
+      setState(() {
+        noteItems.insert(0, newNote.toItem());
+      });
     });
   }
 
