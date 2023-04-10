@@ -26,7 +26,7 @@ class NotesProvider with ChangeNotifier {
     });
   }
 
-  void addNote() async {
+  Future<Note> addNote() async {
     final timestamp = currentTimestamp();
     final note = Note()
       ..createdAt = timestamp
@@ -41,6 +41,7 @@ class NotesProvider with ChangeNotifier {
 
     _notes.insert(0, note);
     notifyListeners();
+    return note;
   }
 
   Future<void> updateNote(Note note) async {

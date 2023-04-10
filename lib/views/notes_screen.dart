@@ -68,6 +68,15 @@ class _NotesScreenState extends State<NotesScreen> {
     });
   }
 
+  void onAdd() async {
+    final Note note = await widget.onAdd();
+
+    setState(() {
+      selectValue(note.toItem());
+      isEditing = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -76,7 +85,7 @@ class _NotesScreenState extends State<NotesScreen> {
           return NotesView(
             items: widget.notes.map((Note note) => note.toItem()).toList(),
             isSmallScreen: widget.isSmallScreen,
-            onAdd: widget.onAdd,
+            onAdd: onAdd,
             onUpdate: widget.onUpdate,
             onSelect: selectValue,
             onClear: clearValue,

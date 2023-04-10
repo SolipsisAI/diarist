@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
               vocab: vocab,
               isolateUtils: isolateUtils,
               onAdd: () {
-                context.read<NotesProvider>().addNote();
+                return context.read<NotesProvider>().addNote();
               },
               onUpdate: (noteItem) {
                 context.read<NotesProvider>().updateNote(noteItem.toNote());
