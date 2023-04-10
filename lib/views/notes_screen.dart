@@ -39,7 +39,13 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   bool isEditing = false;
   final ValueNotifier<NoteItem?> selected = ValueNotifier(null);
-  void selectValue(NoteItem? item) => selected.value = item;
+
+  void selectValue(NoteItem? item) {
+    selected.value = item;
+    setState(() {
+      isEditing = false;
+    });
+  }
   void clearValue() => selected.value = null;
 
   late Stream<void> notesChanged;
