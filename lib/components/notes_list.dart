@@ -131,6 +131,7 @@ class NoteItem implements ListItem {
 
   Note toNote() {
     return Note()
+      ..id = id
       ..createdAt = createdAt ?? currentTimestamp()
       ..updatedAt = updatedAt ?? currentTimestamp()
       ..uuid = randomString()

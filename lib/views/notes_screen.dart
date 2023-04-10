@@ -54,11 +54,9 @@ class _NotesScreenState extends State<NotesScreen> {
     notesChanged = widget.isar.notes.watchLazy();
 
     notesChanged.listen((event) async {
-      final newNote = await widget.isar.notes.where().sortByCreatedAtDesc().findFirst();
-      debugPrint('NEW NOTE ADDED ${newNote!.id}');
-      setState(() {
-        noteItems.insert(0, newNote.toItem());
-      });
+      // Watch for latest updated 
+      final newNote = await widget.isar.notes.where().sortByUpdatedAtDesc().findFirst();
+      debugPrint('CHANGED ${newNote!.id}');
     });
   }
 
@@ -76,9 +74,15 @@ class _NotesScreenState extends State<NotesScreen> {
     });
 
     debugPrint('Added note ${newNote.id}');
+
+    setState(() {
+      noteItems.insert(0, newNote.toItem());
+    });
   }
 
   Future<void> updateNote(NoteItem item) async {
+    debugPrint('updated ${item.id}');
+
     final note = item.toNote();
 
     await widget.isar.writeTxn((_isar) async {
