@@ -93,7 +93,7 @@ class _NotesScreenState extends State<NotesScreen> {
       await isar.predictions.put(prediction);
     });
 
-    debugPrint('P ${prediction.id}');
+    debugPrint('P ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
