@@ -21,7 +21,7 @@ class NotesProvider with ChangeNotifier {
 
     await isar!.txn((isar) async {
       final notesCollection = isar.notes;
-      _notes = await notesCollection.where().findAll();
+      _notes = await notesCollection.where().sortByCreatedAtDesc().findAll();
       notifyListeners();
     });
   }
@@ -39,7 +39,7 @@ class NotesProvider with ChangeNotifier {
       await isar.notes.put(note);
     });
 
-    _notes.add(note);
+    _notes.insert(0, note);
     notifyListeners();
   }
 
