@@ -64,7 +64,7 @@ class Sidebar extends StatelessWidget {
       footerDivider: divider,
       headerBuilder: (context, extended) {
         return SizedBox(
-          height: 50,
+          height: 100,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Image.asset('assets/images/light-bulb.png'),
