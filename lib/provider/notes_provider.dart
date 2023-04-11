@@ -17,7 +17,7 @@ class NotesProvider with ChangeNotifier {
   Isar? isar;
 
   void init() async {
-    final dir = await getApplicationSupportDirectory();
+    final dir = await getApplicationDocumentsDirectory();
     isar ??= await Isar.open(
         schemas: [NoteSchema, PredictionSchema], directory: dir.path);
 
