@@ -53,7 +53,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   late Stream<void> notesChanged;
 
-  void refreshNotes() {
+  Future<void> refreshNotes() async {
     debugPrint('Refresh');
   }
 
