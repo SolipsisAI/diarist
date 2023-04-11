@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PACKAGE_ASSETS=packaging-assets/linux
+PACKAGE_ASSETS=package-assets/linux
 
 timestamp=$(date +"%Y")
 
