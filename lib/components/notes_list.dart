@@ -44,13 +44,21 @@ class NotesList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = items[index];
 
-                      return CustomListTile(item: item, selectedItem: selected, onSelect: onSelect);
+                      return CustomListTile(
+                          item: item,
+                          selectedItem: selected,
+                          onSelect: onSelect);
                     }))));
   }
 }
 
 class CustomListTile extends StatelessWidget {
-  const CustomListTile({Key? key, required this.item, required this.selectedItem, required this.onSelect}) : super(key: key);
+  const CustomListTile(
+      {Key? key,
+      required this.item,
+      required this.selectedItem,
+      required this.onSelect})
+      : super(key: key);
 
   final NoteItem item;
   final NoteItem? selectedItem;
@@ -58,26 +66,22 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NotesProvider>(
-      builder: (context, provider, _) {
-        return ListTile(
-                        contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                        visualDensity:
-                            const VisualDensity(horizontal: -4, vertical: 0),
-                        textColor: gray,
-                        title: item.buildTitle(context),
-                        subtitle: item.buildSubtitle(context),
-                        onTap: () {
-                          onSelect(item);
-                        },
-                        selected: (selectedItem != null && selectedItem!.id == item.id),
-                        selectedTileColor: accentCanvasColor,
-                        selectedColor: white,
-                        shape: const Border(
-                            bottom: BorderSide(color: borderColor)),
-                      );
-      }
-    );
+    return Consumer<NotesProvider>(builder: (context, provider, _) {
+      return ListTile(
+        contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+        visualDensity: const VisualDensity(horizontal: -4, vertical: 0),
+        textColor: gray,
+        title: item.buildTitle(context),
+        subtitle: item.buildSubtitle(context),
+        onTap: () {
+          onSelect(item);
+        },
+        selected: (selectedItem != null && selectedItem!.id == item.id),
+        selectedTileColor: accentCanvasColor,
+        selectedColor: white,
+        shape: const Border(bottom: BorderSide(color: borderColor)),
+      );
+    });
   }
 }
 
@@ -131,8 +135,8 @@ class NoteItem implements ListItem {
   final int? createdAt;
   final int? updatedAt;
 
-  NoteItem(
-      this.id, this.createdAt, this.updatedAt, this.title, this.text, this.uuid);
+  NoteItem(this.id, this.createdAt, this.updatedAt, this.title, this.text,
+      this.uuid);
 
   @override
   Widget buildTitle(BuildContext context) => Text(
@@ -146,7 +150,8 @@ class NoteItem implements ListItem {
   Widget buildSubtitle(BuildContext context) => Text(getExcerpt(text, 20));
 
   @override
-  String toString() => 'NOTEITEM id: $id, uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
+  String toString() =>
+      'NOTEITEM id: $id, uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
     return Note()
