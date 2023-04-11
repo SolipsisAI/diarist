@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'common_ui.dart';
 
 class InAppBar extends StatelessWidget {
@@ -51,7 +52,7 @@ class ToggleAppBar extends StatelessWidget {
             onPressed: () {
               onAnalyze();
             },
-            icon: const Icon(Icons.online_prediction)),
+            icon: const FaIcon(FontAwesomeIcons.brain)),
         Switch(value: isOn, onChanged: onToggle),
       ],
     );
