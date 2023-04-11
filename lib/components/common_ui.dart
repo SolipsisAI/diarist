@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const primaryColor = Color.fromARGB(255, 224, 251, 252);
 const canvasColor = Color.fromARGB(255, 37, 50, 55);
@@ -27,4 +28,21 @@ double getPadding(bool isSmallScreen) {
     return 20.0;
   }
   return 50.0;
+}
+
+FaIcon getEmotionIcon(String? emotion) {
+  final iconsByEmotion = {
+    "sadness": FontAwesomeIcons.faceSadCry,
+    "joy": FontAwesomeIcons.faceSmile,
+    "love": FontAwesomeIcons.heart,
+    "anger": FontAwesomeIcons.faceAngry,
+    "fear": FontAwesomeIcons.faceFrown,
+    "surprise": FontAwesomeIcons.faceSurprise
+  };
+
+  if (!iconsByEmotion.containsKey(emotion)) {
+    return const FaIcon(FontAwesomeIcons.brain, color: Colors.grey);
+  }
+
+  return FaIcon(iconsByEmotion[emotion], color: Colors.grey);
 }

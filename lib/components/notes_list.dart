@@ -72,7 +72,7 @@ class CustomListTile extends StatelessWidget {
 
       return ListTile(
         //leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
-        leading: Text('${item.emotion}'),
+        leading: getEmotionIcon(item.emotion),
         contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
         visualDensity: const VisualDensity(horizontal: -4, vertical: 0),
         textColor: gray,
