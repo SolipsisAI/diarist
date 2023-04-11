@@ -15,14 +15,16 @@ extension GetNoteCollection on Isar {
 const NoteSchema = CollectionSchema(
   name: 'Note',
   schema:
-      '{"name":"Note","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"text","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Note","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"sentiment","type":"String"},{"name":"text","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'createdAt': 0,
-    'text': 1,
-    'title': 2,
-    'updatedAt': 3,
-    'uuid': 4
+    'emotion': 1,
+    'sentiment': 2,
+    'text': 3,
+    'title': 4,
+    'updatedAt': 5,
+    'uuid': 6
   },
   listProperties: {},
   indexIds: {},
@@ -63,16 +65,28 @@ void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
   var dynamicSize = 0;
   final value0 = object.createdAt;
   final _createdAt = value0;
-  final value1 = object.text;
-  final _text = IsarBinaryWriter.utf8Encoder.convert(value1);
+  final value1 = object.emotion;
+  IsarUint8List? _emotion;
+  if (value1 != null) {
+    _emotion = IsarBinaryWriter.utf8Encoder.convert(value1);
+  }
+  dynamicSize += (_emotion?.length ?? 0) as int;
+  final value2 = object.sentiment;
+  IsarUint8List? _sentiment;
+  if (value2 != null) {
+    _sentiment = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_sentiment?.length ?? 0) as int;
+  final value3 = object.text;
+  final _text = IsarBinaryWriter.utf8Encoder.convert(value3);
   dynamicSize += (_text.length) as int;
-  final value2 = object.title;
-  final _title = IsarBinaryWriter.utf8Encoder.convert(value2);
+  final value4 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value4);
   dynamicSize += (_title.length) as int;
-  final value3 = object.updatedAt;
-  final _updatedAt = value3;
-  final value4 = object.uuid;
-  final _uuid = IsarBinaryWriter.utf8Encoder.convert(value4);
+  final value5 = object.updatedAt;
+  final _updatedAt = value5;
+  final value6 = object.uuid;
+  final _uuid = IsarBinaryWriter.utf8Encoder.convert(value6);
   dynamicSize += (_uuid.length) as int;
   final size = staticSize + dynamicSize;
 
@@ -81,21 +95,25 @@ void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeLong(offsets[0], _createdAt);
-  writer.writeBytes(offsets[1], _text);
-  writer.writeBytes(offsets[2], _title);
-  writer.writeLong(offsets[3], _updatedAt);
-  writer.writeBytes(offsets[4], _uuid);
+  writer.writeBytes(offsets[1], _emotion);
+  writer.writeBytes(offsets[2], _sentiment);
+  writer.writeBytes(offsets[3], _text);
+  writer.writeBytes(offsets[4], _title);
+  writer.writeLong(offsets[5], _updatedAt);
+  writer.writeBytes(offsets[6], _uuid);
 }
 
 Note _noteDeserializeNative(IsarCollection<Note> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
   final object = Note();
   object.createdAt = reader.readLong(offsets[0]);
+  object.emotion = reader.readStringOrNull(offsets[1]);
   object.id = id;
-  object.text = reader.readString(offsets[1]);
-  object.title = reader.readString(offsets[2]);
-  object.updatedAt = reader.readLong(offsets[3]);
-  object.uuid = reader.readString(offsets[4]);
+  object.sentiment = reader.readStringOrNull(offsets[2]);
+  object.text = reader.readString(offsets[3]);
+  object.title = reader.readString(offsets[4]);
+  object.updatedAt = reader.readLong(offsets[5]);
+  object.uuid = reader.readString(offsets[6]);
   return object;
 }
 
@@ -107,12 +125,16 @@ P _noteDeserializePropNative<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readLong(offset)) as P;
+    case 6:
       return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -122,7 +144,9 @@ P _noteDeserializePropNative<P>(
 dynamic _noteSerializeWeb(IsarCollection<Note> collection, Note object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
+  IsarNative.jsObjectSet(jsObj, 'emotion', object.emotion);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'sentiment', object.sentiment);
   IsarNative.jsObjectSet(jsObj, 'text', object.text);
   IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(jsObj, 'updatedAt', object.updatedAt);
@@ -134,7 +158,9 @@ Note _noteDeserializeWeb(IsarCollection<Note> collection, dynamic jsObj) {
   final object = Note();
   object.createdAt =
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
+  object.emotion = IsarNative.jsObjectGet(jsObj, 'emotion');
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment');
   object.text = IsarNative.jsObjectGet(jsObj, 'text') ?? '';
   object.title = IsarNative.jsObjectGet(jsObj, 'title') ?? '';
   object.updatedAt =
@@ -148,8 +174,12 @@ P _noteDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') ??
           double.negativeInfinity) as P;
+    case 'emotion':
+      return (IsarNative.jsObjectGet(jsObj, 'emotion')) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'sentiment':
+      return (IsarNative.jsObjectGet(jsObj, 'sentiment')) as P;
     case 'text':
       return (IsarNative.jsObjectGet(jsObj, 'text') ?? '') as P;
     case 'title':
@@ -275,6 +305,115 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     ));
   }
 
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'emotion',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'emotion',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionContains(String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'emotion',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'emotion',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<Note, Note, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -327,6 +466,117 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'sentiment',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'sentiment',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'sentiment',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'sentiment',
+      value: pattern,
+      caseSensitive: caseSensitive,
     ));
   }
 
@@ -692,12 +942,28 @@ extension NoteQueryWhereSortBy on QueryBuilder<Note, Note, QSortBy> {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> sortByEmotion() {
+    return addSortByInternal('emotion', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByEmotionDesc() {
+    return addSortByInternal('emotion', Sort.desc);
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<Note, Note, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortBySentiment() {
+    return addSortByInternal('sentiment', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortBySentimentDesc() {
+    return addSortByInternal('sentiment', Sort.desc);
   }
 
   QueryBuilder<Note, Note, QAfterSortBy> sortByText() {
@@ -742,12 +1008,28 @@ extension NoteQueryWhereSortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> thenByEmotion() {
+    return addSortByInternal('emotion', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByEmotionDesc() {
+    return addSortByInternal('emotion', Sort.desc);
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<Note, Note, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenBySentiment() {
+    return addSortByInternal('sentiment', Sort.asc);
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenBySentimentDesc() {
+    return addSortByInternal('sentiment', Sort.desc);
   }
 
   QueryBuilder<Note, Note, QAfterSortBy> thenByText() {
@@ -788,8 +1070,18 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
     return addDistinctByInternal('createdAt');
   }
 
+  QueryBuilder<Note, Note, QDistinct> distinctByEmotion(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('emotion', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<Note, Note, QDistinct> distinctById() {
     return addDistinctByInternal('id');
+  }
+
+  QueryBuilder<Note, Note, QDistinct> distinctBySentiment(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('sentiment', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<Note, Note, QDistinct> distinctByText(
@@ -817,8 +1109,16 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
     return addPropertyNameInternal('createdAt');
   }
 
+  QueryBuilder<Note, String?, QQueryOperations> emotionProperty() {
+    return addPropertyNameInternal('emotion');
+  }
+
   QueryBuilder<Note, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
+  }
+
+  QueryBuilder<Note, String?, QQueryOperations> sentimentProperty() {
+    return addPropertyNameInternal('sentiment');
   }
 
   QueryBuilder<Note, String, QQueryOperations> textProperty() {

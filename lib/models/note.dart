@@ -14,8 +14,11 @@ class Note {
   late String title;
   late String text;
   late String uuid;
+  late String? emotion = "";
+  late String? sentiment = "";
 
   NoteItem toItem() {
-    return NoteItem(id!, createdAt, updatedAt, title, text, uuid);
+    return NoteItem(
+        id!, createdAt, updatedAt, title, text, uuid, emotion, sentiment);
   }
 }

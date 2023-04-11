@@ -99,7 +99,7 @@ class _NotesScreenState extends State<NotesScreen> {
       ..sentiment = result['sentiment'] as String
       ..sentimentScore = result['sentimentScore'] as double;
 
-    widget.onPredict(prediction);
+    widget.onPredict(note, prediction);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {

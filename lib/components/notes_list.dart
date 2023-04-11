@@ -71,7 +71,8 @@ class CustomListTile extends StatelessWidget {
       final datetime = toDateTime(item.createdAt);
 
       return ListTile(
-        leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
+        //leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
+        leading: Text('${item.emotion}'),
         contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
         visualDensity: const VisualDensity(horizontal: -4, vertical: 0),
         textColor: gray,
@@ -138,9 +139,11 @@ class NoteItem implements ListItem {
   String title;
   final int? createdAt;
   final int? updatedAt;
+  String? emotion;
+  String? sentiment;
 
   NoteItem(this.id, this.createdAt, this.updatedAt, this.title, this.text,
-      this.uuid);
+      this.uuid, this.emotion, this.sentiment);
 
   @override
   Widget buildTitle(BuildContext context) => Text(
@@ -164,6 +167,8 @@ class NoteItem implements ListItem {
       ..updatedAt = updatedAt ?? currentTimestamp()
       ..uuid = randomString()
       ..text = text
-      ..title = title;
+      ..title = title
+      ..emotion = emotion
+      ..sentiment = sentiment;
   }
 }

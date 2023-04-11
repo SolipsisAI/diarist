@@ -60,13 +60,21 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Prediction> addPrediction(Prediction prediction) async {
+  Future<Prediction> addPrediction(Note note, Prediction prediction) async {
+    note.emotion = prediction.emotion;
+    note.sentiment = prediction.sentiment;
+
     await isar!.writeTxn((isar) async {
       await isar.predictions.put(prediction);
+      await isar.notes.put(note);
     });
 
     print(
         'prediction ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
+
+    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
+    updatedNote.emotion = note.emotion;
+    updatedNote.sentiment = note.sentiment;
 
     return prediction;
   }
