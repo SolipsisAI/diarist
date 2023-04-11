@@ -51,6 +51,9 @@ class NotesProvider with ChangeNotifier {
       await isar.notes.put(note);
     });
 
+    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
+    updatedNote.text = note.text;
+
     notifyListeners();
     return note;
   }
