@@ -24,7 +24,7 @@ final List<String> labels = [
 Future<Map<String, Object>> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // Split by newline
-  List<String> texts = splitText(rawText, maxLen: _sentenceLen);
+  List<String> texts = splitText(rawText);
   debugPrint('texts: $texts');
 
   // Keep track of counts

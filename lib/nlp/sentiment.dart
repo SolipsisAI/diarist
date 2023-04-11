@@ -18,7 +18,7 @@ Future<Map<String, Object>> classify(
     return classifyNoSplit(interpreter, rawText, dict);
   }
 
-  List<String> texts = splitText(rawText, maxLen: sentenceLen);
+  List<String> texts = splitText(rawText);
 
   var labelIndexes = List<int>.filled(labels.length, 0);
   var scores = List.generate(

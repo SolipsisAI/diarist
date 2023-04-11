@@ -27,12 +27,7 @@ int argmax(Vector input) {
   return index;
 }
 
-List<String> splitText(String text, {int? maxLen = 256}) {
-  if (text.length <= maxLen!) {
-    // Strip newlines
-    return [text.replaceAll(RegExp("\n"), ' ')];
-  }
-
+List<String> splitText(String text) {
   LineSplitter splitter = const LineSplitter();
   return splitter.convert(text);
 }
