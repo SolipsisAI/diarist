@@ -24,7 +24,7 @@ final List<String> labels = [
 Future<Map<String, Object>> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // Split by newline
-  List<String> texts = splitText(rawText, maxLen: _sentenceLen);
+  List<String> texts = splitText(rawText);
   debugPrint('texts: $texts');
 
   // Keep track of counts
@@ -84,7 +84,7 @@ List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
 
   // For each word in sentence find corresponding index in dict
   for (var tok in toks) {
-    if (index > _sentenceLen) {
+    if (index >= _sentenceLen) {
       break;
     }
     var encoded = wordPiece(sanitizeString(tok, false), dict);

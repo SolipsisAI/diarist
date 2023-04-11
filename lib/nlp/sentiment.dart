@@ -18,7 +18,7 @@ Future<Map<String, Object>> classify(
     return classifyNoSplit(interpreter, rawText, dict);
   }
 
-  List<String> texts = splitText(rawText, maxLen: sentenceLen);
+  List<String> texts = splitText(rawText);
 
   var labelIndexes = List<int>.filled(labels.length, 0);
   var scores = List.generate(
@@ -100,7 +100,7 @@ List<List<double>> tokenizeInputText(String text, Map<String, int> dict) {
 
   // For each word in sentence find corresponding index in dict
   for (var tok in toks) {
-    if (index > sentenceLen) {
+    if (index >= sentenceLen) {
       break;
     }
     var sanitizedWord = sanitizeString(tok, true);
