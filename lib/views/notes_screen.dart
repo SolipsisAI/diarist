@@ -46,6 +46,7 @@ class _NotesScreenState extends State<NotesScreen> {
       isEditing = false;
     });
   }
+
   void clearValue() => selected.value = null;
 
   late Stream<void> notesChanged;

@@ -18,22 +18,23 @@ class InAppBar extends StatelessWidget {
       title: Text(title, style: const TextStyle(fontSize: 16)),
       actions: <Widget>[
         IconButton(
-          onPressed: () { onAdd(); },
-          icon: const Icon(Icons.add)
-        ),
+            onPressed: () {
+              onAdd();
+            },
+            icon: const Icon(Icons.add)),
       ],
     );
   }
 }
 
 class ToggleAppBar extends StatelessWidget {
-  const ToggleAppBar({
-    Key? key,
-    required this.title,
-    required this.onToggle,
-    required this.onAnalyze,
-    required this.isOn
-  }) : super(key: key);
+  const ToggleAppBar(
+      {Key? key,
+      required this.title,
+      required this.onToggle,
+      required this.onAnalyze,
+      required this.isOn})
+      : super(key: key);
 
   final String title;
   final onToggle;
@@ -46,7 +47,11 @@ class ToggleAppBar extends StatelessWidget {
       backgroundColor: accentCanvasColor,
       title: Text(title, style: const TextStyle(fontSize: 16)),
       actions: <Widget>[
-        IconButton(onPressed: () { onAnalyze(); }, icon: const Icon(Icons.check)),
+        IconButton(
+            onPressed: () {
+              onAnalyze();
+            },
+            icon: const Icon(Icons.online_prediction)),
         Switch(value: isOn, onChanged: onToggle),
       ],
     );
