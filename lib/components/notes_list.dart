@@ -1,4 +1,5 @@
 // Source: https://docs.flutter.dev/cookbook/lists/mixed-list
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:diarist/provider/notes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,7 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<NotesProvider>(builder: (context, provider, _) {
       return ListTile(
+        leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
         contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
         visualDensity: const VisualDensity(horizontal: -4, vertical: 0),
         textColor: gray,
