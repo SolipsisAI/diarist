@@ -41,14 +41,10 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  bool isEditing = false;
   final ValueNotifier<NoteItem?> selected = ValueNotifier(null);
 
   void selectValue(NoteItem? item) {
     selected.value = item;
-    setState(() {
-      isEditing = false;
-    });
   }
 
   void clearValue() => selected.value = null;
@@ -59,17 +55,10 @@ class _NotesScreenState extends State<NotesScreen> {
     debugPrint('Refresh');
   }
 
-  void toggleEditing() {
-    setState(() {
-      isEditing = !isEditing;
-    });
-  }
-
   void onAdd() async {
     final Note note = await widget.onAdd();
     setState(() {
       selectValue(note.toItem());
-      isEditing = true;
     });
   }
 
@@ -124,9 +113,7 @@ class _NotesScreenState extends State<NotesScreen> {
             onClear: clearValue,
             selected: selected,
             onRefresh: refreshNotes,
-            onToggle: toggleEditing,
             onAnalyze: makePrediction,
-            isEditing: isEditing,
           );
         });
   }
@@ -143,9 +130,7 @@ class NotesView extends StatelessWidget {
       required this.onClear,
       required this.selected,
       required this.onRefresh,
-      required this.onToggle,
-      required this.onAnalyze,
-      required this.isEditing})
+      required this.onAnalyze})
       : super(key: key);
 
   final List<NoteItem> items;
@@ -156,9 +141,7 @@ class NotesView extends StatelessWidget {
   final Function onClear;
   final Function onRefresh;
   final ValueNotifier<NoteItem?> selected;
-  final Function onToggle;
   final Function onAnalyze;
-  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -185,8 +168,6 @@ class NotesView extends StatelessWidget {
                     noteItem: selected.value!,
                     isSmallScreen: isSmallScreen,
                     onUpdate: onUpdate,
-                    isEditing: isEditing,
-                    onToggle: onToggle,
                     onAnalyze: onAnalyze,
                   )
                 : const Center(

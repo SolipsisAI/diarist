@@ -14,17 +14,13 @@ class NoteView extends StatefulWidget {
       required this.noteItem,
       required this.isSmallScreen,
       required this.onUpdate,
-      required this.onToggle,
-      required this.onAnalyze,
-      required this.isEditing})
+      required this.onAnalyze})
       : super(key: noteKey);
 
   final bool isSmallScreen;
   final NoteItem noteItem;
   final Function onUpdate;
-  final Function onToggle;
   final Function onAnalyze;
-  final bool isEditing;
 
   @override
   NoteViewState createState() => NoteViewState();
@@ -32,6 +28,7 @@ class NoteView extends StatefulWidget {
 
 class NoteViewState extends State<NoteView> {
   late NoteItem _noteItem;
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -44,6 +41,12 @@ class NoteViewState extends State<NoteView> {
     widget.onUpdate(_noteItem);
   }
 
+  void toggle() {
+    setState(() {
+      isEditing = !isEditing;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,15 +54,15 @@ class NoteViewState extends State<NoteView> {
             preferredSize: const Size.fromHeight(40.0),
             child: ToggleAppBar(
               title: toDateString(_noteItem.createdAt),
-              isOn: widget.isEditing,
+              isOn: isEditing,
               onToggle: (e) {
-                widget.onToggle();
+                toggle();
               },
               onAnalyze: () {
                 widget.onAnalyze(_noteItem.toNote());
               },
             )),
-        body: widget.isEditing
+        body: isEditing
             ? TextEditor(
                 onTextChange: onTextChange,
                 isSmallScreen: widget.isSmallScreen,
