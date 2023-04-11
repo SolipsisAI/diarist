@@ -65,6 +65,9 @@ class NotesProvider with ChangeNotifier {
       await isar.predictions.put(prediction);
     });
 
+    print(
+        'prediction ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
+
     return prediction;
   }
 }
