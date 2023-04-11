@@ -51,9 +51,6 @@ class NotesProvider with ChangeNotifier {
       await isar.notes.put(note);
     });
 
-    final n = _notes[note.id! - 1];
-    print('${n.text}');
-
     notifyListeners();
     return note;
   }

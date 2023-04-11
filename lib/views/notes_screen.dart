@@ -70,7 +70,6 @@ class _NotesScreenState extends State<NotesScreen> {
 
   void onAdd() async {
     final Note note = await widget.onAdd();
-
     setState(() {
       selectValue(note.toItem());
       isEditing = true;

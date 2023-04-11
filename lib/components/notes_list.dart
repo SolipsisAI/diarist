@@ -1,5 +1,7 @@
 // Source: https://docs.flutter.dev/cookbook/lists/mixed-list
+import 'package:diarist/provider/notes_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/note.dart';
 import 'common_ui.dart';
 import 'in_app_bar.dart';
@@ -42,7 +44,23 @@ class NotesList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = items[index];
 
-                      return ListTile(
+                      return CustomListTile(item: item, selectedItem: selected, onSelect: onSelect);
+                    }))));
+  }
+}
+
+class CustomListTile extends StatelessWidget {
+  const CustomListTile({Key? key, required this.item, required this.selectedItem, required this.onSelect}) : super(key: key);
+
+  final NoteItem item;
+  final NoteItem? selectedItem;
+  final Function onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<NotesProvider>(
+      builder: (context, provider, _) {
+        return ListTile(
                         contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                         visualDensity:
                             const VisualDensity(horizontal: -4, vertical: 0),
@@ -52,13 +70,14 @@ class NotesList extends StatelessWidget {
                         onTap: () {
                           onSelect(item);
                         },
-                        selected: (selected != null && selected!.id == item.id),
+                        selected: (selectedItem != null && selectedItem!.id == item.id),
                         selectedTileColor: accentCanvasColor,
                         selectedColor: white,
                         shape: const Border(
                             bottom: BorderSide(color: borderColor)),
                       );
-                    }))));
+      }
+    );
   }
 }
 
