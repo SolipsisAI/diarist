@@ -68,6 +68,8 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<NotesProvider>(builder: (context, provider, _) {
+      final datetime = toDateTime(item.createdAt);
+
       return ListTile(
         leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
         contentPadding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
