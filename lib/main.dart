@@ -4,23 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'views/chat_screen.dart';
-import 'models/chat_message.dart';
-import 'models/chat_user.dart';
+import 'app.dart';
+import 'provider/notes_provider.dart';
+import 'models/note.dart';
 import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
 import 'utils/helpers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final dir = await getApplicationSupportDirectory();
-  final Isar _isar = await Isar.open(
-      schemas: [ChatMessageSchema, ChatUserSchema, PredictionSchema],
-      directory: dir.path);
-  final chatMessages = await _isar.chatMessages.where().findAll();
 
   // Load interpreters
   final Interpreter emotionInterpreter =
@@ -45,27 +40,22 @@ void main() async {
   final IsolateUtils isolateUtils = IsolateUtils();
   await isolateUtils.start(rootIsolateToken, rootIsolatePort);
 
-  runApp(Diarist(
-    isar: _isar,
-    chatMessages: chatMessages,
-    interpreters: interpreters,
-    vocab: vocab,
-    isolateUtils: isolateUtils,
-  ));
+  runApp(ListenableProvider<NotesProvider>(
+      create: (_) => NotesProvider(),
+      child: Diarist(
+          interpreters: interpreters,
+          vocab: vocab,
+          isolateUtils: isolateUtils)));
 }
 
 class Diarist extends StatelessWidget {
   const Diarist(
       {Key? key,
-      required this.isar,
-      required this.chatMessages,
       required this.interpreters,
       required this.vocab,
       required this.isolateUtils})
       : super(key: key);
 
-  final Isar isar;
-  final List<ChatMessage> chatMessages;
   final Map<String, int> interpreters;
   final Map<String, dynamic> vocab;
   final IsolateUtils isolateUtils;
@@ -81,13 +71,12 @@ class Diarist extends StatelessWidget {
           }
         },
         child: MaterialApp(
-          title: 'Diarist',
-          home: ChatScreen(
-              isar: isar,
-              chatMessages: chatMessages,
+            title: 'Diarist',
+            debugShowCheckedModeBanner: false,
+            home: DiaristApp(
               interpreters: interpreters,
               vocab: vocab,
-              isolateUtils: isolateUtils),
-        ));
+              isolateUtils: isolateUtils,
+            )));
   }
 }

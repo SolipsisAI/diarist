@@ -15,19 +15,20 @@ extension GetPredictionCollection on Isar {
 const PredictionSchema = CollectionSchema(
   name: 'Prediction',
   schema:
-      '{"name":"Prediction","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[{"name":"chatMessage","target":"ChatMessage"}]}',
+      '{"name":"Prediction","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"emotionScore","type":"Double"},{"name":"noteUuid","type":"String"},{"name":"sentiment","type":"String"},{"name":"sentimentScore","type":"Double"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'createdAt': 0,
     'emotion': 1,
     'emotionScore': 2,
-    'sentiment': 3,
-    'sentimentScore': 4
+    'noteUuid': 3,
+    'sentiment': 4,
+    'sentimentScore': 5
   },
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
-  linkIds: {'chatMessage': 0},
+  linkIds: {},
   backlinkLinkNames: {},
   getId: _predictionGetId,
   setId: _predictionSetId,
@@ -55,7 +56,7 @@ void _predictionSetId(Prediction object, int id) {
 }
 
 List<IsarLinkBase> _predictionGetLinks(Prediction object) {
-  return [object.chatMessage];
+  return [];
 }
 
 void _predictionSerializeNative(
@@ -73,11 +74,14 @@ void _predictionSerializeNative(
   dynamicSize += (_emotion.length) as int;
   final value2 = object.emotionScore;
   final _emotionScore = value2;
-  final value3 = object.sentiment;
-  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value3);
+  final value3 = object.noteUuid;
+  final _noteUuid = IsarBinaryWriter.utf8Encoder.convert(value3);
+  dynamicSize += (_noteUuid.length) as int;
+  final value4 = object.sentiment;
+  final _sentiment = IsarBinaryWriter.utf8Encoder.convert(value4);
   dynamicSize += (_sentiment.length) as int;
-  final value4 = object.sentimentScore;
-  final _sentimentScore = value4;
+  final value5 = object.sentimentScore;
+  final _sentimentScore = value5;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -87,8 +91,9 @@ void _predictionSerializeNative(
   writer.writeLong(offsets[0], _createdAt);
   writer.writeBytes(offsets[1], _emotion);
   writer.writeDouble(offsets[2], _emotionScore);
-  writer.writeBytes(offsets[3], _sentiment);
-  writer.writeDouble(offsets[4], _sentimentScore);
+  writer.writeBytes(offsets[3], _noteUuid);
+  writer.writeBytes(offsets[4], _sentiment);
+  writer.writeDouble(offsets[5], _sentimentScore);
 }
 
 Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
@@ -98,9 +103,9 @@ Prediction _predictionDeserializeNative(IsarCollection<Prediction> collection,
   object.emotion = reader.readString(offsets[1]);
   object.emotionScore = reader.readDouble(offsets[2]);
   object.id = id;
-  object.sentiment = reader.readString(offsets[3]);
-  object.sentimentScore = reader.readDouble(offsets[4]);
-  _predictionAttachLinks(collection, id, object);
+  object.noteUuid = reader.readString(offsets[3]);
+  object.sentiment = reader.readString(offsets[4]);
+  object.sentimentScore = reader.readDouble(offsets[5]);
   return object;
 }
 
@@ -118,6 +123,8 @@ P _predictionDeserializePropNative<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (reader.readDouble(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -131,6 +138,7 @@ dynamic _predictionSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'emotion', object.emotion);
   IsarNative.jsObjectSet(jsObj, 'emotionScore', object.emotionScore);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'noteUuid', object.noteUuid);
   IsarNative.jsObjectSet(jsObj, 'sentiment', object.sentiment);
   IsarNative.jsObjectSet(jsObj, 'sentimentScore', object.sentimentScore);
   return jsObj;
@@ -145,11 +153,10 @@ Prediction _predictionDeserializeWeb(
   object.emotionScore =
       IsarNative.jsObjectGet(jsObj, 'emotionScore') ?? double.negativeInfinity;
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.noteUuid = IsarNative.jsObjectGet(jsObj, 'noteUuid') ?? '';
   object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '';
   object.sentimentScore = IsarNative.jsObjectGet(jsObj, 'sentimentScore') ??
       double.negativeInfinity;
-  _predictionAttachLinks(
-      collection, IsarNative.jsObjectGet(jsObj, 'id'), object);
   return object;
 }
 
@@ -165,6 +172,8 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
           double.negativeInfinity) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'noteUuid':
+      return (IsarNative.jsObjectGet(jsObj, 'noteUuid') ?? '') as P;
     case 'sentiment':
       return (IsarNative.jsObjectGet(jsObj, 'sentiment') ?? '') as P;
     case 'sentimentScore':
@@ -175,9 +184,7 @@ P _predictionDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _predictionAttachLinks(IsarCollection col, int id, Prediction object) {
-  object.chatMessage.attach(col, col.isar.chatMessages, 'chatMessage', id);
-}
+void _predictionAttachLinks(IsarCollection col, int id, Prediction object) {}
 
 extension PredictionQueryWhereSort
     on QueryBuilder<Prediction, Prediction, QWhere> {
@@ -484,6 +491,111 @@ extension PredictionQueryFilter
     ));
   }
 
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      noteUuidGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'noteUuid',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition>
+      noteUuidStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'noteUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> noteUuidMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'noteUuid',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<Prediction, Prediction, QAfterFilterCondition> sentimentEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -622,16 +734,7 @@ extension PredictionQueryFilter
 }
 
 extension PredictionQueryLinks
-    on QueryBuilder<Prediction, Prediction, QFilterCondition> {
-  QueryBuilder<Prediction, Prediction, QAfterFilterCondition> chatMessage(
-      FilterQuery<ChatMessage> q) {
-    return linkInternal(
-      isar.chatMessages,
-      q,
-      'chatMessage',
-    );
-  }
-}
+    on QueryBuilder<Prediction, Prediction, QFilterCondition> {}
 
 extension PredictionQueryWhereSortBy
     on QueryBuilder<Prediction, Prediction, QSortBy> {
@@ -665,6 +768,14 @@ extension PredictionQueryWhereSortBy
 
   QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByNoteUuid() {
+    return addSortByInternal('noteUuid', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> sortByNoteUuidDesc() {
+    return addSortByInternal('noteUuid', Sort.desc);
   }
 
   QueryBuilder<Prediction, Prediction, QAfterSortBy> sortBySentiment() {
@@ -719,6 +830,14 @@ extension PredictionQueryWhereSortThenBy
     return addSortByInternal('id', Sort.desc);
   }
 
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByNoteUuid() {
+    return addSortByInternal('noteUuid', Sort.asc);
+  }
+
+  QueryBuilder<Prediction, Prediction, QAfterSortBy> thenByNoteUuidDesc() {
+    return addSortByInternal('noteUuid', Sort.desc);
+  }
+
   QueryBuilder<Prediction, Prediction, QAfterSortBy> thenBySentiment() {
     return addSortByInternal('sentiment', Sort.asc);
   }
@@ -756,6 +875,11 @@ extension PredictionQueryWhereDistinct
     return addDistinctByInternal('id');
   }
 
+  QueryBuilder<Prediction, Prediction, QDistinct> distinctByNoteUuid(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('noteUuid', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<Prediction, Prediction, QDistinct> distinctBySentiment(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('sentiment', caseSensitive: caseSensitive);
@@ -782,6 +906,10 @@ extension PredictionQueryProperty
 
   QueryBuilder<Prediction, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
+  }
+
+  QueryBuilder<Prediction, String, QQueryOperations> noteUuidProperty() {
+    return addPropertyNameInternal('noteUuid');
   }
 
   QueryBuilder<Prediction, String, QQueryOperations> sentimentProperty() {

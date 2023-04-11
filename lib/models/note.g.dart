@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chat_user.dart';
+part of 'note.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -8,21 +8,21 @@ part of 'chat_user.dart';
 
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
-extension GetChatUserCollection on Isar {
-  IsarCollection<ChatUser> get chatUsers => getCollection();
+extension GetNoteCollection on Isar {
+  IsarCollection<Note> get notes => getCollection();
 }
 
-const ChatUserSchema = CollectionSchema(
-  name: 'ChatUser',
+const NoteSchema = CollectionSchema(
+  name: 'Note',
   schema:
-      '{"name":"ChatUser","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"firstName","type":"String"},{"name":"imageUrl","type":"String"},{"name":"lastName","type":"String"},{"name":"nick","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Note","idName":"id","properties":[{"name":"createdAt","type":"Long"},{"name":"emotion","type":"String"},{"name":"sentiment","type":"String"},{"name":"text","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'createdAt': 0,
-    'firstName': 1,
-    'imageUrl': 2,
-    'lastName': 3,
-    'nick': 4,
+    'emotion': 1,
+    'sentiment': 2,
+    'text': 3,
+    'title': 4,
     'updatedAt': 5,
     'uuid': 6
   },
@@ -31,20 +31,20 @@ const ChatUserSchema = CollectionSchema(
   indexValueTypes: {},
   linkIds: {},
   backlinkLinkNames: {},
-  getId: _chatUserGetId,
-  setId: _chatUserSetId,
-  getLinks: _chatUserGetLinks,
-  attachLinks: _chatUserAttachLinks,
-  serializeNative: _chatUserSerializeNative,
-  deserializeNative: _chatUserDeserializeNative,
-  deserializePropNative: _chatUserDeserializePropNative,
-  serializeWeb: _chatUserSerializeWeb,
-  deserializeWeb: _chatUserDeserializeWeb,
-  deserializePropWeb: _chatUserDeserializePropWeb,
+  getId: _noteGetId,
+  setId: _noteSetId,
+  getLinks: _noteGetLinks,
+  attachLinks: _noteAttachLinks,
+  serializeNative: _noteSerializeNative,
+  deserializeNative: _noteDeserializeNative,
+  deserializePropNative: _noteDeserializePropNative,
+  serializeWeb: _noteSerializeWeb,
+  deserializeWeb: _noteDeserializeWeb,
+  deserializePropWeb: _noteDeserializePropWeb,
   version: 3,
 );
 
-int? _chatUserGetId(ChatUser object) {
+int? _noteGetId(Note object) {
   if (object.id == Isar.autoIncrement) {
     return null;
   } else {
@@ -52,36 +52,37 @@ int? _chatUserGetId(ChatUser object) {
   }
 }
 
-void _chatUserSetId(ChatUser object, int id) {
+void _noteSetId(Note object, int id) {
   object.id = id;
 }
 
-List<IsarLinkBase> _chatUserGetLinks(ChatUser object) {
+List<IsarLinkBase> _noteGetLinks(Note object) {
   return [];
 }
 
-void _chatUserSerializeNative(
-    IsarCollection<ChatUser> collection,
-    IsarRawObject rawObj,
-    ChatUser object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
+void _noteSerializeNative(IsarCollection<Note> collection, IsarRawObject rawObj,
+    Note object, int staticSize, List<int> offsets, AdapterAlloc alloc) {
   var dynamicSize = 0;
   final value0 = object.createdAt;
   final _createdAt = value0;
-  final value1 = object.firstName;
-  final _firstName = IsarBinaryWriter.utf8Encoder.convert(value1);
-  dynamicSize += (_firstName.length) as int;
-  final value2 = object.imageUrl;
-  final _imageUrl = IsarBinaryWriter.utf8Encoder.convert(value2);
-  dynamicSize += (_imageUrl.length) as int;
-  final value3 = object.lastName;
-  final _lastName = IsarBinaryWriter.utf8Encoder.convert(value3);
-  dynamicSize += (_lastName.length) as int;
-  final value4 = object.nick;
-  final _nick = IsarBinaryWriter.utf8Encoder.convert(value4);
-  dynamicSize += (_nick.length) as int;
+  final value1 = object.emotion;
+  IsarUint8List? _emotion;
+  if (value1 != null) {
+    _emotion = IsarBinaryWriter.utf8Encoder.convert(value1);
+  }
+  dynamicSize += (_emotion?.length ?? 0) as int;
+  final value2 = object.sentiment;
+  IsarUint8List? _sentiment;
+  if (value2 != null) {
+    _sentiment = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_sentiment?.length ?? 0) as int;
+  final value3 = object.text;
+  final _text = IsarBinaryWriter.utf8Encoder.convert(value3);
+  dynamicSize += (_text.length) as int;
+  final value4 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value4);
+  dynamicSize += (_title.length) as int;
   final value5 = object.updatedAt;
   final _updatedAt = value5;
   final value6 = object.uuid;
@@ -94,29 +95,29 @@ void _chatUserSerializeNative(
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeLong(offsets[0], _createdAt);
-  writer.writeBytes(offsets[1], _firstName);
-  writer.writeBytes(offsets[2], _imageUrl);
-  writer.writeBytes(offsets[3], _lastName);
-  writer.writeBytes(offsets[4], _nick);
+  writer.writeBytes(offsets[1], _emotion);
+  writer.writeBytes(offsets[2], _sentiment);
+  writer.writeBytes(offsets[3], _text);
+  writer.writeBytes(offsets[4], _title);
   writer.writeLong(offsets[5], _updatedAt);
   writer.writeBytes(offsets[6], _uuid);
 }
 
-ChatUser _chatUserDeserializeNative(IsarCollection<ChatUser> collection, int id,
+Note _noteDeserializeNative(IsarCollection<Note> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
-  final object = ChatUser();
+  final object = Note();
   object.createdAt = reader.readLong(offsets[0]);
-  object.firstName = reader.readString(offsets[1]);
+  object.emotion = reader.readStringOrNull(offsets[1]);
   object.id = id;
-  object.imageUrl = reader.readString(offsets[2]);
-  object.lastName = reader.readString(offsets[3]);
-  object.nick = reader.readString(offsets[4]);
+  object.sentiment = reader.readStringOrNull(offsets[2]);
+  object.text = reader.readString(offsets[3]);
+  object.title = reader.readString(offsets[4]);
   object.updatedAt = reader.readLong(offsets[5]);
   object.uuid = reader.readString(offsets[6]);
   return object;
 }
 
-P _chatUserDeserializePropNative<P>(
+P _noteDeserializePropNative<P>(
     int id, IsarBinaryReader reader, int propertyIndex, int offset) {
   switch (propertyIndex) {
     case -1:
@@ -124,9 +125,9 @@ P _chatUserDeserializePropNative<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
@@ -140,51 +141,49 @@ P _chatUserDeserializePropNative<P>(
   }
 }
 
-dynamic _chatUserSerializeWeb(
-    IsarCollection<ChatUser> collection, ChatUser object) {
+dynamic _noteSerializeWeb(IsarCollection<Note> collection, Note object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
-  IsarNative.jsObjectSet(jsObj, 'firstName', object.firstName);
+  IsarNative.jsObjectSet(jsObj, 'emotion', object.emotion);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
-  IsarNative.jsObjectSet(jsObj, 'imageUrl', object.imageUrl);
-  IsarNative.jsObjectSet(jsObj, 'lastName', object.lastName);
-  IsarNative.jsObjectSet(jsObj, 'nick', object.nick);
+  IsarNative.jsObjectSet(jsObj, 'sentiment', object.sentiment);
+  IsarNative.jsObjectSet(jsObj, 'text', object.text);
+  IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(jsObj, 'updatedAt', object.updatedAt);
   IsarNative.jsObjectSet(jsObj, 'uuid', object.uuid);
   return jsObj;
 }
 
-ChatUser _chatUserDeserializeWeb(
-    IsarCollection<ChatUser> collection, dynamic jsObj) {
-  final object = ChatUser();
+Note _noteDeserializeWeb(IsarCollection<Note> collection, dynamic jsObj) {
+  final object = Note();
   object.createdAt =
       IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
-  object.firstName = IsarNative.jsObjectGet(jsObj, 'firstName') ?? '';
+  object.emotion = IsarNative.jsObjectGet(jsObj, 'emotion');
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.imageUrl = IsarNative.jsObjectGet(jsObj, 'imageUrl') ?? '';
-  object.lastName = IsarNative.jsObjectGet(jsObj, 'lastName') ?? '';
-  object.nick = IsarNative.jsObjectGet(jsObj, 'nick') ?? '';
+  object.sentiment = IsarNative.jsObjectGet(jsObj, 'sentiment');
+  object.text = IsarNative.jsObjectGet(jsObj, 'text') ?? '';
+  object.title = IsarNative.jsObjectGet(jsObj, 'title') ?? '';
   object.updatedAt =
       IsarNative.jsObjectGet(jsObj, 'updatedAt') ?? double.negativeInfinity;
   object.uuid = IsarNative.jsObjectGet(jsObj, 'uuid') ?? '';
   return object;
 }
 
-P _chatUserDeserializePropWeb<P>(Object jsObj, String propertyName) {
+P _noteDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') ??
           double.negativeInfinity) as P;
-    case 'firstName':
-      return (IsarNative.jsObjectGet(jsObj, 'firstName') ?? '') as P;
+    case 'emotion':
+      return (IsarNative.jsObjectGet(jsObj, 'emotion')) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
-    case 'imageUrl':
-      return (IsarNative.jsObjectGet(jsObj, 'imageUrl') ?? '') as P;
-    case 'lastName':
-      return (IsarNative.jsObjectGet(jsObj, 'lastName') ?? '') as P;
-    case 'nick':
-      return (IsarNative.jsObjectGet(jsObj, 'nick') ?? '') as P;
+    case 'sentiment':
+      return (IsarNative.jsObjectGet(jsObj, 'sentiment')) as P;
+    case 'text':
+      return (IsarNative.jsObjectGet(jsObj, 'text') ?? '') as P;
+    case 'title':
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
     case 'updatedAt':
       return (IsarNative.jsObjectGet(jsObj, 'updatedAt') ??
           double.negativeInfinity) as P;
@@ -195,16 +194,16 @@ P _chatUserDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _chatUserAttachLinks(IsarCollection col, int id, ChatUser object) {}
+void _noteAttachLinks(IsarCollection col, int id, Note object) {}
 
-extension ChatUserQueryWhereSort on QueryBuilder<ChatUser, ChatUser, QWhere> {
-  QueryBuilder<ChatUser, ChatUser, QAfterWhere> anyId() {
+extension NoteQueryWhereSort on QueryBuilder<Note, Note, QWhere> {
+  QueryBuilder<Note, Note, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
-extension ChatUserQueryWhere on QueryBuilder<ChatUser, ChatUser, QWhereClause> {
-  QueryBuilder<ChatUser, ChatUser, QAfterWhereClause> idEqualTo(int id) {
+extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
+  QueryBuilder<Note, Note, QAfterWhereClause> idEqualTo(int id) {
     return addWhereClauseInternal(IdWhereClause.between(
       lower: id,
       includeLower: true,
@@ -213,7 +212,7 @@ extension ChatUserQueryWhere on QueryBuilder<ChatUser, ChatUser, QWhereClause> {
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterWhereClause> idNotEqualTo(int id) {
+  QueryBuilder<Note, Note, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: id, includeUpper: false),
@@ -229,21 +228,21 @@ extension ChatUserQueryWhere on QueryBuilder<ChatUser, ChatUser, QWhereClause> {
     }
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Note, Note, QAfterWhereClause> idGreaterThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: id, includeLower: include),
     );
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Note, Note, QAfterWhereClause> idLessThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: id, includeUpper: include),
     );
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterWhereClause> idBetween(
+  QueryBuilder<Note, Note, QAfterWhereClause> idBetween(
     int lowerId,
     int upperId, {
     bool includeLower = true,
@@ -258,10 +257,8 @@ extension ChatUserQueryWhere on QueryBuilder<ChatUser, ChatUser, QWhereClause> {
   }
 }
 
-extension ChatUserQueryFilter
-    on QueryBuilder<ChatUser, ChatUser, QFilterCondition> {
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> createdAtEqualTo(
-      int value) {
+extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'createdAt',
@@ -269,7 +266,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> createdAtGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -281,7 +278,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> createdAtLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtLessThan(
     int value, {
     bool include = false,
   }) {
@@ -293,7 +290,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> createdAtBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -308,55 +305,63 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameEqualTo(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'emotion',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionEqualTo(
+    String? value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameGreaterThan(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionGreaterThan(
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.gt,
       include: include,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameLessThan(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionLessThan(
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
       include: include,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionBetween(
+    String? lower,
+    String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return addFilterConditionInternal(FilterCondition.between(
-      property: 'firstName',
+      property: 'emotion',
       lower: lower,
       includeLower: includeLower,
       upper: upper,
@@ -365,53 +370,51 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameStartsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.startsWith,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameEndsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.endsWith,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameContains(
-      String value,
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
-      property: 'firstName',
+      property: 'emotion',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> firstNameMatches(
-      String pattern,
+  QueryBuilder<Note, Note, QAfterFilterCondition> emotionMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
-      property: 'firstName',
+      property: 'emotion',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<Note, Note, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'id',
@@ -419,7 +422,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> idEqualTo(int value) {
+  QueryBuilder<Note, Note, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -427,7 +430,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -439,7 +442,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -451,7 +454,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> idBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -466,55 +469,63 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlEqualTo(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'sentiment',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentEqualTo(
+    String? value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlGreaterThan(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentGreaterThan(
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.gt,
       include: include,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlLessThan(
-    String value, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentLessThan(
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
       include: include,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentBetween(
+    String? lower,
+    String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return addFilterConditionInternal(FilterCondition.between(
-      property: 'imageUrl',
+      property: 'sentiment',
       lower: lower,
       includeLower: includeLower,
       upper: upper,
@@ -523,65 +534,65 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlStartsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.startsWith,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlEndsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.endsWith,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlContains(
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentContains(
       String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> imageUrlMatches(
+  QueryBuilder<Note, Note, QAfterFilterCondition> sentimentMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
-      property: 'imageUrl',
+      property: 'sentiment',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameEqualTo(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -589,13 +600,13 @@ extension ChatUserQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.gt,
       include: include,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -603,13 +614,13 @@ extension ChatUserQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
       include: include,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -617,7 +628,7 @@ extension ChatUserQueryFilter
     bool includeUpper = true,
   }) {
     return addFilterConditionInternal(FilterCondition.between(
-      property: 'lastName',
+      property: 'text',
       lower: lower,
       includeLower: includeLower,
       upper: upper,
@@ -626,65 +637,63 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameStartsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.startsWith,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameEndsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> textEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.endsWith,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameContains(
-      String value,
+  QueryBuilder<Note, Note, QAfterFilterCondition> textContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
-      property: 'lastName',
+      property: 'text',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> lastNameMatches(
-      String pattern,
+  QueryBuilder<Note, Note, QAfterFilterCondition> textMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
-      property: 'lastName',
+      property: 'text',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickEqualTo(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -692,13 +701,13 @@ extension ChatUserQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.gt,
       include: include,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -706,13 +715,13 @@ extension ChatUserQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.lt,
       include: include,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -720,7 +729,7 @@ extension ChatUserQueryFilter
     bool includeUpper = true,
   }) {
     return addFilterConditionInternal(FilterCondition.between(
-      property: 'nick',
+      property: 'title',
       lower: lower,
       includeLower: includeLower,
       upper: upper,
@@ -729,54 +738,51 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickStartsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.startsWith,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickEndsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.endsWith,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickContains(
-      String value,
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
-      property: 'nick',
+      property: 'title',
       value: value,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> nickMatches(
-      String pattern,
+  QueryBuilder<Note, Note, QAfterFilterCondition> titleMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
-      property: 'nick',
+      property: 'title',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> updatedAtEqualTo(
-      int value) {
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'updatedAt',
@@ -784,7 +790,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> updatedAtGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -796,7 +802,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> updatedAtLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtLessThan(
     int value, {
     bool include = false,
   }) {
@@ -808,7 +814,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> updatedAtBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -823,7 +829,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidEqualTo(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -835,7 +841,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidGreaterThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -849,7 +855,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidLessThan(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -863,7 +869,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidBetween(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -880,7 +886,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidStartsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -892,7 +898,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidEndsWith(
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -904,8 +910,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidContains(
-      String value,
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
@@ -915,8 +920,7 @@ extension ChatUserQueryFilter
     ));
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterFilterCondition> uuidMatches(
-      String pattern,
+  QueryBuilder<Note, Note, QAfterFilterCondition> uuidMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
@@ -927,214 +931,209 @@ extension ChatUserQueryFilter
   }
 }
 
-extension ChatUserQueryLinks
-    on QueryBuilder<ChatUser, ChatUser, QFilterCondition> {}
+extension NoteQueryLinks on QueryBuilder<Note, Note, QFilterCondition> {}
 
-extension ChatUserQueryWhereSortBy
-    on QueryBuilder<ChatUser, ChatUser, QSortBy> {
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByCreatedAt() {
+extension NoteQueryWhereSortBy on QueryBuilder<Note, Note, QSortBy> {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByCreatedAtDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedAtDesc() {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByFirstName() {
-    return addSortByInternal('firstName', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByEmotion() {
+    return addSortByInternal('emotion', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByFirstNameDesc() {
-    return addSortByInternal('firstName', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByEmotionDesc() {
+    return addSortByInternal('emotion', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortById() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByImageUrl() {
-    return addSortByInternal('imageUrl', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortBySentiment() {
+    return addSortByInternal('sentiment', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByImageUrlDesc() {
-    return addSortByInternal('imageUrl', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortBySentimentDesc() {
+    return addSortByInternal('sentiment', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByLastName() {
-    return addSortByInternal('lastName', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByText() {
+    return addSortByInternal('text', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByLastNameDesc() {
-    return addSortByInternal('lastName', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTextDesc() {
+    return addSortByInternal('text', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByNick() {
-    return addSortByInternal('nick', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTitle() {
+    return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByNickDesc() {
-    return addSortByInternal('nick', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTitleDesc() {
+    return addSortByInternal('title', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByUpdatedAt() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedAt() {
     return addSortByInternal('updatedAt', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByUpdatedAtDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedAtDesc() {
     return addSortByInternal('updatedAt', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByUuid() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUuid() {
     return addSortByInternal('uuid', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> sortByUuidDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUuidDesc() {
     return addSortByInternal('uuid', Sort.desc);
   }
 }
 
-extension ChatUserQueryWhereSortThenBy
-    on QueryBuilder<ChatUser, ChatUser, QSortThenBy> {
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByCreatedAt() {
+extension NoteQueryWhereSortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByCreatedAtDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByCreatedAtDesc() {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByFirstName() {
-    return addSortByInternal('firstName', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByEmotion() {
+    return addSortByInternal('emotion', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByFirstNameDesc() {
-    return addSortByInternal('firstName', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByEmotionDesc() {
+    return addSortByInternal('emotion', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenById() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByImageUrl() {
-    return addSortByInternal('imageUrl', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenBySentiment() {
+    return addSortByInternal('sentiment', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByImageUrlDesc() {
-    return addSortByInternal('imageUrl', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenBySentimentDesc() {
+    return addSortByInternal('sentiment', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByLastName() {
-    return addSortByInternal('lastName', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByText() {
+    return addSortByInternal('text', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByLastNameDesc() {
-    return addSortByInternal('lastName', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTextDesc() {
+    return addSortByInternal('text', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByNick() {
-    return addSortByInternal('nick', Sort.asc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTitle() {
+    return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByNickDesc() {
-    return addSortByInternal('nick', Sort.desc);
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTitleDesc() {
+    return addSortByInternal('title', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByUpdatedAt() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedAt() {
     return addSortByInternal('updatedAt', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByUpdatedAtDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedAtDesc() {
     return addSortByInternal('updatedAt', Sort.desc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByUuid() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUuid() {
     return addSortByInternal('uuid', Sort.asc);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QAfterSortBy> thenByUuidDesc() {
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUuidDesc() {
     return addSortByInternal('uuid', Sort.desc);
   }
 }
 
-extension ChatUserQueryWhereDistinct
-    on QueryBuilder<ChatUser, ChatUser, QDistinct> {
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByCreatedAt() {
+extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
+  QueryBuilder<Note, Note, QDistinct> distinctByCreatedAt() {
     return addDistinctByInternal('createdAt');
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByFirstName(
+  QueryBuilder<Note, Note, QDistinct> distinctByEmotion(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('firstName', caseSensitive: caseSensitive);
+    return addDistinctByInternal('emotion', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctById() {
+  QueryBuilder<Note, Note, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByImageUrl(
+  QueryBuilder<Note, Note, QDistinct> distinctBySentiment(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('imageUrl', caseSensitive: caseSensitive);
+    return addDistinctByInternal('sentiment', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByLastName(
+  QueryBuilder<Note, Note, QDistinct> distinctByText(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('lastName', caseSensitive: caseSensitive);
+    return addDistinctByInternal('text', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByNick(
+  QueryBuilder<Note, Note, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('nick', caseSensitive: caseSensitive);
+    return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByUpdatedAt() {
+  QueryBuilder<Note, Note, QDistinct> distinctByUpdatedAt() {
     return addDistinctByInternal('updatedAt');
   }
 
-  QueryBuilder<ChatUser, ChatUser, QDistinct> distinctByUuid(
+  QueryBuilder<Note, Note, QDistinct> distinctByUuid(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('uuid', caseSensitive: caseSensitive);
   }
 }
 
-extension ChatUserQueryProperty
-    on QueryBuilder<ChatUser, ChatUser, QQueryProperty> {
-  QueryBuilder<ChatUser, int, QQueryOperations> createdAtProperty() {
+extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
+  QueryBuilder<Note, int, QQueryOperations> createdAtProperty() {
     return addPropertyNameInternal('createdAt');
   }
 
-  QueryBuilder<ChatUser, String, QQueryOperations> firstNameProperty() {
-    return addPropertyNameInternal('firstName');
+  QueryBuilder<Note, String?, QQueryOperations> emotionProperty() {
+    return addPropertyNameInternal('emotion');
   }
 
-  QueryBuilder<ChatUser, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Note, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<ChatUser, String, QQueryOperations> imageUrlProperty() {
-    return addPropertyNameInternal('imageUrl');
+  QueryBuilder<Note, String?, QQueryOperations> sentimentProperty() {
+    return addPropertyNameInternal('sentiment');
   }
 
-  QueryBuilder<ChatUser, String, QQueryOperations> lastNameProperty() {
-    return addPropertyNameInternal('lastName');
+  QueryBuilder<Note, String, QQueryOperations> textProperty() {
+    return addPropertyNameInternal('text');
   }
 
-  QueryBuilder<ChatUser, String, QQueryOperations> nickProperty() {
-    return addPropertyNameInternal('nick');
+  QueryBuilder<Note, String, QQueryOperations> titleProperty() {
+    return addPropertyNameInternal('title');
   }
 
-  QueryBuilder<ChatUser, int, QQueryOperations> updatedAtProperty() {
+  QueryBuilder<Note, int, QQueryOperations> updatedAtProperty() {
     return addPropertyNameInternal('updatedAt');
   }
 
-  QueryBuilder<ChatUser, String, QQueryOperations> uuidProperty() {
+  QueryBuilder<Note, String, QQueryOperations> uuidProperty() {
     return addPropertyNameInternal('uuid');
   }
 }

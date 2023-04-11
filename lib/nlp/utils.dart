@@ -11,7 +11,7 @@ Vector softmax(List<double> output) {
   final sum = expVec.toList().reduce((a, b) => a + b);
   final result = expVec.scalarDiv(sum);
   final max = result.max();
-  debugPrint('softmax: $max');
+  //debugPrint('softmax: $max');
   return result;
 }
 

@@ -99,7 +99,9 @@ List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
   vec[index++] = dict[sep]!;
 
   // returning List<List<double>> as our interpreter input tensor expects the shape, [1,256]
-  return [vec];
+  final inputIds = vec.where((e) => e > 0).toList();
+
+  return [inputIds];
 }
 
 List wordPiece(String input, Map<String, int> dict) {
