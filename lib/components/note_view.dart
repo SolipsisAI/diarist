@@ -51,7 +51,7 @@ class NoteViewState extends State<NoteView> {
             preferredSize: const Size.fromHeight(40.0),
             child: ToggleAppBar(
               title: toDateString(_noteItem.createdAt),
-              isOn: widget.isEditing,
+              isOn: true,
               onToggle: (e) {
                 widget.onToggle();
               },

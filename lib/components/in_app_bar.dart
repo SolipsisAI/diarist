@@ -53,7 +53,7 @@ class ToggleAppBar extends StatelessWidget {
               onAnalyze();
             },
             icon: const FaIcon(FontAwesomeIcons.brain)),
-        Switch(value: isOn, onChanged: onToggle),
+        //Switch(value: isOn, onChanged: onToggle),
       ],
     );
   }
