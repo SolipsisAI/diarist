@@ -12,7 +12,7 @@ OPT_CMD=
 ROOT_DIR=$(shell pwd)
 APP_DIR=$(ROOT_DIR)/AppDir
 TMP_DIR=$(ROOT_DIR)/tmp
-TIMESTAMP=`date +'%Y-%m-%d_%H:%M:%S'`
+TIMESTAMP=`date +'%Y-%m-%d_%T'`
 ARCHIVE_DIR=$(TMP_DIR)/$(TIMESTAMP)
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 

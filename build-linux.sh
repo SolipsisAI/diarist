@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PACKAGE_ASSETS=package-assets/linux
 
-timestamp=$(date +"%Y")
+timestamp=$(date +"%Y-%m-%d%H%M%s")
 
 mkdir -p tmp
 mv Diarist.AppDir "tmp/$timestamp.AppDir"
