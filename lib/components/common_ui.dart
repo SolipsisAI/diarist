@@ -40,9 +40,18 @@ FaIcon getEmotionIcon(String? emotion) {
     "surprise": FontAwesomeIcons.solidFaceSurprise
   };
 
+  final colorsByEmotion = {
+    "sadness": Colors.blueAccent,
+    "joy": Colors.yellowAccent,
+    "love": Colors.orange,
+    "anger": Colors.redAccent,
+    "fear": Colors.purpleAccent,
+    "surprise": Colors.lightGreenAccent
+  };
+
   if (!iconsByEmotion.containsKey(emotion)) {
     return const FaIcon(FontAwesomeIcons.brain, color: Colors.grey);
   }
 
-  return FaIcon(iconsByEmotion[emotion], color: Colors.white);
+  return FaIcon(iconsByEmotion[emotion], color: colorsByEmotion[emotion]);
 }
