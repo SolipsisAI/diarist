@@ -41,14 +41,12 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  bool isEditing = false;
+  // TODO: Add toggle
+  bool isEditing = true;
   final ValueNotifier<NoteItem?> selected = ValueNotifier(null);
 
   void selectValue(NoteItem? item) {
     selected.value = item;
-    setState(() {
-      isEditing = false;
-    });
   }
 
   void clearValue() => selected.value = null;
@@ -69,7 +67,6 @@ class _NotesScreenState extends State<NotesScreen> {
     final Note note = await widget.onAdd();
     setState(() {
       selectValue(note.toItem());
-      isEditing = true;
     });
   }
 

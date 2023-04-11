@@ -84,7 +84,7 @@ List<List<int>> tokenizeInputText(String text, Map<String, int> dict) {
 
   // For each word in sentence find corresponding index in dict
   for (var tok in toks) {
-    if (index > _sentenceLen) {
+    if (index >= _sentenceLen) {
       break;
     }
     var encoded = wordPiece(sanitizeString(tok, false), dict);

@@ -100,7 +100,7 @@ List<List<double>> tokenizeInputText(String text, Map<String, int> dict) {
 
   // For each word in sentence find corresponding index in dict
   for (var tok in toks) {
-    if (index > sentenceLen) {
+    if (index >= sentenceLen) {
       break;
     }
     var sanitizedWord = sanitizeString(tok, true);
