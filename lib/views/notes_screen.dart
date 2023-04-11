@@ -77,7 +77,18 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   void onUpdate(NoteItem noteItem) async {
-    final Note note = await widget.onUpdate(noteItem);
+    final Note updatedNote = await widget.onUpdate(noteItem);
+    final IsolateData isolateData = IsolateData(
+      updatedNote.text,
+      updatedNote.id!,
+      widget.interpreters['emotion']!,
+      widget.interpreters['sentiment']!,
+      widget.vocab['emotion'],
+      widget.vocab['sentiment'],
+    );
+
+    final result = await inference(isolateData);
+    print(result);
   }
 
   @override
