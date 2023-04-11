@@ -32,17 +32,17 @@ double getPadding(bool isSmallScreen) {
 
 FaIcon getEmotionIcon(String? emotion) {
   final iconsByEmotion = {
-    "sadness": FontAwesomeIcons.faceSadCry,
-    "joy": FontAwesomeIcons.faceSmile,
-    "love": FontAwesomeIcons.heart,
-    "anger": FontAwesomeIcons.faceAngry,
-    "fear": FontAwesomeIcons.faceFrown,
-    "surprise": FontAwesomeIcons.faceSurprise
+    "sadness": FontAwesomeIcons.solidFaceSadCry,
+    "joy": FontAwesomeIcons.solidFaceGrin,
+    "love": FontAwesomeIcons.solidFaceGrinHearts,
+    "anger": FontAwesomeIcons.solidFaceAngry,
+    "fear": FontAwesomeIcons.solidFaceGrimace,
+    "surprise": FontAwesomeIcons.solidFaceSurprise
   };
 
   if (!iconsByEmotion.containsKey(emotion)) {
     return const FaIcon(FontAwesomeIcons.brain, color: Colors.grey);
   }
 
-  return FaIcon(iconsByEmotion[emotion], color: Colors.grey);
+  return FaIcon(iconsByEmotion[emotion], color: Colors.white);
 }
