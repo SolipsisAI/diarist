@@ -31,11 +31,13 @@ class ToggleAppBar extends StatelessWidget {
     Key? key,
     required this.title,
     required this.onToggle,
+    required this.onAnalyze,
     required this.isOn
   }) : super(key: key);
 
   final String title;
   final onToggle;
+  final onAnalyze;
   final bool isOn;
 
   @override
@@ -44,6 +46,7 @@ class ToggleAppBar extends StatelessWidget {
       backgroundColor: accentCanvasColor,
       title: Text(title, style: const TextStyle(fontSize: 16)),
       actions: <Widget>[
+        IconButton(onPressed: () { onAnalyze(); }, icon: const Icon(Icons.check)),
         Switch(value: isOn, onChanged: onToggle),
       ],
     );

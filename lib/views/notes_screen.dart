@@ -50,14 +50,6 @@ class _NotesScreenState extends State<NotesScreen> {
 
   late Stream<void> notesChanged;
 
-  Future<Map<String, Object>> inference(IsolateData isolateData) async {
-    ReceivePort responsePort = ReceivePort();
-    widget.isolateUtils.sendPort
-        .send(isolateData..responsePort = responsePort.sendPort);
-    final result = await responsePort.first;
-    return result;
-  }
-
   void refreshNotes() {
     debugPrint('Refresh');
   }
@@ -78,9 +70,12 @@ class _NotesScreenState extends State<NotesScreen> {
 
   void onUpdate(NoteItem noteItem) async {
     final Note updatedNote = await widget.onUpdate(noteItem);
+  }
+
+  void makePrediction(Note note) async {
     final IsolateData isolateData = IsolateData(
-      updatedNote.text,
-      updatedNote.id!,
+      note.text,
+      note.id!,
       widget.interpreters['emotion']!,
       widget.interpreters['sentiment']!,
       widget.vocab['emotion'],
@@ -89,6 +84,14 @@ class _NotesScreenState extends State<NotesScreen> {
 
     final result = await inference(isolateData);
     print(result);
+  }
+
+  Future<Map<String, Object>> inference(IsolateData isolateData) async {
+    ReceivePort responsePort = ReceivePort();
+    widget.isolateUtils.sendPort
+        .send(isolateData..responsePort = responsePort.sendPort);
+    final result = await responsePort.first;
+    return result;
   }
 
   @override
@@ -106,6 +109,7 @@ class _NotesScreenState extends State<NotesScreen> {
             selected: selected,
             onRefresh: refreshNotes,
             onToggle: toggleEditing,
+            onAnalyze: makePrediction,
             isEditing: isEditing,
           );
         });
@@ -124,6 +128,7 @@ class NotesView extends StatelessWidget {
       required this.selected,
       required this.onRefresh,
       required this.onToggle,
+      required this.onAnalyze,
       required this.isEditing})
       : super(key: key);
 
@@ -136,6 +141,7 @@ class NotesView extends StatelessWidget {
   final Function onRefresh;
   final ValueNotifier<NoteItem?> selected;
   final Function onToggle;
+  final Function onAnalyze;
   final bool isEditing;
 
   @override
@@ -165,6 +171,7 @@ class NotesView extends StatelessWidget {
                     onUpdate: onUpdate,
                     isEditing: isEditing,
                     onToggle: onToggle,
+                    onAnalyze: onAnalyze,
                   )
                 : const Center(
                     child: Text('ThoughtLog',

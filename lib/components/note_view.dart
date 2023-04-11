@@ -15,6 +15,7 @@ class NoteView extends StatefulWidget {
       required this.isSmallScreen,
       required this.onUpdate,
       required this.onToggle,
+      required this.onAnalyze,
       required this.isEditing})
       : super(key: noteKey);
 
@@ -22,6 +23,7 @@ class NoteView extends StatefulWidget {
   final NoteItem noteItem;
   final Function onUpdate;
   final Function onToggle;
+  final Function onAnalyze;
   final bool isEditing;
 
   @override
@@ -52,6 +54,9 @@ class NoteViewState extends State<NoteView> {
               isOn: widget.isEditing,
               onToggle: (e) {
                 widget.onToggle();
+              },
+              onAnalyze: () {
+                widget.onAnalyze(_noteItem.toNote());
               },
             )),
         body: widget.isEditing
