@@ -1,5 +1,7 @@
 import 'dart:isolate';
 
+import 'package:diarist/models/prediction.dart';
+import 'package:diarist/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -20,7 +22,8 @@ class NotesScreen extends StatefulWidget {
       required this.vocab,
       required this.isolateUtils,
       required this.onAdd,
-      required this.onUpdate})
+      required this.onUpdate,
+      required this.onPredict})
       : super(key: key);
 
   final List<Note> notes;
@@ -31,6 +34,7 @@ class NotesScreen extends StatefulWidget {
   final IsolateUtils isolateUtils;
   final Function onAdd;
   final Function onUpdate;
+  final Function onPredict;
 
   @override
   State<NotesScreen> createState() => _NotesScreenState();
@@ -85,6 +89,17 @@ class _NotesScreenState extends State<NotesScreen> {
 
     final result = await inference(isolateData);
     print(result);
+
+    final Prediction prediction = Prediction()
+      ..id = note.id
+      ..noteUuid = note.uuid
+      ..createdAt = currentTimestamp()
+      ..emotion = result['emotion'] as String
+      ..emotionScore = result['emotionScore'] as double
+      ..sentiment = result['sentiment'] as String
+      ..sentimentScore = result['sentimentScore'] as double;
+
+    widget.onPredict(prediction);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
