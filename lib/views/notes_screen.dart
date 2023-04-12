@@ -116,7 +116,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   Future<void> saveFile(Note note) async {
     final Directory appDocDir = await getAppDocDir();
-    final String filePath = '${appDocDir.path}/${note.uuid}.json';
+    final String filePath = '${appDocDir.path}/${note.id}.json';
     final File file = File(filePath);
     await file.writeAsString(jsonEncode(note.toJson()));
     print('Saved $filePath');
