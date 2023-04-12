@@ -138,6 +138,7 @@ class _NotesScreenState extends State<NotesScreen> {
             onToggle: toggleEditing,
             onAnalyze: makePrediction,
             isEditing: isEditing,
+            onClose: saveFile,
           );
         });
   }
@@ -156,6 +157,7 @@ class NotesView extends StatelessWidget {
       required this.onRefresh,
       required this.onToggle,
       required this.onAnalyze,
+      required this.onClose,
       required this.isEditing})
       : super(key: key);
 
@@ -169,6 +171,7 @@ class NotesView extends StatelessWidget {
   final ValueNotifier<NoteItem?> selected;
   final Function onToggle;
   final Function onAnalyze;
+  final Function onClose;
   final bool isEditing;
 
   @override
@@ -199,6 +202,7 @@ class NotesView extends StatelessWidget {
                     isEditing: isEditing,
                     onToggle: onToggle,
                     onAnalyze: onAnalyze,
+                    onClose: onClose,
                   )
                 : const Center(
                     child: Text('ThoughtLog',
