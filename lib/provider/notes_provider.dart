@@ -46,6 +46,7 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Note> updateNote(Note note) async {
+    print(note.uuid);
     note.updatedAt = currentTimestamp();
 
     await isar!.writeTxn((isar) async {
