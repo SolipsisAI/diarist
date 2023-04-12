@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:diarist/models/prediction.dart';
@@ -107,6 +108,15 @@ class _NotesScreenState extends State<NotesScreen> {
         .send(isolateData..responsePort = responsePort.sendPort);
     final result = await responsePort.first;
     return result;
+  }
+
+  Future<void> saveFile(NoteItem noteItem) async {
+    final Note note = noteItem.toNote();
+    final Directory appDocDir = await getAppDocDir();
+    final String filePath = '${appDocDir.path}/${noteItem.uuid}.json';
+    final File file = File(filePath);
+    await file.writeAsString(note.toJson().toString());
+    print('Saved $filePath');
   }
 
   @override
