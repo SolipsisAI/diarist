@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,8 +20,12 @@ class NotesProvider with ChangeNotifier {
 
   void init() async {
     final dir = await getApplicationDocumentsDirectory();
+    final appDocDir = await Directory('${dir.path}/Diarist').create(recursive: true);
+    
+    print('appDocDir: ${appDocDir.path}');
+
     isar ??= await Isar.open(
-        schemas: [NoteSchema, PredictionSchema], directory: dir.path);
+        schemas: [NoteSchema, PredictionSchema], directory: appDocDir.path);
 
     await isar!.txn((isar) async {
       final notesCollection = isar.notes;
