@@ -34,7 +34,7 @@ install:
 simulator:
 	@open -a Simulator.app
 
-run-ios: simulator
+run-ios: simulator pub
 	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v
 
 run: pub
