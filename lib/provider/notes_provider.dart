@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import '../models/note.dart';
 import '../models/prediction.dart';
 import '../utils/helpers.dart';
@@ -17,9 +16,9 @@ class NotesProvider with ChangeNotifier {
   Isar? isar;
 
   void init() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final appDocDir = await getAppDocDir();
     isar ??= await Isar.open(
-        schemas: [NoteSchema, PredictionSchema], directory: dir.path);
+        schemas: [NoteSchema, PredictionSchema], directory: appDocDir.path);
 
     await isar!.txn((isar) async {
       final notesCollection = isar.notes;
