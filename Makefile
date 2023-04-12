@@ -34,17 +34,20 @@ install:
 simulator:
 	@open -a Simulator.app
 
-run-ios: simulator
+run-ios: simulator pub
 	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v
 
-run:
+run: pub
 	@$(FLUTTER_CMD) run -d $(target) -v
 
-build: 
+pub:
+	@$(FLUTTER_CMD) pub get
+
+build: pub
 	@$(FLUTTER_CMD) build $(target) -v
 	@$(OPT_CMD)
 
-build-ios:
+build-ios: pub
 	@$(FLUTTER_CMD) build ipa
 
 devices:
