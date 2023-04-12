@@ -55,7 +55,7 @@ class ToggleAppBar extends StatelessWidget {
               onAnalyze();
             },
             icon: const FaIcon(FontAwesomeIcons.brain)),
-        TextButton(onPressed: () { print('Done'); }, child: const Text('Done'))
+        TextButton(onPressed: () { onClose(); }, child: const Text('Done'))
       ],
     );
   }
