@@ -34,12 +34,14 @@ class ToggleAppBar extends StatelessWidget {
       required this.title,
       required this.onToggle,
       required this.onAnalyze,
+      required this.onClose,
       required this.isOn})
       : super(key: key);
 
   final String title;
   final onToggle;
   final onAnalyze;
+  final onClose;
   final bool isOn;
 
   @override

@@ -121,6 +121,14 @@ class _NotesScreenState extends State<NotesScreen> {
     print('Saved $filePath');
   }
 
+  Future<void> onClose() async {
+    if (selected.value != null) {
+      final noteItem = selected.value;
+      saveFile(noteItem!.toNote());
+    }
+    clearValue();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -132,7 +140,7 @@ class _NotesScreenState extends State<NotesScreen> {
             onAdd: onAdd,
             onUpdate: onUpdate,
             onSelect: selectValue,
-            onClear: clearValue,
+            onClear: onClose,
             selected: selected,
             onRefresh: refreshNotes,
             onToggle: toggleEditing,
@@ -199,6 +207,7 @@ class NotesView extends StatelessWidget {
                     isEditing: isEditing,
                     onToggle: onToggle,
                     onAnalyze: onAnalyze,
+                    onClose: onClear,
                   )
                 : const Center(
                     child: Text('ThoughtLog',
