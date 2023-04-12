@@ -1,10 +1,11 @@
 import 'package:diarist/components/notes_list.dart';
-import 'package:diarist/models/prediction.dart';
 import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'note.g.dart';
 
 @Collection()
+@JsonSerializable()
 class Note {
   @Id()
   int? id;
@@ -17,8 +18,13 @@ class Note {
   late String? emotion = "";
   late String? sentiment = "";
 
+  Note();
+
   NoteItem toItem() {
     return NoteItem(
         id!, createdAt, updatedAt, title, text, uuid, emotion, sentiment);
   }
+
+  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
+  Map<String, dynamic> toJson() => _$NoteToJson(this);
 }
