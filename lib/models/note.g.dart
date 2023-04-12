@@ -1137,3 +1137,28 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
     return addPropertyNameInternal('uuid');
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Note _$NoteFromJson(Map<String, dynamic> json) => Note()
+  ..id = json['id'] as int?
+  ..createdAt = json['createdAt'] as int
+  ..updatedAt = json['updatedAt'] as int
+  ..title = json['title'] as String
+  ..text = json['text'] as String
+  ..uuid = json['uuid'] as String
+  ..emotion = json['emotion'] as String?
+  ..sentiment = json['sentiment'] as String?;
+
+Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
+      'title': instance.title,
+      'text': instance.text,
+      'uuid': instance.uuid,
+      'emotion': instance.emotion,
+      'sentiment': instance.sentiment,
+    };
