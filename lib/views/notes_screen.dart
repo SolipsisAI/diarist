@@ -100,6 +100,9 @@ class _NotesScreenState extends State<NotesScreen> {
       ..sentimentScore = result['sentimentScore'] as double;
 
     widget.onPredict(note, prediction);
+
+    // Update the JSON
+    saveFile(note);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -110,10 +113,9 @@ class _NotesScreenState extends State<NotesScreen> {
     return result;
   }
 
-  Future<void> saveFile(NoteItem noteItem) async {
-    final Note note = noteItem.toNote();
+  Future<void> saveFile(Note note) async {
     final Directory appDocDir = await getAppDocDir();
-    final String filePath = '${appDocDir.path}/${noteItem.uuid}.json';
+    final String filePath = '${appDocDir.path}/${note.uuid}.json';
     final File file = File(filePath);
     await file.writeAsString(note.toJson().toString());
     print('Saved $filePath');
