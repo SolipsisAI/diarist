@@ -75,6 +75,8 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   void makePrediction(Note note) async {
+    if (note.text.isEmpty) return;
+
     final IsolateData isolateData = IsolateData(
       note.text,
       note.id!,
