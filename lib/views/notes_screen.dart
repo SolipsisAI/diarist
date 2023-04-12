@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -117,7 +118,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final Directory appDocDir = await getAppDocDir();
     final String filePath = '${appDocDir.path}/${note.uuid}.json';
     final File file = File(filePath);
-    await file.writeAsString(note.toJson().toString());
+    await file.writeAsString(jsonEncode(note.toJson()));
     print('Saved $filePath');
   }
 
