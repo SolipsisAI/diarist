@@ -34,12 +34,16 @@ class ToggleAppBar extends StatelessWidget {
       required this.title,
       required this.onToggle,
       required this.onAnalyze,
+      required this.onClose,
+      required this.isSmallScreen,
       required this.isOn})
       : super(key: key);
 
   final String title;
   final onToggle;
   final onAnalyze;
+  final onClose;
+  final bool isSmallScreen;
   final bool isOn;
 
   @override
@@ -53,7 +57,13 @@ class ToggleAppBar extends StatelessWidget {
               onAnalyze();
             },
             icon: const FaIcon(FontAwesomeIcons.brain)),
-        //Switch(value: isOn, onChanged: onToggle),
+        Visibility(
+            visible: !isSmallScreen,
+            child: TextButton(
+                onPressed: () {
+                  onClose();
+                },
+                child: const Text('Done')))
       ],
     );
   }

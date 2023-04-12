@@ -3,7 +3,7 @@ ifneq (,$(wildcard ./.env))
   export
 endif
 
-.PHONY: timestamp install simulator run-ios run build build-ios devices generate clean
+.PHONY: timestamp install simulator run-ios run build build-ios devices generate clean pub
 
 #FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter  # There is an issue with fvm currently
 FLUTTER_CMD=flutter

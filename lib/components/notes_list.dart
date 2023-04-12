@@ -134,11 +134,11 @@ class MessageItem implements ListItem {
 /// A ListItem that contains data to display a note
 class NoteItem implements ListItem {
   final int id;
-  final String? uuid;
+  final String uuid;
   String text;
   String title;
-  final int? createdAt;
-  final int? updatedAt;
+  final int createdAt;
+  final int updatedAt;
   String? emotion;
   String? sentiment;
 
@@ -163,9 +163,9 @@ class NoteItem implements ListItem {
   Note toNote() {
     return Note()
       ..id = id
-      ..createdAt = createdAt ?? currentTimestamp()
-      ..updatedAt = updatedAt ?? currentTimestamp()
-      ..uuid = randomString()
+      ..createdAt = createdAt
+      ..updatedAt = updatedAt
+      ..uuid = uuid
       ..text = text
       ..title = title
       ..emotion = emotion

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:diarist/models/prediction.dart';
@@ -75,6 +77,8 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   void makePrediction(Note note) async {
+    if (note.text.isEmpty) return;
+
     final IsolateData isolateData = IsolateData(
       note.text,
       note.id!,
@@ -97,6 +101,9 @@ class _NotesScreenState extends State<NotesScreen> {
       ..sentimentScore = result['sentimentScore'] as double;
 
     widget.onPredict(note, prediction);
+
+    // Update the JSON
+    saveFile(note);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -105,6 +112,22 @@ class _NotesScreenState extends State<NotesScreen> {
         .send(isolateData..responsePort = responsePort.sendPort);
     final result = await responsePort.first;
     return result;
+  }
+
+  Future<void> saveFile(Note note) async {
+    final Directory appDocDir = await getAppDocDir();
+    final String filePath = '${appDocDir.path}/${note.uuid}.json';
+    final File file = File(filePath);
+    await file.writeAsString(jsonEncode(note.toJson()));
+    print('Saved $filePath');
+  }
+
+  Future<void> onClose() async {
+    if (selected.value != null) {
+      final noteItem = selected.value;
+      saveFile(noteItem!.toNote());
+    }
+    clearValue();
   }
 
   @override
@@ -118,7 +141,7 @@ class _NotesScreenState extends State<NotesScreen> {
             onAdd: onAdd,
             onUpdate: onUpdate,
             onSelect: selectValue,
-            onClear: clearValue,
+            onClear: onClose,
             selected: selected,
             onRefresh: refreshNotes,
             onToggle: toggleEditing,
@@ -185,6 +208,7 @@ class NotesView extends StatelessWidget {
                     isEditing: isEditing,
                     onToggle: onToggle,
                     onAnalyze: onAnalyze,
+                    onClose: onClear,
                   )
                 : const Center(
                     child: Text('ThoughtLog',
