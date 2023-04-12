@@ -51,7 +51,10 @@ class _NotesScreenState extends State<NotesScreen> {
     selected.value = item;
   }
 
-  void clearValue() => selected.value = null;
+  void clearValue() {
+    saveFile(selected.value!);
+    selected.value = null;
+  }
 
   late Stream<void> notesChanged;
 
@@ -114,7 +117,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final Directory appDocDir = await getAppDocDir();
     final String filePath = '${appDocDir.path}/${noteItem.uuid}.json';
     final File file = File(filePath);
-    await file.writeAsString(note.text);
+    await file.writeAsString(note.toJson().toString());
     print('Saved $filePath');
   }
 
