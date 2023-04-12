@@ -62,7 +62,8 @@ class NoteViewState extends State<NoteView> {
               },
               onClose: () {
                 widget.onClose();
-              }
+              },
+              isSmallScreen: widget.isSmallScreen,
             )),
         body: widget.isEditing
             ? TextEditor(
