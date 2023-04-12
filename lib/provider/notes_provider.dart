@@ -76,6 +76,7 @@ class NotesProvider with ChangeNotifier {
     updatedNote.emotion = note.emotion;
     updatedNote.sentiment = note.sentiment;
 
+    notifyListeners();
     return prediction;
   }
 }
