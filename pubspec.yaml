@@ -70,7 +70,7 @@ dev_dependencies:
 flutter_icons:
   android: false
   ios: true
-  image_path: "assets/images/DiaristIcon-1024.png"
+  image_path: "assets/images/DiaristIcon.png"
   remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
@@ -91,7 +91,7 @@ flutter:
   assets:
     - assets/
     - assets/models/
-    - assets/images/light-bulb.png
+    - assets/images/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

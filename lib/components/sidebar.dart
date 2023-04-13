@@ -67,7 +67,7 @@ class Sidebar extends StatelessWidget {
           height: 100,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Image.asset('assets/images/light-bulb.png'),
+            child: Image.asset('assets/images/icon.png'),
           ),
         );
       },
