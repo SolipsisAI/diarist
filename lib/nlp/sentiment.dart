@@ -4,7 +4,7 @@ import 'package:ml_linalg/linalg.dart';
 
 import 'utils.dart';
 
-const int sentenceLen = 512;
+const int sentenceLen = 256;
 const String start = '<START>';
 const String pad = '<PAD>';
 const String unk = '<UNKNOWN>';
@@ -18,7 +18,7 @@ Future<Map<String, Object>> classify(
     return classifyNoSplit(interpreter, rawText, dict);
   }
 
-  List<String> texts = splitText(rawText);
+  List<String> texts = splitText(rawText, maxLen: sentenceLen);
 
   var labelIndexes = List<int>.filled(labels.length, 0);
   var scores = List.generate(
