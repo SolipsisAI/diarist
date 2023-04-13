@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:diarist/nlp/sentiment.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -24,7 +25,7 @@ final List<String> labels = [
 Future<Map<String, Object>> classify(
     Interpreter interpreter, String rawText, Map<String, int> dict) async {
   // Split by newline
-  List<String> texts = splitText(rawText);
+  List<String> texts = splitText(rawText, maxLen: sentenceLen);
   debugPrint('texts: $texts');
 
   // Keep track of counts
