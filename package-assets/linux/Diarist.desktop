@@ -6,3 +6,4 @@ Name=Diarist
 Exec=diarist %u
 Icon=diarist
 Categories=Utility;
+StartupWMClass=diarist
