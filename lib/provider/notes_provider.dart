@@ -54,6 +54,7 @@ class NotesProvider with ChangeNotifier {
 
     realm.write(() {
       prediction.note = note;
+      note.prediction = prediction;
       realm.add<Prediction>(prediction, update: true);
     });
 
