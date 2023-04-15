@@ -45,8 +45,8 @@ class NotesProvider with ChangeNotifier {
       note.updatedAt = currentTimestamp();
     });
 
-    final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
-    updatedNote.text = note.text;
+    // final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
+    // updatedNote.text = note.text;
 
     notifyListeners();
     return note;
@@ -62,9 +62,9 @@ class NotesProvider with ChangeNotifier {
     print(
         'prediction ${prediction.uuid} ${prediction.noteUuid} ${prediction.emotion} ${prediction.sentiment}');
 
-    final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
-    updatedNote.emotion = note.emotion;
-    updatedNote.sentiment = note.sentiment;
+    // final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
+    // updatedNote.emotion = note.emotion;
+    // updatedNote.sentiment = note.sentiment;
 
     notifyListeners();
     return prediction;
