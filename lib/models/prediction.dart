@@ -1,11 +1,11 @@
-import 'package:isar/isar.dart';
+import 'package:realm/realm.dart';
 
 part 'prediction.g.dart';
 
-@Collection()
-class Prediction {
-  @Id()
-  int? id;
+@RealmModel()
+class _Prediction {
+  @PrimaryKey()
+  late final String uuid;
 
   late int createdAt;
   late String sentiment;
