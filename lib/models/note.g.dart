@@ -3,6 +3,29 @@
 part of 'note.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
+  ..uuid = json['uuid'] as String
+  ..createdAt = json['createdAt'] as int
+  ..updatedAt = json['updatedAt'] as int
+  ..title = json['title'] as String
+  ..text = json['text'] as String
+  ..emotion = json['emotion'] as String?
+  ..sentiment = json['sentiment'] as String?;
+
+Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
+      'uuid': instance.uuid,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
+      'title': instance.title,
+      'text': instance.text,
+      'emotion': instance.emotion,
+      'sentiment': instance.sentiment,
+    };
+
+// **************************************************************************
 // RealmObjectGenerator
 // **************************************************************************
 
