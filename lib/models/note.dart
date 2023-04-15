@@ -18,6 +18,9 @@ class _Note {
   late String? emotion = "";
   late String? sentiment = "";
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  late List<_Prediction> predictions;
+
   NoteItem toItem() {
     return NoteItem(
         uuid, createdAt, updatedAt, title, text, emotion, sentiment);
@@ -38,4 +41,21 @@ extension NoteJ on Note {
   static Note fromJson(Map<String, dynamic> json) =>
       toRealmObject(_$NoteFromJson(json));
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+}
+
+@RealmModel()
+class _Prediction {
+  @PrimaryKey()
+  late final String uuid;
+
+  late int createdAt;
+  late String sentiment;
+  late double sentimentScore;
+  late String emotion;
+  late double emotionScore;
+  late _Note? note;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @Backlink(#predictions)
+  late Iterable<_Note> linkedNote;
 }
