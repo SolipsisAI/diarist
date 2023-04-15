@@ -13,9 +13,11 @@ class NotesProvider with ChangeNotifier {
 
   List<Note> get notes => _notes;
 
+  late Realm realm;
+
   void init() async {
     final config = Configuration([Note.schema, Prediction.schema]);
-    final realm = Realm(config);
+    realm = Realm(config);
     final notesCollection =
         realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
     _notes = notesCollection.toList();
@@ -24,15 +26,11 @@ class NotesProvider with ChangeNotifier {
 
   Future<Note> addNote() async {
     final timestamp = currentTimestamp();
-    final note = Note()
-      ..createdAt = timestamp
-      ..updatedAt = timestamp
-      ..uuid = randomString()
-      ..text = ""
-      ..title = toDateString(timestamp);
+    final note =
+        Note(randomString(), timestamp, timestamp, toDateString(timestamp), "");
 
-    await isar!.writeTxn((isar) async {
-      await isar.notes.put(note);
+    realm.write(() {
+      realm.add(note);
     });
 
     _notes.insert(0, note);
@@ -42,13 +40,12 @@ class NotesProvider with ChangeNotifier {
 
   Future<Note> updateNote(Note note) async {
     print(note.uuid);
-    note.updatedAt = currentTimestamp();
 
-    await isar!.writeTxn((isar) async {
-      await isar.notes.put(note);
+    realm.write(() {
+      note.updatedAt = currentTimestamp();
     });
 
-    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
+    final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
     updatedNote.text = note.text;
 
     notifyListeners();
@@ -56,18 +53,16 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Prediction> addPrediction(Note note, Prediction prediction) async {
-    note.emotion = prediction.emotion;
-    note.sentiment = prediction.sentiment;
-
-    await isar!.writeTxn((isar) async {
-      await isar.predictions.put(prediction);
-      await isar.notes.put(note);
+    realm.write(() {
+      note.emotion = prediction.emotion;
+      note.sentiment = prediction.sentiment;
+      prediction.noteUuid = note.uuid;
     });
 
     print(
-        'prediction ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
+        'prediction ${prediction.uuid} ${prediction.noteUuid} ${prediction.emotion} ${prediction.sentiment}');
 
-    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
+    final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
     updatedNote.emotion = note.emotion;
     updatedNote.sentiment = note.sentiment;
 
