@@ -29,7 +29,7 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
 // RealmObjectGenerator
 // **************************************************************************
 
-class Note extends _Note with RealmEntity, RealmObject {
+class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   static var _defaultsSet = false;
 
   Note(
@@ -42,67 +42,71 @@ class Note extends _Note with RealmEntity, RealmObject {
     String? sentiment = "",
   }) {
     if (!_defaultsSet) {
-      _defaultsSet = RealmObject.setDefaults<Note>({
+      _defaultsSet = RealmObjectBase.setDefaults<Note>({
         'emotion': "",
         'sentiment': "",
       });
     }
-    RealmObject.set(this, 'uuid', uuid);
-    RealmObject.set(this, 'createdAt', createdAt);
-    RealmObject.set(this, 'updatedAt', updatedAt);
-    RealmObject.set(this, 'title', title);
-    RealmObject.set(this, 'text', text);
-    RealmObject.set(this, 'emotion', emotion);
-    RealmObject.set(this, 'sentiment', sentiment);
+    RealmObjectBase.set(this, 'uuid', uuid);
+    RealmObjectBase.set(this, 'createdAt', createdAt);
+    RealmObjectBase.set(this, 'updatedAt', updatedAt);
+    RealmObjectBase.set(this, 'title', title);
+    RealmObjectBase.set(this, 'text', text);
+    RealmObjectBase.set(this, 'emotion', emotion);
+    RealmObjectBase.set(this, 'sentiment', sentiment);
   }
 
   Note._();
 
   @override
-  String get uuid => RealmObject.get<String>(this, 'uuid') as String;
+  String get uuid => RealmObjectBase.get<String>(this, 'uuid') as String;
   @override
   set uuid(String value) => throw RealmUnsupportedSetError();
 
   @override
-  int get createdAt => RealmObject.get<int>(this, 'createdAt') as int;
+  int get createdAt => RealmObjectBase.get<int>(this, 'createdAt') as int;
   @override
-  set createdAt(int value) => RealmObject.set(this, 'createdAt', value);
+  set createdAt(int value) => RealmObjectBase.set(this, 'createdAt', value);
 
   @override
-  int get updatedAt => RealmObject.get<int>(this, 'updatedAt') as int;
+  int get updatedAt => RealmObjectBase.get<int>(this, 'updatedAt') as int;
   @override
-  set updatedAt(int value) => RealmObject.set(this, 'updatedAt', value);
+  set updatedAt(int value) => RealmObjectBase.set(this, 'updatedAt', value);
 
   @override
-  String get title => RealmObject.get<String>(this, 'title') as String;
+  String get title => RealmObjectBase.get<String>(this, 'title') as String;
   @override
-  set title(String value) => RealmObject.set(this, 'title', value);
+  set title(String value) => RealmObjectBase.set(this, 'title', value);
 
   @override
-  String get text => RealmObject.get<String>(this, 'text') as String;
+  String get text => RealmObjectBase.get<String>(this, 'text') as String;
   @override
-  set text(String value) => RealmObject.set(this, 'text', value);
+  set text(String value) => RealmObjectBase.set(this, 'text', value);
 
   @override
-  String? get emotion => RealmObject.get<String>(this, 'emotion') as String?;
+  String? get emotion =>
+      RealmObjectBase.get<String>(this, 'emotion') as String?;
   @override
-  set emotion(String? value) => RealmObject.set(this, 'emotion', value);
+  set emotion(String? value) => RealmObjectBase.set(this, 'emotion', value);
 
   @override
   String? get sentiment =>
-      RealmObject.get<String>(this, 'sentiment') as String?;
+      RealmObjectBase.get<String>(this, 'sentiment') as String?;
   @override
-  set sentiment(String? value) => RealmObject.set(this, 'sentiment', value);
+  set sentiment(String? value) => RealmObjectBase.set(this, 'sentiment', value);
 
   @override
   Stream<RealmObjectChanges<Note>> get changes =>
-      RealmObject.getChanges<Note>(this);
+      RealmObjectBase.getChanges<Note>(this);
+
+  @override
+  Note freeze() => RealmObjectBase.freezeObject<Note>(this);
 
   static SchemaObject get schema => _schema ??= _initSchema();
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
-    RealmObject.registerFactory(Note._);
-    return const SchemaObject(Note, [
+    RealmObjectBase.registerFactory(Note._);
+    return const SchemaObject(ObjectType.realmObject, Note, 'Note', [
       SchemaProperty('uuid', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('createdAt', RealmPropertyType.int),
       SchemaProperty('updatedAt', RealmPropertyType.int),
