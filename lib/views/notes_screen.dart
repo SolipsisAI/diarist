@@ -81,7 +81,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
     final IsolateData isolateData = IsolateData(
       note.text,
-      note.id!,
+      note.uuid,
       widget.interpreters['emotion']!,
       widget.interpreters['sentiment']!,
       widget.vocab['emotion'],

@@ -49,7 +49,7 @@ class IsolateUtils {
           sentimentInterpreter, isolateData.text, isolateData.sentimentDict);
 
       isolateData.responsePort.send({
-        'noteId': isolateData.noteId,
+        'noteId': isolateData.noteUuid,
         'emotion': emotionResult['label']!,
         'emotionScore': emotionResult['score']!,
         'sentiment': sentimentResult['label']!,
@@ -62,13 +62,13 @@ class IsolateUtils {
 /// Bundles data to pass between Isolate
 class IsolateData {
   final String text;
-  late int noteId;
+  late String noteUuid;
   late int emotionAddress;
   late int sentimentAddress;
   late Map<String, int> emotionDict;
   late Map<String, int> sentimentDict;
   late SendPort responsePort;
 
-  IsolateData(this.text, this.noteId, this.emotionAddress,
+  IsolateData(this.text, this.noteUuid, this.emotionAddress,
       this.sentimentAddress, this.emotionDict, this.sentimentDict);
 }
