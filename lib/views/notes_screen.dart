@@ -91,19 +91,20 @@ class _NotesScreenState extends State<NotesScreen> {
     final result = await inference(isolateData);
     print(result);
 
-    final Prediction prediction = Prediction()
-      ..id = note.id
-      ..noteUuid = note.uuid
-      ..createdAt = currentTimestamp()
-      ..emotion = result['emotion'] as String
-      ..emotionScore = result['emotionScore'] as double
-      ..sentiment = result['sentiment'] as String
-      ..sentimentScore = result['sentimentScore'] as double;
+    final Prediction prediction = Prediction(
+      randomString(),
+      currentTimestamp(),
+      result['emotion'] as String,
+      result['emotionScore'] as double,
+      result['sentiment'] as String,
+      result['sentimentScore'] as double,
+      note.uuid,
+    );
 
     widget.onPredict(note, prediction);
 
     // Update the JSON
-    saveFile(note);
+    // saveFile(note);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -201,7 +202,7 @@ class NotesView extends StatelessWidget {
             ),
             pane2: (selected.value != null)
                 ? NoteView(
-                    noteKey: ObjectKey(selected.value!.id),
+                    noteKey: ObjectKey(selected.value!.uuid),
                     noteItem: selected.value!,
                     isSmallScreen: isSmallScreen,
                     onUpdate: onUpdate,
