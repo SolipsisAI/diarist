@@ -41,12 +41,13 @@ class NotesProvider with ChangeNotifier {
   Future<Note> updateNote(Note note) async {
     print(note.uuid);
 
-    realm.write(() {
-      note.updatedAt = currentTimestamp();
-    });
-
     // final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
     // updatedNote.text = note.text;
+
+    realm.write(() {
+      note.updatedAt = currentTimestamp();
+      realm.add<Note>(note, update: true);
+    });
 
     notifyListeners();
     return note;

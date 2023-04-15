@@ -92,14 +92,13 @@ class _NotesScreenState extends State<NotesScreen> {
     print(result);
 
     final Prediction prediction = Prediction(
-      randomString(),
-      currentTimestamp(),
-      result['emotion'] as String,
-      result['emotionScore'] as double,
-      result['sentiment'] as String,
-      result['sentimentScore'] as double,
-      note.uuid,
-    );
+        randomString(),
+        currentTimestamp(),
+        result['emotion'] as String,
+        result['emotionScore'] as double,
+        result['sentiment'] as String,
+        result['sentimentScore'] as double,
+        note.uuid);
 
     widget.onPredict(note, prediction);
 
