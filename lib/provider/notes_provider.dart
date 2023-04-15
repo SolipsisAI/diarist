@@ -39,9 +39,8 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Note> updateNote(Note note) async {
-    note.updatedAt = currentTimestamp();
-
     realm.write(() {
+      note.updatedAt = currentTimestamp();
       realm.add<Note>(note, update: true);
     });
 
