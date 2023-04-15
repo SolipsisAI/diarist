@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:diarist/models/prediction.dart';
 import 'package:diarist/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -92,13 +91,13 @@ class _NotesScreenState extends State<NotesScreen> {
     print(result);
 
     final Prediction prediction = Prediction(
-        randomString(),
-        currentTimestamp(),
-        result['emotion'] as String,
-        result['emotionScore'] as double,
-        result['sentiment'] as String,
-        result['sentimentScore'] as double,
-        note.uuid);
+      randomString(),
+      currentTimestamp(),
+      result['emotion'] as String,
+      result['emotionScore'] as double,
+      result['sentiment'] as String,
+      result['sentimentScore'] as double,
+    );
 
     widget.onPredict(note, prediction);
 

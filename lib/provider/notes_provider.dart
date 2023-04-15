@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:realm/realm.dart';
 import '../models/note.dart';
-import '../models/prediction.dart';
 import '../utils/helpers.dart';
 
 class NotesProvider with ChangeNotifier {
@@ -51,18 +50,18 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Prediction> updatePrediction(Note note, Prediction prediction) async {
-    note.emotion = prediction.emotion;
-    note.sentiment = prediction.sentiment;
-    prediction.noteUuid = note.uuid;
+    //note.emotion = prediction.emotion;
+    //note.sentiment = prediction.sentiment;
 
     realm.write(() {
+      prediction.note = note;
       realm.add<Prediction>(prediction, update: true);
     });
 
     updateNote(note);
 
     print(
-        'prediction ${prediction.uuid} ${prediction.noteUuid} ${prediction.emotion} ${prediction.sentiment}');
+        'prediction ${prediction.uuid} ${prediction.note!.uuid} ${prediction.emotion} ${prediction.sentiment}');
 
     notifyListeners();
     return prediction;
