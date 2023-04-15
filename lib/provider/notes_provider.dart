@@ -16,7 +16,7 @@ class NotesProvider with ChangeNotifier {
   late Realm realm;
 
   void init() async {
-    final config = Configuration([Note.schema, Prediction.schema]);
+    final config = Configuration.local([Note.schema, Prediction.schema]);
     realm = Realm(config);
     final notesCollection =
         realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');

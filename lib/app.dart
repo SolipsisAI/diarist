@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'components/common_ui.dart';
 import 'components/sidebar.dart';
 import 'views/home_screen.dart';
-import 'models/note.dart';
 import 'utils/isolate_utils.dart';
 
 class DiaristApp extends StatelessWidget {
