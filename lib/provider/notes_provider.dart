@@ -35,12 +35,14 @@ class NotesProvider with ChangeNotifier {
 
     _notes.insert(0, note);
     notifyListeners();
+
     return note;
   }
 
   Future<Note> updateNote(Note note) async {
+    note.updatedAt = currentTimestamp();
+
     realm.write(() {
-      note.updatedAt = currentTimestamp();
       realm.add<Note>(note, update: true);
     });
 
@@ -48,19 +50,19 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Prediction> addPrediction(Note note, Prediction prediction) async {
+  Future<Prediction> updatePrediction(Note note, Prediction prediction) async {
+    note.emotion = prediction.emotion;
+    note.sentiment = prediction.sentiment;
+    prediction.noteUuid = note.uuid;
+
     realm.write(() {
-      note.emotion = prediction.emotion;
-      note.sentiment = prediction.sentiment;
-      prediction.noteUuid = note.uuid;
+      realm.add<Prediction>(prediction, update: true);
     });
+
+    updateNote(note);
 
     print(
         'prediction ${prediction.uuid} ${prediction.noteUuid} ${prediction.emotion} ${prediction.sentiment}');
-
-    // final Note updatedNote = _notes.firstWhere((n) => n.uuid == note.uuid);
-    // updatedNote.emotion = note.emotion;
-    // updatedNote.sentiment = note.sentiment;
 
     notifyListeners();
     return prediction;

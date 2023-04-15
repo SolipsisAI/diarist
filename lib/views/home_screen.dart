@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
               onPredict: (note, prediction) {
                 return context
                     .read<NotesProvider>()
-                    .addPrediction(note, prediction);
+                    .updatePrediction(note, prediction);
               },
             );
           default:
