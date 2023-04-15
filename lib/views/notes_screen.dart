@@ -126,7 +126,7 @@ class _NotesScreenState extends State<NotesScreen> {
   Future<void> onClose() async {
     if (selected.value != null) {
       final noteItem = selected.value;
-      saveFile(noteItem!.toNote());
+      //saveFile(noteItem!.toNote());
     }
     clearValue();
   }
