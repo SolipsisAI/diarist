@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
+import 'package:realm/realm.dart';
 import '../models/note.dart';
 import '../models/prediction.dart';
 import '../utils/helpers.dart';
@@ -13,18 +13,13 @@ class NotesProvider with ChangeNotifier {
 
   List<Note> get notes => _notes;
 
-  Isar? isar;
-
   void init() async {
-    final appDocDir = await getAppDocDir();
-    isar ??= await Isar.open(
-        schemas: [NoteSchema, PredictionSchema], directory: appDocDir.path);
-
-    await isar!.txn((isar) async {
-      final notesCollection = isar.notes;
-      _notes = await notesCollection.where().sortByCreatedAtDesc().findAll();
-      notifyListeners();
-    });
+    final config = Configuration([Note.schema, Prediction.schema]);
+    final realm = Realm(config);
+    final notesCollection =
+        realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
+    _notes = notesCollection.toList();
+    notifyListeners();
   }
 
   Future<Note> addNote() async {
