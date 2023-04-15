@@ -19,7 +19,7 @@ class _Note {
   late String? sentiment = "";
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  late List<_Prediction> predictions;
+  late _Prediction? prediction;
 
   NoteItem toItem() {
     return NoteItem(
@@ -53,9 +53,7 @@ class _Prediction {
   late double sentimentScore;
   late String emotion;
   late double emotionScore;
-  late _Note? note;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  @Backlink(#predictions)
-  late Iterable<_Note> linkedNote;
+  late _Note? note;
 }

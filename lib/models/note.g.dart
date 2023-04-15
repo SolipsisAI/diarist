@@ -40,7 +40,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     String text, {
     String? emotion = "",
     String? sentiment = "",
-    Iterable<Prediction> predictions = const [],
+    Prediction? prediction,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Note>({
@@ -55,8 +55,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'text', text);
     RealmObjectBase.set(this, 'emotion', emotion);
     RealmObjectBase.set(this, 'sentiment', sentiment);
-    RealmObjectBase.set<RealmList<Prediction>>(
-        this, 'predictions', RealmList<Prediction>(predictions));
+    RealmObjectBase.set(this, 'prediction', prediction);
   }
 
   Note._();
@@ -99,12 +98,11 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   set sentiment(String? value) => RealmObjectBase.set(this, 'sentiment', value);
 
   @override
-  RealmList<Prediction> get predictions =>
-      RealmObjectBase.get<Prediction>(this, 'predictions')
-          as RealmList<Prediction>;
+  Prediction? get prediction =>
+      RealmObjectBase.get<Prediction>(this, 'prediction') as Prediction?;
   @override
-  set predictions(covariant RealmList<Prediction> value) =>
-      throw RealmUnsupportedSetError();
+  set prediction(covariant Prediction? value) =>
+      RealmObjectBase.set(this, 'prediction', value);
 
   @override
   Stream<RealmObjectChanges<Note>> get changes =>
@@ -125,8 +123,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('text', RealmPropertyType.string),
       SchemaProperty('emotion', RealmPropertyType.string, optional: true),
       SchemaProperty('sentiment', RealmPropertyType.string, optional: true),
-      SchemaProperty('predictions', RealmPropertyType.object,
-          linkTarget: 'Prediction', collectionType: RealmCollectionType.list),
+      SchemaProperty('prediction', RealmPropertyType.object,
+          optional: true, linkTarget: 'Prediction'),
     ]);
   }
 }
@@ -194,13 +192,6 @@ class Prediction extends _Prediction
   set note(covariant Note? value) => RealmObjectBase.set(this, 'note', value);
 
   @override
-  RealmResults<Note> get linkedNote =>
-      RealmObjectBase.get<Note>(this, 'linkedNote') as RealmResults<Note>;
-  @override
-  set linkedNote(covariant RealmResults<Note> value) =>
-      throw RealmUnsupportedSetError();
-
-  @override
   Stream<RealmObjectChanges<Prediction>> get changes =>
       RealmObjectBase.getChanges<Prediction>(this);
 
@@ -221,10 +212,6 @@ class Prediction extends _Prediction
       SchemaProperty('emotionScore', RealmPropertyType.double),
       SchemaProperty('note', RealmPropertyType.object,
           optional: true, linkTarget: 'Note'),
-      SchemaProperty('linkedNote', RealmPropertyType.linkingObjects,
-          linkOriginProperty: 'predictions',
-          collectionType: RealmCollectionType.list,
-          linkTarget: 'Note'),
     ]);
   }
 }
