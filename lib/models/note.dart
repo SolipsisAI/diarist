@@ -1,6 +1,8 @@
 import 'package:realm/realm.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../components/notes_list.dart';
+
 part 'note.g.dart';
 
 @RealmModel()
@@ -15,6 +17,11 @@ class _Note {
   late String text;
   late String? emotion = "";
   late String? sentiment = "";
+
+  NoteItem toItem() {
+    return NoteItem(
+        uuid, createdAt, updatedAt, title, text, emotion, sentiment);
+  }
 }
 
 extension NoteJ on Note {
