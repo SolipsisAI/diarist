@@ -1,33 +1,33 @@
 PODS:
   - Flutter (1.0.0)
-  - isar_flutter_libs (1.0.0):
-    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - realm (1.0.3):
+    - Flutter
   - tflite_flutter (0.1.0):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - realm (from `.symlinks/plugins/realm/ios`)
   - tflite_flutter (from `.symlinks/plugins/tflite_flutter/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  isar_flutter_libs:
-    :path: ".symlinks/plugins/isar_flutter_libs/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
+  realm:
+    :path: ".symlinks/plugins/realm/ios"
   tflite_flutter:
     :path: ".symlinks/plugins/tflite_flutter/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  isar_flutter_libs: 5a34aebdd82e388db81dad8dd26786a642bb5b90
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  realm: 4895ba0593da3a42e5e21a37c99907520893bcaf
   tflite_flutter: 9157a660578930a99728974f247369af1c3595d5
 
 PODFILE CHECKSUM: 88170fc17e0ce517f873a3b638ec7c173f65635b

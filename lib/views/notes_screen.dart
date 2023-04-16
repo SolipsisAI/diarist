@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:diarist/models/prediction.dart';
 import 'package:diarist/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -81,7 +80,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
     final IsolateData isolateData = IsolateData(
       note.text,
-      note.id!,
+      note.uuid,
       widget.interpreters['emotion']!,
       widget.interpreters['sentiment']!,
       widget.vocab['emotion'],
@@ -91,19 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final result = await inference(isolateData);
     print(result);
 
-    final Prediction prediction = Prediction()
-      ..id = note.id
-      ..noteUuid = note.uuid
-      ..createdAt = currentTimestamp()
-      ..emotion = result['emotion'] as String
-      ..emotionScore = result['emotionScore'] as double
-      ..sentiment = result['sentiment'] as String
-      ..sentimentScore = result['sentimentScore'] as double;
-
-    widget.onPredict(note, prediction);
-
-    // Update the JSON
-    saveFile(note);
+    await widget.onPredict(note, result);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
@@ -125,7 +112,7 @@ class _NotesScreenState extends State<NotesScreen> {
   Future<void> onClose() async {
     if (selected.value != null) {
       final noteItem = selected.value;
-      saveFile(noteItem!.toNote());
+      //saveFile(noteItem!.toNote());
     }
     clearValue();
   }
@@ -201,7 +188,7 @@ class NotesView extends StatelessWidget {
             ),
             pane2: (selected.value != null)
                 ? NoteView(
-                    noteKey: ObjectKey(selected.value!.id),
+                    noteKey: ObjectKey(selected.value!.uuid),
                     noteItem: selected.value!,
                     isSmallScreen: isSmallScreen,
                     onUpdate: onUpdate,

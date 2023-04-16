@@ -81,7 +81,7 @@ class CustomListTile extends StatelessWidget {
         onTap: () {
           onSelect(item);
         },
-        selected: (selectedItem != null && selectedItem!.id == item.id),
+        selected: (selectedItem != null && selectedItem!.uuid == item.uuid),
         selectedTileColor: accentCanvasColor,
         selectedColor: white,
         shape: const Border(bottom: BorderSide(color: borderColor)),
@@ -133,17 +133,16 @@ class MessageItem implements ListItem {
 
 /// A ListItem that contains data to display a note
 class NoteItem implements ListItem {
-  final int id;
   final String uuid;
-  String text;
-  String title;
   final int createdAt;
   final int updatedAt;
+  String title;
+  String text;
   String? emotion;
   String? sentiment;
 
-  NoteItem(this.id, this.createdAt, this.updatedAt, this.title, this.text,
-      this.uuid, this.emotion, this.sentiment);
+  NoteItem(this.uuid, this.createdAt, this.updatedAt, this.title, this.text,
+      this.emotion, this.sentiment);
 
   @override
   Widget buildTitle(BuildContext context) => Text(
@@ -158,17 +157,9 @@ class NoteItem implements ListItem {
 
   @override
   String toString() =>
-      'NOTEITEM id: $id, uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
+      'NOTEITEM id: uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
-    return Note()
-      ..id = id
-      ..createdAt = createdAt
-      ..updatedAt = updatedAt
-      ..uuid = uuid
-      ..text = text
-      ..title = title
-      ..emotion = emotion
-      ..sentiment = sentiment;
+    return Note(uuid, createdAt, updatedAt, title, text);
   }
 }

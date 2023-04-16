@@ -2,15 +2,11 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'app.dart';
 import 'provider/notes_provider.dart';
-import 'models/note.dart';
-import 'models/prediction.dart';
 import 'utils/isolate_utils.dart';
 import 'utils/helpers.dart';
 

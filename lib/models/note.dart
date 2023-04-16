@@ -1,30 +1,65 @@
-import 'package:diarist/components/notes_list.dart';
-import 'package:isar/isar.dart';
+import 'package:realm/realm.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../components/notes_list.dart';
 
 part 'note.g.dart';
 
-@Collection()
+@RealmModel()
 @JsonSerializable()
-class Note {
-  @Id()
-  int? id;
+class _Note {
+  @PrimaryKey()
+  late final String uuid;
 
   late int createdAt;
   late int updatedAt;
   late String title;
   late String text;
-  late String uuid;
-  late String? emotion = "";
-  late String? sentiment = "";
 
-  Note();
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get emotion => predictions.isNotEmpty ? predictions.first.emotion : "";
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get sentiment =>
+      predictions.isNotEmpty ? predictions.first.sentiment : "";
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  late List<_Prediction> predictions;
 
   NoteItem toItem() {
     return NoteItem(
-        id!, createdAt, updatedAt, title, text, uuid, emotion, sentiment);
+        uuid, createdAt, updatedAt, title, text, emotion, sentiment);
+  }
+}
+
+extension NoteJ on Note {
+  static Note toRealmObject(_Note note) {
+    return Note(
+      note.uuid,
+      note.createdAt,
+      note.updatedAt,
+      note.title,
+      note.text,
+    );
   }
 
-  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
+  static Note fromJson(Map<String, dynamic> json) =>
+      toRealmObject(_$NoteFromJson(json));
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+}
+
+@RealmModel()
+class _Prediction {
+  @PrimaryKey()
+  late final String uuid;
+
+  late int createdAt;
+  late String sentiment;
+  late double sentimentScore;
+  late String emotion;
+  late double emotionScore;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @Backlink(#predictions)
+  late Iterable<_Note> linkedNote;
 }

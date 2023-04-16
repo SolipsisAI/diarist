@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
+import 'package:realm/realm.dart';
 import '../models/note.dart';
-import '../models/prediction.dart';
 import '../utils/helpers.dart';
 
 class NotesProvider with ChangeNotifier {
@@ -13,68 +12,64 @@ class NotesProvider with ChangeNotifier {
 
   List<Note> get notes => _notes;
 
-  Isar? isar;
+  late Realm realm;
 
   void init() async {
-    final appDocDir = await getAppDocDir();
-    isar ??= await Isar.open(
-        schemas: [NoteSchema, PredictionSchema], directory: appDocDir.path);
-
-    await isar!.txn((isar) async {
-      final notesCollection = isar.notes;
-      _notes = await notesCollection.where().sortByCreatedAtDesc().findAll();
-      notifyListeners();
-    });
+    final config = Configuration.local([Note.schema, Prediction.schema]);
+    realm = Realm(config);
+    final notesCollection =
+        realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
+    _notes = notesCollection.toList();
+    notifyListeners();
   }
 
   Future<Note> addNote() async {
     final timestamp = currentTimestamp();
-    final note = Note()
-      ..createdAt = timestamp
-      ..updatedAt = timestamp
-      ..uuid = randomString()
-      ..text = ""
-      ..title = toDateString(timestamp);
+    final note =
+        Note(randomString(), timestamp, timestamp, toDateString(timestamp), "");
 
-    await isar!.writeTxn((isar) async {
-      await isar.notes.put(note);
+    realm.write(() {
+      realm.add(note);
     });
 
     _notes.insert(0, note);
     notifyListeners();
+
     return note;
   }
 
   Future<Note> updateNote(Note note) async {
-    print(note.uuid);
-    note.updatedAt = currentTimestamp();
-
-    await isar!.writeTxn((isar) async {
-      await isar.notes.put(note);
+    realm.write(() {
+      note.updatedAt = currentTimestamp();
+      realm.add<Note>(note, update: true);
     });
-
-    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
-    updatedNote.text = note.text;
 
     notifyListeners();
     return note;
   }
 
-  Future<Prediction> addPrediction(Note note, Prediction prediction) async {
-    note.emotion = prediction.emotion;
-    note.sentiment = prediction.sentiment;
+  Future<Prediction> updatePrediction(
+      Note note, Map<String, Object> result) async {
+    final predictionUuid = note.predictions.isNotEmpty
+        ? note.predictions.first.uuid
+        : randomString();
 
-    await isar!.writeTxn((isar) async {
-      await isar.predictions.put(prediction);
-      await isar.notes.put(note);
+    final Prediction prediction = Prediction(
+      predictionUuid,
+      currentTimestamp(),
+      result['sentiment'] as String,
+      result['sentimentScore'] as double,
+      result['emotion'] as String,
+      result['emotionScore'] as double,
+    );
+
+    realm.write(() {
+      note.predictions.add(prediction);
+      realm.add<Note>(note, update: true);
     });
 
     print(
-        'prediction ${prediction.id} ${prediction.emotion} ${prediction.sentiment}');
-
-    final Note updatedNote = _notes.firstWhere((n) => n.id == note.id);
-    updatedNote.emotion = note.emotion;
-    updatedNote.sentiment = note.sentiment;
+        'prediction ${prediction.uuid} ${prediction.emotion} ${prediction.sentiment} for note ${note.uuid}');
 
     notifyListeners();
     return prediction;
