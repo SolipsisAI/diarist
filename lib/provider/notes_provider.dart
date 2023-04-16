@@ -48,9 +48,14 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Prediction> updatePrediction(Note note, Map<String, Object> result) async {
+  Future<Prediction> updatePrediction(
+      Note note, Map<String, Object> result) async {
+    final predictionUuid = note.predictions.isNotEmpty
+        ? note.predictions.first.uuid
+        : randomString();
+
     final Prediction prediction = Prediction(
-      note.prediction?.uuid ?? randomString(),
+      predictionUuid,
       currentTimestamp(),
       result['sentiment'] as String,
       result['sentimentScore'] as double,
@@ -59,10 +64,7 @@ class NotesProvider with ChangeNotifier {
     );
 
     realm.write(() {
-      note.prediction = prediction;
-      note.sentiment = note.prediction!.sentiment;
-      note.emotion = note.prediction!.emotion;
-      realm.add<Note>(note, update: true);
+      realm.add<Prediction>(prediction, update: true);
     });
 
     print(

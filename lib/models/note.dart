@@ -15,11 +15,16 @@ class _Note {
   late int updatedAt;
   late String title;
   late String text;
-  late String? emotion = "";
-  late String? sentiment = "";
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  late _Prediction? prediction;
+  String get emotion => predictions.isNotEmpty ? predictions.first.emotion : "";
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get sentiment =>
+      predictions.isNotEmpty ? predictions.first.sentiment : "";
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  late List<_Prediction> predictions;
 
   NoteItem toItem() {
     return NoteItem(
@@ -55,6 +60,6 @@ class _Prediction {
   late double emotionScore;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  @Backlink(#prediction)
-  late Iterable<_Note> noteLink;
+  @Backlink(#predictions)
+  late Iterable<_Note> linkedNote;
 }

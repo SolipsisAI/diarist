@@ -90,10 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final result = await inference(isolateData);
     print(result);
 
-    widget.onPredict(note, result);
-
-    // Update the JSON
-    // saveFile(note);
+    await widget.onPredict(note, result);
   }
 
   Future<Map<String, Object>> inference(IsolateData isolateData) async {
