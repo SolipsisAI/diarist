@@ -49,11 +49,13 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Prediction> updatePrediction(Note note, Prediction prediction) async {
-    //note.emotion = prediction.emotion;
-    //note.sentiment = prediction.sentiment;
-
     realm.write(() {
       prediction.note = note;
+
+      if (note.prediction != null) {
+        prediction.uuid = note.prediction!.uuid;
+      }
+
       realm.add<Prediction>(prediction, update: true);
 
       note.sentiment = prediction.sentiment;
