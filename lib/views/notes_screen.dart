@@ -90,17 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final result = await inference(isolateData);
     print(result);
 
-    final Prediction prediction = Prediction(
-      note.prediction?.uuid ?? randomString(),
-      currentTimestamp(),
-      result['sentiment'] as String,
-      result['sentimentScore'] as double,
-      result['emotion'] as String,
-      result['emotionScore'] as double,
-      note: note 
-    );
-
-    widget.onPredict(note, prediction);
+    widget.onPredict(note, result);
 
     // Update the JSON
     // saveFile(note);
