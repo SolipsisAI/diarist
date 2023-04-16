@@ -137,14 +137,16 @@ class Prediction extends _Prediction
     String sentiment,
     double sentimentScore,
     String emotion,
-    double emotionScore,
-  ) {
+    double emotionScore, {
+    Note? note,
+  }) {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'sentiment', sentiment);
     RealmObjectBase.set(this, 'sentimentScore', sentimentScore);
     RealmObjectBase.set(this, 'emotion', emotion);
     RealmObjectBase.set(this, 'emotionScore', emotionScore);
+    RealmObjectBase.set(this, 'note', note);
   }
 
   Prediction._();
@@ -185,11 +187,9 @@ class Prediction extends _Prediction
       RealmObjectBase.set(this, 'emotionScore', value);
 
   @override
-  RealmResults<Note> get note =>
-      RealmObjectBase.get<Note>(this, 'note') as RealmResults<Note>;
+  Note? get note => RealmObjectBase.get<Note>(this, 'note') as Note?;
   @override
-  set note(covariant RealmResults<Note> value) =>
-      throw RealmUnsupportedSetError();
+  set note(covariant Note? value) => RealmObjectBase.set(this, 'note', value);
 
   @override
   Stream<RealmObjectChanges<Prediction>> get changes =>
@@ -210,10 +210,8 @@ class Prediction extends _Prediction
       SchemaProperty('sentimentScore', RealmPropertyType.double),
       SchemaProperty('emotion', RealmPropertyType.string),
       SchemaProperty('emotionScore', RealmPropertyType.double),
-      SchemaProperty('note', RealmPropertyType.linkingObjects,
-          linkOriginProperty: 'prediction',
-          collectionType: RealmCollectionType.list,
-          linkTarget: 'Note'),
+      SchemaProperty('note', RealmPropertyType.object,
+          optional: true, linkTarget: 'Note'),
     ]);
   }
 }

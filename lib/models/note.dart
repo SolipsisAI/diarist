@@ -55,6 +55,5 @@ class _Prediction {
   late double emotionScore;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  @Backlink(#prediction)
-  late Iterable<_Note> note;
+  late _Note? note;
 }
