@@ -56,6 +56,8 @@ class NotesProvider with ChangeNotifier {
       prediction.note = note;
       realm.add<Prediction>(prediction, update: true);
 
+      note.sentiment = prediction.sentiment;
+      note.emotion = prediction.emotion;
       note.prediction = prediction;
       realm.add<Note>(note, update: true);
     });
