@@ -160,7 +160,6 @@ class NoteItem implements ListItem {
       'NOTEITEM id: uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
-    return Note(uuid, createdAt, updatedAt, title, text,
-        emotion: emotion, sentiment: sentiment);
+    return Note(uuid, createdAt, updatedAt, title, text);
   }
 }
