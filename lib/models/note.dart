@@ -17,11 +17,13 @@ class _Note {
   late String text;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get emotion => predictions.isNotEmpty ? predictions.first.emotion : "";
+  String get emotion => prediction.emotion;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get sentiment =>
-      predictions.isNotEmpty ? predictions.first.sentiment : "";
+  String get sentiment => prediction.sentiment;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _Prediction get prediction => predictions.first; 
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   late List<_Prediction> predictions;
