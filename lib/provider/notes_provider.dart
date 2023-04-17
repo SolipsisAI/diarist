@@ -16,7 +16,8 @@ class NotesProvider with ChangeNotifier {
 
   void init() async {
     final dir = await getAppSupportDir();
-    final config = Configuration.local([Note.schema], path: dir.path);
+    final realmPath = '${dir.path}/default.realm';
+    final config = Configuration.local([Note.schema], path: realmPath);
     realm = Realm(config);
     final notesCollection =
         realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
