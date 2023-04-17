@@ -3,7 +3,7 @@ ifneq (,$(wildcard ./.env))
   export
 endif
 
-.PHONY: timestamp install simulator run-ios run build build-ios devices generate clean pub
+.PHONY: env timestamp install simulator run-ios run build build-ios devices generate clean pub
 
 #FLUTTER_CMD=.fvm/flutter_sdk/bin/flutter  # There is an issue with fvm currently
 FLUTTER_CMD=flutter
@@ -23,6 +23,9 @@ else
   OPT_CMD=bash ./build-linux.sh
 endif
 
+env:
+	@echo $(ENV)
+
 timestamp:
 	echo $(TIMESTAMP)
 
@@ -35,20 +38,20 @@ simulator:
 	@open -a Simulator.app
 
 run-ios: simulator pub
-	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v
+	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 run: pub
-	@$(FLUTTER_CMD) run -d $(target) -v
+	@$(FLUTTER_CMD) run -d $(target) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 pub:
 	@$(FLUTTER_CMD) pub get
 
 build: pub
-	@$(FLUTTER_CMD) build $(target) -v
+	@$(FLUTTER_CMD) build $(target) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 	@$(OPT_CMD)
 
 build-ios: pub
-	@$(FLUTTER_CMD) build ipa
+	@$(FLUTTER_CMD) build ipa --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 devices:
 	@$(FLUTTER_CMD) devices
