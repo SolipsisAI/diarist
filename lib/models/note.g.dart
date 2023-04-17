@@ -8,8 +8,8 @@ part of 'note.dart';
 
 _Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
   ..uuid = json['uuid'] as String
-  ..createdAt = json['createdAt'] as int
-  ..updatedAt = json['updatedAt'] as int
+  ..createdAt = DateTime.parse(json['createdAt'] as String)
+  ..updatedAt = DateTime.parse(json['updatedAt'] as String)
   ..text = json['text'] as String
   ..title = json['title'] as String?
   ..sentimentLabel = json['sentimentLabel'] as String?
@@ -18,12 +18,14 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
   ..emotionScore = (json['emotionScore'] as num?)?.toDouble()
   ..actualSentimentLabel = json['actualSentimentLabel'] as String?
   ..actualEmotionLabel = json['actualEmotionLabel'] as String?
-  ..predictionUpdatedAt = json['predictionUpdatedAt'] as int?;
+  ..predictionUpdatedAt = json['predictionUpdatedAt'] == null
+      ? null
+      : DateTime.parse(json['predictionUpdatedAt'] as String);
 
 Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'uuid': instance.uuid,
-      'createdAt': instance.createdAt,
-      'updatedAt': instance.updatedAt,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
       'text': instance.text,
       'title': instance.title,
       'sentimentLabel': instance.sentimentLabel,
@@ -32,7 +34,7 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'emotionScore': instance.emotionScore,
       'actualSentimentLabel': instance.actualSentimentLabel,
       'actualEmotionLabel': instance.actualEmotionLabel,
-      'predictionUpdatedAt': instance.predictionUpdatedAt,
+      'predictionUpdatedAt': instance.predictionUpdatedAt?.toIso8601String(),
     };
 
 // **************************************************************************
@@ -42,8 +44,8 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
 class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   Note(
     String uuid,
-    int createdAt,
-    int updatedAt,
+    DateTime createdAt,
+    DateTime updatedAt,
     String text, {
     String? title,
     String? sentimentLabel,
@@ -52,7 +54,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     double? emotionScore,
     String? actualSentimentLabel,
     String? actualEmotionLabel,
-    int? predictionUpdatedAt,
+    DateTime? predictionUpdatedAt,
   }) {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
@@ -76,14 +78,18 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   set uuid(String value) => throw RealmUnsupportedSetError();
 
   @override
-  int get createdAt => RealmObjectBase.get<int>(this, 'createdAt') as int;
+  DateTime get createdAt =>
+      RealmObjectBase.get<DateTime>(this, 'createdAt') as DateTime;
   @override
-  set createdAt(int value) => RealmObjectBase.set(this, 'createdAt', value);
+  set createdAt(DateTime value) =>
+      RealmObjectBase.set(this, 'createdAt', value);
 
   @override
-  int get updatedAt => RealmObjectBase.get<int>(this, 'updatedAt') as int;
+  DateTime get updatedAt =>
+      RealmObjectBase.get<DateTime>(this, 'updatedAt') as DateTime;
   @override
-  set updatedAt(int value) => RealmObjectBase.set(this, 'updatedAt', value);
+  set updatedAt(DateTime value) =>
+      RealmObjectBase.set(this, 'updatedAt', value);
 
   @override
   String get text => RealmObjectBase.get<String>(this, 'text') as String;
@@ -138,10 +144,10 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'actualEmotionLabel', value);
 
   @override
-  int? get predictionUpdatedAt =>
-      RealmObjectBase.get<int>(this, 'predictionUpdatedAt') as int?;
+  DateTime? get predictionUpdatedAt =>
+      RealmObjectBase.get<DateTime>(this, 'predictionUpdatedAt') as DateTime?;
   @override
-  set predictionUpdatedAt(int? value) =>
+  set predictionUpdatedAt(DateTime? value) =>
       RealmObjectBase.set(this, 'predictionUpdatedAt', value);
 
   @override
@@ -157,8 +163,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.registerFactory(Note._);
     return const SchemaObject(ObjectType.realmObject, Note, 'Note', [
       SchemaProperty('uuid', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('createdAt', RealmPropertyType.int),
-      SchemaProperty('updatedAt', RealmPropertyType.int),
+      SchemaProperty('createdAt', RealmPropertyType.timestamp),
+      SchemaProperty('updatedAt', RealmPropertyType.timestamp),
       SchemaProperty('text', RealmPropertyType.string),
       SchemaProperty('title', RealmPropertyType.string, optional: true),
       SchemaProperty('sentimentLabel', RealmPropertyType.string,
@@ -171,7 +177,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
           optional: true),
       SchemaProperty('actualEmotionLabel', RealmPropertyType.string,
           optional: true),
-      SchemaProperty('predictionUpdatedAt', RealmPropertyType.int,
+      SchemaProperty('predictionUpdatedAt', RealmPropertyType.timestamp,
           optional: true),
     ]);
   }

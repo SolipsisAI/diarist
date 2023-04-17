@@ -67,8 +67,6 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<NotesProvider>(builder: (context, provider, _) {
-      final datetime = toDateTime(item.createdAt);
-
       return ListTile(
         //leading: const FaIcon(FontAwesomeIcons.brain, color: Colors.grey),
         leading: getEmotionIcon(item.emotion),
@@ -133,8 +131,8 @@ class MessageItem implements ListItem {
 /// A ListItem that contains data to display a note
 class NoteItem implements ListItem {
   final String uuid;
-  final int createdAt;
-  final int updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   String text;
   String? title;
   String? sentimentLabel;
@@ -143,7 +141,7 @@ class NoteItem implements ListItem {
   double? emotionScore;
   String? actualSentimentLabel;
   String? actualEmotionLabel;
-  int? predictionUpdatedAt;
+  DateTime? predictionUpdatedAt;
   String? emotion;
   String? sentiment;
 

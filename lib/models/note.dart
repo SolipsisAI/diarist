@@ -11,8 +11,8 @@ class _Note {
   @PrimaryKey()
   late final String uuid;
 
-  late int createdAt;
-  late int updatedAt;
+  late DateTime createdAt;
+  late DateTime updatedAt;
   late String text;
   late String? title;
   late String? sentimentLabel;
@@ -21,7 +21,7 @@ class _Note {
   late double? emotionScore;
   late String? actualSentimentLabel;
   late String? actualEmotionLabel;
-  late int? predictionUpdatedAt;
+  late DateTime? predictionUpdatedAt;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get emotion => actualEmotionLabel ?? emotionLabel;
