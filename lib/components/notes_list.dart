@@ -1,5 +1,4 @@
 // Source: https://docs.flutter.dev/cookbook/lists/mixed-list
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:diarist/provider/notes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,8 +135,8 @@ class NoteItem implements ListItem {
   final String uuid;
   final int createdAt;
   final int updatedAt;
-  String title;
   String text;
+  String? title;
   String? sentimentLabel;
   double? sentimentScore;
   String? emotionLabel;
@@ -152,8 +151,8 @@ class NoteItem implements ListItem {
       this.uuid,
       this.createdAt,
       this.updatedAt,
-      this.title,
       this.text,
+      this.title,
       this.sentimentLabel,
       this.sentimentScore,
       this.emotionLabel,
@@ -166,7 +165,7 @@ class NoteItem implements ListItem {
 
   @override
   Widget buildTitle(BuildContext context) => Text(
-        title,
+        title ?? toDateString(createdAt),
         style: const TextStyle(
           fontWeight: FontWeight.w600,
         ),
@@ -180,7 +179,8 @@ class NoteItem implements ListItem {
       'NOTEITEM id: uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
-    return Note(uuid, createdAt, updatedAt, title, text,
+    return Note(uuid, createdAt, updatedAt, text,
+        title: title,
         sentimentLabel: sentimentLabel,
         sentimentScore: sentimentScore,
         emotionLabel: emotionLabel,

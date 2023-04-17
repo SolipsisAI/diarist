@@ -10,8 +10,8 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
   ..uuid = json['uuid'] as String
   ..createdAt = json['createdAt'] as int
   ..updatedAt = json['updatedAt'] as int
-  ..title = json['title'] as String
   ..text = json['text'] as String
+  ..title = json['title'] as String?
   ..sentimentLabel = json['sentimentLabel'] as String?
   ..sentimentScore = (json['sentimentScore'] as num?)?.toDouble()
   ..emotionLabel = json['emotionLabel'] as String?
@@ -24,8 +24,8 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'title': instance.title,
       'text': instance.text,
+      'title': instance.title,
       'sentimentLabel': instance.sentimentLabel,
       'sentimentScore': instance.sentimentScore,
       'emotionLabel': instance.emotionLabel,
@@ -44,8 +44,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     String uuid,
     int createdAt,
     int updatedAt,
-    String title,
     String text, {
+    String? title,
     String? sentimentLabel,
     double? sentimentScore,
     String? emotionLabel,
@@ -57,8 +57,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
-    RealmObjectBase.set(this, 'title', title);
     RealmObjectBase.set(this, 'text', text);
+    RealmObjectBase.set(this, 'title', title);
     RealmObjectBase.set(this, 'sentimentLabel', sentimentLabel);
     RealmObjectBase.set(this, 'sentimentScore', sentimentScore);
     RealmObjectBase.set(this, 'emotionLabel', emotionLabel);
@@ -86,14 +86,14 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   set updatedAt(int value) => RealmObjectBase.set(this, 'updatedAt', value);
 
   @override
-  String get title => RealmObjectBase.get<String>(this, 'title') as String;
-  @override
-  set title(String value) => RealmObjectBase.set(this, 'title', value);
-
-  @override
   String get text => RealmObjectBase.get<String>(this, 'text') as String;
   @override
   set text(String value) => RealmObjectBase.set(this, 'text', value);
+
+  @override
+  String? get title => RealmObjectBase.get<String>(this, 'title') as String?;
+  @override
+  set title(String? value) => RealmObjectBase.set(this, 'title', value);
 
   @override
   String? get sentimentLabel =>
@@ -159,8 +159,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('uuid', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('createdAt', RealmPropertyType.int),
       SchemaProperty('updatedAt', RealmPropertyType.int),
-      SchemaProperty('title', RealmPropertyType.string),
       SchemaProperty('text', RealmPropertyType.string),
+      SchemaProperty('title', RealmPropertyType.string, optional: true),
       SchemaProperty('sentimentLabel', RealmPropertyType.string,
           optional: true),
       SchemaProperty('sentimentScore', RealmPropertyType.double,
