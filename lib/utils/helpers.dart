@@ -7,6 +7,11 @@ import 'package:intl/intl.dart';
 
 String getEnv() {
   const env = String.fromEnvironment("APP_CONFIG_ENV", defaultValue: "dev");
+
+  if (env.isEmpty) {
+    return ".dev";
+  }
+
   return env == 'prod' ? '' : '.$env';
 }
 
