@@ -54,10 +54,18 @@ class _Prediction {
   late final String uuid;
 
   late int createdAt;
-  late String sentiment;
+  late String sentimentLabel;
   late double sentimentScore;
-  late String emotion;
+  late String emotionLabel;
   late double emotionScore;
+  late String? actualSentimentLabel;
+  late String? actualEmotionLabel;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get emotion => actualEmotionLabel ?? emotionLabel;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get sentiment => actualSentimentLabel ?? sentimentLabel;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @Backlink(#predictions)

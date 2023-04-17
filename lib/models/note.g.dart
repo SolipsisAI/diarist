@@ -106,17 +106,21 @@ class Prediction extends _Prediction
   Prediction(
     String uuid,
     int createdAt,
-    String sentiment,
+    String sentimentLabel,
     double sentimentScore,
-    String emotion,
-    double emotionScore,
-  ) {
+    String emotionLabel,
+    double emotionScore, {
+    String? actualSentimentLabel,
+    String? actualEmotionLabel,
+  }) {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
-    RealmObjectBase.set(this, 'sentiment', sentiment);
+    RealmObjectBase.set(this, 'sentimentLabel', sentimentLabel);
     RealmObjectBase.set(this, 'sentimentScore', sentimentScore);
-    RealmObjectBase.set(this, 'emotion', emotion);
+    RealmObjectBase.set(this, 'emotionLabel', emotionLabel);
     RealmObjectBase.set(this, 'emotionScore', emotionScore);
+    RealmObjectBase.set(this, 'actualSentimentLabel', actualSentimentLabel);
+    RealmObjectBase.set(this, 'actualEmotionLabel', actualEmotionLabel);
   }
 
   Prediction._();
@@ -132,10 +136,11 @@ class Prediction extends _Prediction
   set createdAt(int value) => RealmObjectBase.set(this, 'createdAt', value);
 
   @override
-  String get sentiment =>
-      RealmObjectBase.get<String>(this, 'sentiment') as String;
+  String get sentimentLabel =>
+      RealmObjectBase.get<String>(this, 'sentimentLabel') as String;
   @override
-  set sentiment(String value) => RealmObjectBase.set(this, 'sentiment', value);
+  set sentimentLabel(String value) =>
+      RealmObjectBase.set(this, 'sentimentLabel', value);
 
   @override
   double get sentimentScore =>
@@ -145,9 +150,11 @@ class Prediction extends _Prediction
       RealmObjectBase.set(this, 'sentimentScore', value);
 
   @override
-  String get emotion => RealmObjectBase.get<String>(this, 'emotion') as String;
+  String get emotionLabel =>
+      RealmObjectBase.get<String>(this, 'emotionLabel') as String;
   @override
-  set emotion(String value) => RealmObjectBase.set(this, 'emotion', value);
+  set emotionLabel(String value) =>
+      RealmObjectBase.set(this, 'emotionLabel', value);
 
   @override
   double get emotionScore =>
@@ -155,6 +162,20 @@ class Prediction extends _Prediction
   @override
   set emotionScore(double value) =>
       RealmObjectBase.set(this, 'emotionScore', value);
+
+  @override
+  String? get actualSentimentLabel =>
+      RealmObjectBase.get<String>(this, 'actualSentimentLabel') as String?;
+  @override
+  set actualSentimentLabel(String? value) =>
+      RealmObjectBase.set(this, 'actualSentimentLabel', value);
+
+  @override
+  String? get actualEmotionLabel =>
+      RealmObjectBase.get<String>(this, 'actualEmotionLabel') as String?;
+  @override
+  set actualEmotionLabel(String? value) =>
+      RealmObjectBase.set(this, 'actualEmotionLabel', value);
 
   @override
   RealmResults<Note> get linkedNote =>
@@ -178,10 +199,14 @@ class Prediction extends _Prediction
         ObjectType.realmObject, Prediction, 'Prediction', [
       SchemaProperty('uuid', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('createdAt', RealmPropertyType.int),
-      SchemaProperty('sentiment', RealmPropertyType.string),
+      SchemaProperty('sentimentLabel', RealmPropertyType.string),
       SchemaProperty('sentimentScore', RealmPropertyType.double),
-      SchemaProperty('emotion', RealmPropertyType.string),
+      SchemaProperty('emotionLabel', RealmPropertyType.string),
       SchemaProperty('emotionScore', RealmPropertyType.double),
+      SchemaProperty('actualSentimentLabel', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('actualEmotionLabel', RealmPropertyType.string,
+          optional: true),
       SchemaProperty('linkedNote', RealmPropertyType.linkingObjects,
           linkOriginProperty: 'predictions',
           collectionType: RealmCollectionType.list,
