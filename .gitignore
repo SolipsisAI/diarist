@@ -44,6 +44,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
 .fvm/flutter_sdk
 assets/models/
 assets/backups/
@@ -58,3 +59,4 @@ TensorFlowLiteC.framework.zip
 .env
 *.AppDir
 tmp/
+AppConfig.xcconfig
