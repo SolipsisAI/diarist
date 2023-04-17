@@ -27,8 +27,7 @@ class NotesProvider with ChangeNotifier {
 
   Future<Note> addNote() async {
     final timestamp = currentTimestamp();
-    final note =
-        Note(randomString(), timestamp, timestamp, toDateString(timestamp), "");
+    final note = Note(randomString(), timestamp, timestamp, "");
 
     realm.write(() {
       realm.add(note);

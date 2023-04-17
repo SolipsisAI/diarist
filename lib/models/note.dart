@@ -13,8 +13,8 @@ class _Note {
 
   late int createdAt;
   late int updatedAt;
-  late String title;
   late String text;
+  late String? title;
   late String? sentimentLabel;
   late double? sentimentScore;
   late String? emotionLabel;
@@ -34,8 +34,8 @@ class _Note {
         uuid,
         createdAt,
         updatedAt,
-        title,
         text,
+        title,
         sentimentLabel,
         sentimentScore,
         emotionLabel,
@@ -50,8 +50,7 @@ class _Note {
 
 extension NoteJ on Note {
   static Note toRealmObject(_Note note) {
-    return Note(
-        note.uuid, note.createdAt, note.updatedAt, note.title, note.text);
+    return Note(note.uuid, note.createdAt, note.updatedAt, note.text);
   }
 
   static Note fromJson(Map<String, dynamic> json) =>
