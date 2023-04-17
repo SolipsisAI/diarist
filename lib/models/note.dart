@@ -31,19 +31,27 @@ class _Note {
 
   NoteItem toItem() {
     return NoteItem(
-        uuid, createdAt, updatedAt, title, text, emotion, sentiment);
+        uuid,
+        createdAt,
+        updatedAt,
+        title,
+        text,
+        sentimentLabel,
+        sentimentScore,
+        emotionLabel,
+        emotionScore,
+        actualSentimentLabel,
+        actualEmotionLabel,
+        predictionUpdatedAt,
+        emotion,
+        sentiment);
   }
 }
 
 extension NoteJ on Note {
   static Note toRealmObject(_Note note) {
     return Note(
-      note.uuid,
-      note.createdAt,
-      note.updatedAt,
-      note.title,
-      note.text
-    );
+        note.uuid, note.createdAt, note.updatedAt, note.title, note.text);
   }
 
   static Note fromJson(Map<String, dynamic> json) =>

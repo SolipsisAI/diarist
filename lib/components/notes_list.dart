@@ -138,11 +138,31 @@ class NoteItem implements ListItem {
   final int updatedAt;
   String title;
   String text;
+  String? sentimentLabel;
+  double? sentimentScore;
+  String? emotionLabel;
+  double? emotionScore;
+  String? actualSentimentLabel;
+  String? actualEmotionLabel;
+  int? predictionUpdatedAt;
   String? emotion;
   String? sentiment;
 
-  NoteItem(this.uuid, this.createdAt, this.updatedAt, this.title, this.text,
-      this.emotion, this.sentiment);
+  NoteItem(
+      this.uuid,
+      this.createdAt,
+      this.updatedAt,
+      this.title,
+      this.text,
+      this.sentimentLabel,
+      this.sentimentScore,
+      this.emotionLabel,
+      this.emotionScore,
+      this.actualSentimentLabel,
+      this.actualEmotionLabel,
+      this.predictionUpdatedAt,
+      this.emotion,
+      this.sentiment);
 
   @override
   Widget buildTitle(BuildContext context) => Text(
@@ -160,6 +180,11 @@ class NoteItem implements ListItem {
       'NOTEITEM id: uuid: $uuid, text: $text, createdAt: $createdAt, updatedAt: $updatedAt';
 
   Note toNote() {
-    return Note(uuid, createdAt, updatedAt, title, text);
+    return Note(uuid, createdAt, updatedAt, title, text,
+        sentimentLabel: sentimentLabel,
+        sentimentScore: sentimentScore,
+        emotionLabel: emotionLabel,
+        emotionScore: emotionScore,
+        predictionUpdatedAt: predictionUpdatedAt);
   }
 }
