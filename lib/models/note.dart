@@ -21,6 +21,7 @@ class _Note {
   late double? emotionScore;
   late String? actualSentimentLabel;
   late String? actualEmotionLabel;
+  late int? predictionUpdatedAt;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get emotion => actualEmotionLabel ?? emotionLabel;

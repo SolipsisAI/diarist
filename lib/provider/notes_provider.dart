@@ -47,6 +47,7 @@ class NotesProvider with ChangeNotifier {
         note.emotionScore = result['emotionScore'] as double;
         note.sentimentLabel = result['sentimentLabel'] as String;
         note.sentimentScore = result['sentimentScore'] as double;
+        note.predictionUpdatedAt = note.updatedAt;
       }
 
       realm.add<Note>(note, update: true);

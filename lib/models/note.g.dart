@@ -17,7 +17,8 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
   ..emotionLabel = json['emotionLabel'] as String?
   ..emotionScore = (json['emotionScore'] as num?)?.toDouble()
   ..actualSentimentLabel = json['actualSentimentLabel'] as String?
-  ..actualEmotionLabel = json['actualEmotionLabel'] as String?;
+  ..actualEmotionLabel = json['actualEmotionLabel'] as String?
+  ..predictionUpdatedAt = json['predictionUpdatedAt'] as int?;
 
 Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'uuid': instance.uuid,
@@ -31,6 +32,7 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'emotionScore': instance.emotionScore,
       'actualSentimentLabel': instance.actualSentimentLabel,
       'actualEmotionLabel': instance.actualEmotionLabel,
+      'predictionUpdatedAt': instance.predictionUpdatedAt,
     };
 
 // **************************************************************************
@@ -50,6 +52,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     double? emotionScore,
     String? actualSentimentLabel,
     String? actualEmotionLabel,
+    int? predictionUpdatedAt,
   }) {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
@@ -62,6 +65,7 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'emotionScore', emotionScore);
     RealmObjectBase.set(this, 'actualSentimentLabel', actualSentimentLabel);
     RealmObjectBase.set(this, 'actualEmotionLabel', actualEmotionLabel);
+    RealmObjectBase.set(this, 'predictionUpdatedAt', predictionUpdatedAt);
   }
 
   Note._();
@@ -134,6 +138,13 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'actualEmotionLabel', value);
 
   @override
+  int? get predictionUpdatedAt =>
+      RealmObjectBase.get<int>(this, 'predictionUpdatedAt') as int?;
+  @override
+  set predictionUpdatedAt(int? value) =>
+      RealmObjectBase.set(this, 'predictionUpdatedAt', value);
+
+  @override
   Stream<RealmObjectChanges<Note>> get changes =>
       RealmObjectBase.getChanges<Note>(this);
 
@@ -159,6 +170,8 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('actualSentimentLabel', RealmPropertyType.string,
           optional: true),
       SchemaProperty('actualEmotionLabel', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('predictionUpdatedAt', RealmPropertyType.int,
           optional: true),
     ]);
   }
