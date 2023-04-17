@@ -11,7 +11,14 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note()
   ..createdAt = json['createdAt'] as int
   ..updatedAt = json['updatedAt'] as int
   ..title = json['title'] as String
-  ..text = json['text'] as String;
+  ..text = json['text'] as String
+  ..sentimentLabel = json['sentimentLabel'] as String?
+  ..sentimentScore = (json['sentimentScore'] as num?)?.toDouble()
+  ..emotionLabel = json['emotionLabel'] as String?
+  ..emotionScore = (json['emotionScore'] as num?)?.toDouble()
+  ..actualSentimentLabel = json['actualSentimentLabel'] as String?
+  ..actualEmotionLabel = json['actualEmotionLabel'] as String?
+  ..predictionUpdatedAt = json['predictionUpdatedAt'] as int?;
 
 Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'uuid': instance.uuid,
@@ -19,6 +26,13 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
       'updatedAt': instance.updatedAt,
       'title': instance.title,
       'text': instance.text,
+      'sentimentLabel': instance.sentimentLabel,
+      'sentimentScore': instance.sentimentScore,
+      'emotionLabel': instance.emotionLabel,
+      'emotionScore': instance.emotionScore,
+      'actualSentimentLabel': instance.actualSentimentLabel,
+      'actualEmotionLabel': instance.actualEmotionLabel,
+      'predictionUpdatedAt': instance.predictionUpdatedAt,
     };
 
 // **************************************************************************
@@ -32,15 +46,26 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
     int updatedAt,
     String title,
     String text, {
-    Iterable<Prediction> predictions = const [],
+    String? sentimentLabel,
+    double? sentimentScore,
+    String? emotionLabel,
+    double? emotionScore,
+    String? actualSentimentLabel,
+    String? actualEmotionLabel,
+    int? predictionUpdatedAt,
   }) {
     RealmObjectBase.set(this, 'uuid', uuid);
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
     RealmObjectBase.set(this, 'title', title);
     RealmObjectBase.set(this, 'text', text);
-    RealmObjectBase.set<RealmList<Prediction>>(
-        this, 'predictions', RealmList<Prediction>(predictions));
+    RealmObjectBase.set(this, 'sentimentLabel', sentimentLabel);
+    RealmObjectBase.set(this, 'sentimentScore', sentimentScore);
+    RealmObjectBase.set(this, 'emotionLabel', emotionLabel);
+    RealmObjectBase.set(this, 'emotionScore', emotionScore);
+    RealmObjectBase.set(this, 'actualSentimentLabel', actualSentimentLabel);
+    RealmObjectBase.set(this, 'actualEmotionLabel', actualEmotionLabel);
+    RealmObjectBase.set(this, 'predictionUpdatedAt', predictionUpdatedAt);
   }
 
   Note._();
@@ -71,12 +96,53 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
   set text(String value) => RealmObjectBase.set(this, 'text', value);
 
   @override
-  RealmList<Prediction> get predictions =>
-      RealmObjectBase.get<Prediction>(this, 'predictions')
-          as RealmList<Prediction>;
+  String? get sentimentLabel =>
+      RealmObjectBase.get<String>(this, 'sentimentLabel') as String?;
   @override
-  set predictions(covariant RealmList<Prediction> value) =>
-      throw RealmUnsupportedSetError();
+  set sentimentLabel(String? value) =>
+      RealmObjectBase.set(this, 'sentimentLabel', value);
+
+  @override
+  double? get sentimentScore =>
+      RealmObjectBase.get<double>(this, 'sentimentScore') as double?;
+  @override
+  set sentimentScore(double? value) =>
+      RealmObjectBase.set(this, 'sentimentScore', value);
+
+  @override
+  String? get emotionLabel =>
+      RealmObjectBase.get<String>(this, 'emotionLabel') as String?;
+  @override
+  set emotionLabel(String? value) =>
+      RealmObjectBase.set(this, 'emotionLabel', value);
+
+  @override
+  double? get emotionScore =>
+      RealmObjectBase.get<double>(this, 'emotionScore') as double?;
+  @override
+  set emotionScore(double? value) =>
+      RealmObjectBase.set(this, 'emotionScore', value);
+
+  @override
+  String? get actualSentimentLabel =>
+      RealmObjectBase.get<String>(this, 'actualSentimentLabel') as String?;
+  @override
+  set actualSentimentLabel(String? value) =>
+      RealmObjectBase.set(this, 'actualSentimentLabel', value);
+
+  @override
+  String? get actualEmotionLabel =>
+      RealmObjectBase.get<String>(this, 'actualEmotionLabel') as String?;
+  @override
+  set actualEmotionLabel(String? value) =>
+      RealmObjectBase.set(this, 'actualEmotionLabel', value);
+
+  @override
+  int? get predictionUpdatedAt =>
+      RealmObjectBase.get<int>(this, 'predictionUpdatedAt') as int?;
+  @override
+  set predictionUpdatedAt(int? value) =>
+      RealmObjectBase.set(this, 'predictionUpdatedAt', value);
 
   @override
   Stream<RealmObjectChanges<Note>> get changes =>
@@ -95,97 +161,18 @@ class Note extends _Note with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('updatedAt', RealmPropertyType.int),
       SchemaProperty('title', RealmPropertyType.string),
       SchemaProperty('text', RealmPropertyType.string),
-      SchemaProperty('predictions', RealmPropertyType.object,
-          linkTarget: 'Prediction', collectionType: RealmCollectionType.list),
-    ]);
-  }
-}
-
-class Prediction extends _Prediction
-    with RealmEntity, RealmObjectBase, RealmObject {
-  Prediction(
-    String uuid,
-    int createdAt,
-    String sentiment,
-    double sentimentScore,
-    String emotion,
-    double emotionScore,
-  ) {
-    RealmObjectBase.set(this, 'uuid', uuid);
-    RealmObjectBase.set(this, 'createdAt', createdAt);
-    RealmObjectBase.set(this, 'sentiment', sentiment);
-    RealmObjectBase.set(this, 'sentimentScore', sentimentScore);
-    RealmObjectBase.set(this, 'emotion', emotion);
-    RealmObjectBase.set(this, 'emotionScore', emotionScore);
-  }
-
-  Prediction._();
-
-  @override
-  String get uuid => RealmObjectBase.get<String>(this, 'uuid') as String;
-  @override
-  set uuid(String value) => throw RealmUnsupportedSetError();
-
-  @override
-  int get createdAt => RealmObjectBase.get<int>(this, 'createdAt') as int;
-  @override
-  set createdAt(int value) => RealmObjectBase.set(this, 'createdAt', value);
-
-  @override
-  String get sentiment =>
-      RealmObjectBase.get<String>(this, 'sentiment') as String;
-  @override
-  set sentiment(String value) => RealmObjectBase.set(this, 'sentiment', value);
-
-  @override
-  double get sentimentScore =>
-      RealmObjectBase.get<double>(this, 'sentimentScore') as double;
-  @override
-  set sentimentScore(double value) =>
-      RealmObjectBase.set(this, 'sentimentScore', value);
-
-  @override
-  String get emotion => RealmObjectBase.get<String>(this, 'emotion') as String;
-  @override
-  set emotion(String value) => RealmObjectBase.set(this, 'emotion', value);
-
-  @override
-  double get emotionScore =>
-      RealmObjectBase.get<double>(this, 'emotionScore') as double;
-  @override
-  set emotionScore(double value) =>
-      RealmObjectBase.set(this, 'emotionScore', value);
-
-  @override
-  RealmResults<Note> get linkedNote =>
-      RealmObjectBase.get<Note>(this, 'linkedNote') as RealmResults<Note>;
-  @override
-  set linkedNote(covariant RealmResults<Note> value) =>
-      throw RealmUnsupportedSetError();
-
-  @override
-  Stream<RealmObjectChanges<Prediction>> get changes =>
-      RealmObjectBase.getChanges<Prediction>(this);
-
-  @override
-  Prediction freeze() => RealmObjectBase.freezeObject<Prediction>(this);
-
-  static SchemaObject get schema => _schema ??= _initSchema();
-  static SchemaObject? _schema;
-  static SchemaObject _initSchema() {
-    RealmObjectBase.registerFactory(Prediction._);
-    return const SchemaObject(
-        ObjectType.realmObject, Prediction, 'Prediction', [
-      SchemaProperty('uuid', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('createdAt', RealmPropertyType.int),
-      SchemaProperty('sentiment', RealmPropertyType.string),
-      SchemaProperty('sentimentScore', RealmPropertyType.double),
-      SchemaProperty('emotion', RealmPropertyType.string),
-      SchemaProperty('emotionScore', RealmPropertyType.double),
-      SchemaProperty('linkedNote', RealmPropertyType.linkingObjects,
-          linkOriginProperty: 'predictions',
-          collectionType: RealmCollectionType.list,
-          linkTarget: 'Note'),
+      SchemaProperty('sentimentLabel', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('sentimentScore', RealmPropertyType.double,
+          optional: true),
+      SchemaProperty('emotionLabel', RealmPropertyType.string, optional: true),
+      SchemaProperty('emotionScore', RealmPropertyType.double, optional: true),
+      SchemaProperty('actualSentimentLabel', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('actualEmotionLabel', RealmPropertyType.string,
+          optional: true),
+      SchemaProperty('predictionUpdatedAt', RealmPropertyType.int,
+          optional: true),
     ]);
   }
 }

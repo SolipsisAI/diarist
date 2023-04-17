@@ -15,7 +15,7 @@ class NotesProvider with ChangeNotifier {
   late Realm realm;
 
   void init() async {
-    final config = Configuration.local([Note.schema, Prediction.schema]);
+    final config = Configuration.local([Note.schema]);
     realm = Realm(config);
     final notesCollection =
         realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
@@ -38,40 +38,22 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Note> updateNote(Note note) async {
+  Future<Note> updateNote(Note note, { Map<String, Object>? result }) async {
     realm.write(() {
       note.updatedAt = currentTimestamp();
+
+      if (result != null) {
+        note.emotionLabel = result['emotionLabel'] as String;
+        note.emotionScore = result['emotionScore'] as double;
+        note.sentimentLabel = result['sentimentLabel'] as String;
+        note.sentimentScore = result['sentimentScore'] as double;
+        note.predictionUpdatedAt = note.updatedAt;
+      }
+
       realm.add<Note>(note, update: true);
     });
 
     notifyListeners();
     return note;
-  }
-
-  Future<Prediction> updatePrediction(
-      Note note, Map<String, Object> result) async {
-    final predictionUuid = note.predictions.isNotEmpty
-        ? note.predictions.first.uuid
-        : randomString();
-
-    final Prediction prediction = Prediction(
-      predictionUuid,
-      currentTimestamp(),
-      result['sentiment'] as String,
-      result['sentimentScore'] as double,
-      result['emotion'] as String,
-      result['emotionScore'] as double,
-    );
-
-    realm.write(() {
-      note.predictions.add(prediction);
-      realm.add<Note>(note, update: true);
-    });
-
-    print(
-        'prediction ${prediction.uuid} ${prediction.emotion} ${prediction.sentiment} for note ${note.uuid}');
-
-    notifyListeners();
-    return prediction;
   }
 }
