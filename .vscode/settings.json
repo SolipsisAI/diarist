@@ -8,6 +8,7 @@
   "files.watcherExclude": {
     "**/.fvm": true
   },
+  "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
   "cmake.sourceDirectory": "${workspaceFolder}/linux"
 }
