@@ -50,9 +50,9 @@ class IsolateUtils {
 
       isolateData.responsePort.send({
         'noteId': isolateData.noteUuid,
-        'emotion': emotionResult['label']!,
+        'emotionLabel': emotionResult['label']!,
         'emotionScore': emotionResult['score']!,
-        'sentiment': sentimentResult['label']!,
+        'sentimentLabel': sentimentResult['label']!,
         'sentimentScore': sentimentResult['score']!
       });
     }
