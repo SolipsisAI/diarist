@@ -26,8 +26,8 @@ class NotesProvider with ChangeNotifier {
   }
 
   Future<Note> addNote() async {
-    final timestamp = currentTimestamp();
-    final note = Note(randomString(), timestamp, timestamp, "");
+    final datetime = currentDateTime();
+    final note = Note(randomString(), datetime, datetime, "");
 
     realm.write(() {
       realm.add(note);
@@ -41,7 +41,7 @@ class NotesProvider with ChangeNotifier {
 
   Future<Note> updateNote(Note note, {Map<String, Object>? result}) async {
     realm.write(() {
-      note.updatedAt = currentTimestamp();
+      note.updatedAt = currentDateTime();
 
       if (result != null) {
         note.emotionLabel = result['emotionLabel'] as String;

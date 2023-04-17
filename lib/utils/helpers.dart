@@ -24,13 +24,17 @@ int currentTimestamp() {
   return DateTime.now().millisecondsSinceEpoch;
 }
 
-DateTime toDateTime(int? timestamp) {
-  return DateTime.fromMillisecondsSinceEpoch(timestamp ?? currentTimestamp());
+DateTime currentDateTime() {
+  return DateTime.now();
 }
 
-String toDateString(int? timestamp) {
-  final dateTime = toDateTime(timestamp ?? currentTimestamp());
-  return DateFormat.yMMMEd('en_US').add_jm().format(dateTime);
+DateTime toDateTime(String datestring) {
+  return DateTime.parse(datestring);
+}
+
+String toDateString(DateTime datetime) {
+  final _datetime = (datetime);
+  return DateFormat.yMMMEd('en_US').add_jm().format(_datetime);
 }
 
 Future<Map<String, int>> loadVocab(String vocabFile) async {
