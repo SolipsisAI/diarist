@@ -38,20 +38,20 @@ simulator:
 	@open -a Simulator.app
 
 run-ios: simulator pub
-	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v --dart-define="ENV=$(ENV)"
+	@$(FLUTTER_CMD) run -d $(IOS_DEVICE) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 run: pub
-	@$(FLUTTER_CMD) run -d $(target) -v --dart-define="ENV=$(ENV)"
+	@$(FLUTTER_CMD) run -d $(target) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 pub:
 	@$(FLUTTER_CMD) pub get
 
 build: pub
-	@$(FLUTTER_CMD) build $(target) -v --dart-define="ENV=$(ENV)"
+	@$(FLUTTER_CMD) build $(target) -v --dart-define="APP_CONFIG_ENV=$(ENV)"
 	@$(OPT_CMD)
 
 build-ios: pub
-	@$(FLUTTER_CMD) build ipa --dart-define="ENV=$(ENV)"
+	@$(FLUTTER_CMD) build ipa --dart-define="APP_CONFIG_ENV=$(ENV)"
 
 devices:
 	@$(FLUTTER_CMD) devices

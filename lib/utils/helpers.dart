@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 String getEnv() {
-  const env = String.fromEnvironment("ENV", defaultValue: "dev");
+  const env = String.fromEnvironment("APP_CONFIG_ENV", defaultValue: "dev");
   return env == 'prod' ? '' : '.$env';
 }
 
