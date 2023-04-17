@@ -15,7 +15,8 @@ class NotesProvider with ChangeNotifier {
   late Realm realm;
 
   void init() async {
-    final config = Configuration.local([Note.schema]);
+    final dir = await getAppSupportDir();
+    final config = Configuration.local([Note.schema], path: dir.path);
     realm = Realm(config);
     final notesCollection =
         realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
@@ -38,7 +39,7 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Note> updateNote(Note note, { Map<String, Object>? result }) async {
+  Future<Note> updateNote(Note note, {Map<String, Object>? result}) async {
     realm.write(() {
       note.updatedAt = currentTimestamp();
 

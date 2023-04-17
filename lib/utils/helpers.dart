@@ -5,6 +5,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
+String getEnv() {
+  const env = String.fromEnvironment("ENV", defaultValue: "dev");
+  return env == 'prod' ? '' : '.$env';
+}
+
 String randomString() {
   const uuid = Uuid();
   return uuid.v4();
@@ -55,7 +60,15 @@ String getExcerpt(String text, int maxLength) {
 Future<Directory> getAppDocDir() async {
   final dir = await getApplicationDocumentsDirectory();
   final appDocDir =
-      await Directory('${dir.path}/Diarist').create(recursive: true);
+      await Directory('${dir.path}/Diarist${getEnv()}').create(recursive: true);
+
+  return appDocDir;
+}
+
+Future<Directory> getAppSupportDir() async {
+  final dir = await getApplicationSupportDirectory();
+  final appDocDir =
+      await Directory('${dir.path}/Diarist${getEnv()}').create(recursive: true);
 
   return appDocDir;
 }
