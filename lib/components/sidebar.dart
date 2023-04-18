@@ -83,6 +83,7 @@ class Sidebar extends StatelessWidget {
           icon: Icons.library_books,
           label: 'Notes',
         ),
+        const SidebarXItem(icon: Icons.import_export, label: 'Import')
       ],
     );
   }

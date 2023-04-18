@@ -57,6 +57,8 @@ class HomeScreen extends StatelessWidget {
                     .updateNote(note, result: result);
               },
             );
+          case 2:
+            return Text('Import screen');
           default:
             return Text(
               pageTitle,

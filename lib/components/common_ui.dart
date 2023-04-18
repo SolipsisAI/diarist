@@ -18,6 +18,8 @@ String getTitleByIndex(int index) {
       return 'Home';
     case 1:
       return 'Notes';
+    case 2:
+      return 'Import';
     default:
       return 'Not found page';
   }
