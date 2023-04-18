@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../utils/csv_importer.dart';
+
 class ImportScreen extends StatefulWidget {
   const ImportScreen({Key? key}) : super(key: key);
 
@@ -42,10 +44,11 @@ class _ImportScreenState extends State<ImportScreen>
       file = result.files.first;
 
       print(file.name);
-      print(file.bytes);
       print(file.size);
       print(file.extension);
       print(file.path);
+
+      importCsv(file.path!);
     } else {
       // User canceled the picker
     }
