@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               },
             );
           case 2:
-            return ImportScreen(filename: 'test.csv');
+            return ImportScreen();
           default:
             return Text(
               pageTitle,

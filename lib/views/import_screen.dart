@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ImportScreen extends StatefulWidget {
-  const ImportScreen({Key? key, required this.filename}) : super(key: key);
-
-  final String filename;
+  const ImportScreen({Key? key}) : super(key: key);
 
   @override
   State<ImportScreen> createState() => _ImportScreenState();
@@ -12,6 +13,7 @@ class ImportScreen extends StatefulWidget {
 class _ImportScreenState extends State<ImportScreen>
     with TickerProviderStateMixin {
   late AnimationController controller;
+  late PlatformFile file;
 
   @override
   void initState() {
@@ -33,6 +35,22 @@ class _ImportScreenState extends State<ImportScreen>
     super.dispose();
   }
 
+  void selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      file = result.files.first;
+
+      print(file.name);
+      print(file.bytes);
+      print(file.size);
+      print(file.extension);
+      print(file.path);
+    } else {
+      // User canceled the picker
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +61,10 @@ class _ImportScreenState extends State<ImportScreen>
           children: <Widget>[
             const Text(
               'Linear progress indicator with a fixed color',
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
+            ElevatedButton(
+                onPressed: selectFile, child: const Text('Import DayOne CSV')),
             LinearProgressIndicator(
               value: controller.value,
               semanticsLabel: 'Linear progress indicator',
