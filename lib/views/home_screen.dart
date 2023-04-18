@@ -1,4 +1,5 @@
 import 'package:diarist/views/notes_screen.dart';
+import 'package:diarist/views/import_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               },
             );
           case 2:
-            return Text('Import screen');
+            return ImportScreen(filename: 'test.csv');
           default:
             return Text(
               pageTitle,
