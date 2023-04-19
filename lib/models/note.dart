@@ -56,4 +56,12 @@ extension NoteJ on Note {
   static Note fromJson(Map<String, dynamic> json) =>
       toRealmObject(_$NoteFromJson(json));
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+
+  static Note fromListRow(List<dynamic> row, List<String> headers) {
+    final Map<String, dynamic> json = {};
+    for (var i = 0; i < headers.length; i++) {
+      json[headers[i]] = row[i];
+    }
+    return fromJson(json);
+  }
 }

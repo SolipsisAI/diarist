@@ -39,9 +39,13 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Note> updateNote(Note note, {Map<String, Object>? result}) async {
+  Future<Note> updateNote(Note note,
+      {Map<String, Object>? result, bool? updateDates = true}) async {
     realm.write(() {
-      note.updatedAt = currentDateTime();
+      final bool shouldUpdateDates = updateDates != null && updateDates;
+      if (shouldUpdateDates) {
+        note.updatedAt = currentDateTime();
+      }
 
       if (result != null) {
         note.emotionLabel = result['emotionLabel'] as String;
