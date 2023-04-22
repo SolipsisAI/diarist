@@ -56,7 +56,7 @@ class CSVImporter {
     final rowDictsList = rowDicts.toList();
 
     rowsProcessed = 0;
-    totalRows = rowDictsList.length;
+    totalRows = rowDictsList.length - 1; // Skip headers row
 
     return rowDictsList;
   }
