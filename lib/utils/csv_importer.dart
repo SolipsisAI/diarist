@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:realm/realm.dart';
 
-const FIELD_MAPPING = {'date': 'createdAt', 'modifiedDate': 'updatedAt'};
-
 class CSVImporter {
   late List<String> fields;
 
@@ -15,10 +13,10 @@ class CSVImporter {
     final rowDicts = await readCsv(path);
     print('[CSVImporter]: ${rowDicts.length}');
 
+    if (rowDicts.isEmpty || rowDicts.length <= 2) return;
+
     for (var i = 1; i < rowDicts.length; i++) {
-      final rowData = rowDicts[i];
-      print('row $i added/updated $rowData');
-      //addRow(csvData[i]);
+      addRow(rowDicts[i], ["uuid", "date", "modifiedDate", "text"]);
     }
 
     print('[CSVImporter]: ${rowDicts.length} imported');
