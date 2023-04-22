@@ -63,9 +63,11 @@ class NotesProvider with ChangeNotifier {
   }
 
   void upsertFromDict(Map<dynamic, dynamic> row, headers) {
-    final note = NoteJ.fromListRow(row, headers);
+    final Note note = NoteJ.fromListRow(row, headers);
 
-    updateNote(note);
+    realm.write(() {
+      realm.add<Note>(note, update: true);
+    });
 
     notifyListeners();
   }

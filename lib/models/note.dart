@@ -5,7 +5,7 @@ import '../components/notes_list.dart';
 
 part 'note.g.dart';
 
-const FIELD_MAPPING = {'date': 'createdAt', 'modifiedDate': 'updatedAt'};
+const fieldMapping = {'date': 'createdAt', 'modifiedDate': 'updatedAt'};
 
 @RealmModel()
 @JsonSerializable()
@@ -64,8 +64,8 @@ extension NoteJ on Note {
     for (var i = 0; i < headers.length; i++) {
       var header = headers[i];
 
-      if (FIELD_MAPPING.containsKey(header)) {
-        header = FIELD_MAPPING[header]!;
+      if (fieldMapping.containsKey(header)) {
+        header = fieldMapping[header]!;
       }
 
       json[header] = row[headers[i]];
