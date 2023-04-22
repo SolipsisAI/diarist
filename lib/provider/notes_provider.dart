@@ -66,5 +66,7 @@ class NotesProvider with ChangeNotifier {
     final note = NoteJ.fromListRow(row, headers);
 
     updateNote(note);
+
+    notifyListeners();
   }
 }

@@ -5,10 +5,15 @@ import 'package:csv/csv.dart';
 
 class CSVImporter {
   late List<String> fields;
+  double progress = 0;
+  int rowsProcessed = 0;
+  int totalRows = 0;
 
-  CSVImporter();
+  final Function importRow;
 
-  void importCsv(String path, Function importRow, List<String> headers) async {
+  CSVImporter({required this.importRow});
+
+  void importCsv(String path, List<String> headers) async {
     final rowDicts = await readCsv(path);
     print('[CSVImporter]: ${rowDicts.length}');
 
@@ -19,6 +24,13 @@ class CSVImporter {
     }
 
     print('[CSVImporter]: ${rowDicts.length} imported');
+  }
+
+  double importRowDict(Map<dynamic, dynamic> rowDict, List<String> headers) {
+    importRow(rowDict, headers);
+    rowsProcessed += 1;
+    progress = rowsProcessed / totalRows;
+    return progress;
   }
 
   Future<List<Map>> readCsv(String path) async {
@@ -41,6 +53,11 @@ class CSVImporter {
       return rowDict;
     });
 
-    return rowDicts.toList();
+    final rowDictsList = rowDicts.toList();
+
+    rowsProcessed = 0;
+    totalRows = rowDictsList.length;
+
+    return rowDictsList;
   }
 }

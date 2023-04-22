@@ -20,10 +20,12 @@ class _ImportScreenState extends State<ImportScreen>
   late AnimationController controller;
   late PlatformFile file;
   late CSVImporter importer;
+  late String filePath;
+  late List<Map<dynamic, dynamic>> csvData;
 
   @override
   void initState() {
-    importer = CSVImporter();
+    importer = CSVImporter(importRow: widget.importRow);
     controller = AnimationController(
       /// [AnimationController]s can be created with `vsync: this` because of
       /// [TickerProviderStateMixin].
@@ -47,17 +49,18 @@ class _ImportScreenState extends State<ImportScreen>
 
     if (result != null) {
       file = result.files.first;
-
-      print(file.name);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
-
-      importer.importCsv(file.path!, widget.importRow,
-          ["uuid", "date", "modifiedDate", "text"]);
+      filePath = file.path!;
+      csvData = await importer.readCsv(filePath);
     } else {
       // User canceled the picker
     }
+  }
+
+  void importFile() {
+    for (var i = 1; i < csvData.length; i++) {
+      widget.importRow(csvData[i], ["uuid", "date", "text", "modifiedDate"]);
+    }
+    print('Imported');
   }
 
   @override
@@ -69,15 +72,16 @@ class _ImportScreenState extends State<ImportScreen>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             const Text(
-              'Linear progress indicator with a fixed color',
+              'Select a file',
               style: TextStyle(fontSize: 20, color: Colors.white),
             ),
             ElevatedButton(
-                onPressed: selectFile, child: const Text('Import DayOne CSV')),
+                onPressed: selectFile, child: const Text('Select DayOne CSV')),
             LinearProgressIndicator(
-              value: controller.value,
+              value: importer.progress,
               semanticsLabel: 'Linear progress indicator',
             ),
+            ElevatedButton(onPressed: importFile, child: const Text('Import')),
           ],
         ),
       ),
