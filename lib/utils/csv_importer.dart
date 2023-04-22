@@ -2,21 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
-import 'package:realm/realm.dart';
 
 class CSVImporter {
   late List<String> fields;
 
   CSVImporter();
 
-  void importCsv(String path, Function addRow, List<String> headers) async {
+  void importCsv(String path, Function importRow, List<String> headers) async {
     final rowDicts = await readCsv(path);
     print('[CSVImporter]: ${rowDicts.length}');
 
     if (rowDicts.isEmpty || rowDicts.length <= 2) return;
 
     for (var i = 1; i < rowDicts.length; i++) {
-      addRow(rowDicts[i], ["uuid", "date", "modifiedDate", "text"]);
+      importRow(rowDicts[i], headers);
     }
 
     print('[CSVImporter]: ${rowDicts.length} imported');

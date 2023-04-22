@@ -61,4 +61,10 @@ class NotesProvider with ChangeNotifier {
     notifyListeners();
     return note;
   }
+
+  void upsertFromDict(Map<dynamic, dynamic> row, headers) {
+    final note = NoteJ.fromListRow(row, headers);
+
+    updateNote(note);
+  }
 }

@@ -7,7 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import '../utils/csv_importer.dart';
 
 class ImportScreen extends StatefulWidget {
-  const ImportScreen({Key? key}) : super(key: key);
+  const ImportScreen({Key? key, required this.importRow}) : super(key: key);
+
+  final Function importRow;
 
   @override
   State<ImportScreen> createState() => _ImportScreenState();
@@ -51,7 +53,8 @@ class _ImportScreenState extends State<ImportScreen>
       print(file.extension);
       print(file.path);
 
-      importer.importCsv(file.path!, NoteJ.fromListRow, ["test"]);
+      importer.importCsv(file.path!, widget.importRow,
+          ["uuid", "date", "modifiedDate", "text"]);
     } else {
       // User canceled the picker
     }

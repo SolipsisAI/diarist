@@ -59,7 +59,8 @@ class HomeScreen extends StatelessWidget {
               },
             );
           case 2:
-            return ImportScreen();
+            return ImportScreen(
+                importRow: context.read<NotesProvider>().upsertFromDict);
           default:
             return Text(
               pageTitle,
