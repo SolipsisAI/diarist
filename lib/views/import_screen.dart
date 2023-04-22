@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:diarist/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -16,9 +17,11 @@ class _ImportScreenState extends State<ImportScreen>
     with TickerProviderStateMixin {
   late AnimationController controller;
   late PlatformFile file;
+  late CSVImporter importer;
 
   @override
   void initState() {
+    importer = CSVImporter();
     controller = AnimationController(
       /// [AnimationController]s can be created with `vsync: this` because of
       /// [TickerProviderStateMixin].
@@ -48,7 +51,7 @@ class _ImportScreenState extends State<ImportScreen>
       print(file.extension);
       print(file.path);
 
-      importCsv(file.path!);
+      importer.importCsv(file.path!, NoteJ.fromListRow, ["test"]);
     } else {
       // User canceled the picker
     }

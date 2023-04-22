@@ -7,18 +7,18 @@ import 'package:realm/realm.dart';
 const FIELD_MAPPING = {'date': 'createdAt', 'modifiedDate': 'updatedAt'};
 
 class CSVImporter {
-  late Function addOrUpdate;
   late List<String> fields;
 
-  CSVImporter(this.addOrUpdate);
+  CSVImporter();
 
-  void importCsv(String path, dynamic modelClass, List<String> headers) async {
+  void importCsv(String path, Function addRow, List<String> headers) async {
     final csvData = await readCsv(path);
     print('[CSVImporter]: ${csvData.length}');
 
     for (var i = 0; i < csvData.length; i++) {
-      final data = modelClass.fromListRow(csvData[i]);
-      addOrUpdate(data);
+      final rowData = csvData[i];
+      print('row $i added/updated $rowData');
+      //addRow(csvData[i]);
     }
 
     print('[CSVImporter]: ${csvData.length}');
