@@ -12,16 +12,16 @@ class CSVImporter {
   CSVImporter();
 
   void importCsv(String path, Function addRow, List<String> headers) async {
-    final csvData = await readCsv(path);
-    print('[CSVImporter]: ${csvData.length}');
+    final rowDicts = await readCsv(path);
+    print('[CSVImporter]: ${rowDicts.length}');
 
-    for (var i = 1; i < csvData.length; i++) {
-      final rowData = csvData[i];
+    for (var i = 1; i < rowDicts.length; i++) {
+      final rowData = rowDicts[i];
       print('row $i added/updated $rowData');
       //addRow(csvData[i]);
     }
 
-    print('[CSVImporter]: ${csvData.length}');
+    print('[CSVImporter]: ${rowDicts.length} imported');
   }
 
   Future<List<Map>> readCsv(String path) async {
