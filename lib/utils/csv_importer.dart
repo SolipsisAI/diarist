@@ -15,7 +15,7 @@ class CSVImporter {
     final csvData = await readCsv(path);
     print('[CSVImporter]: ${csvData.length}');
 
-    for (var i = 0; i < csvData.length; i++) {
+    for (var i = 1; i < csvData.length; i++) {
       final rowData = csvData[i];
       print('row $i added/updated $rowData');
       //addRow(csvData[i]);
@@ -24,13 +24,26 @@ class CSVImporter {
     print('[CSVImporter]: ${csvData.length}');
   }
 
-  Future<List<List>> readCsv(String path) async {
+  Future<List<Map>> readCsv(String path) async {
     final csvFile = File(path).openRead();
     final csvData = await csvFile
         .transform(utf8.decoder)
         .transform(const CsvToListConverter(fieldDelimiter: ",", eol: "\n"))
         .toList();
 
-    return csvData;
+    if (csvData.isEmpty) {
+      return [];
+    }
+
+    final headers = csvData[0];
+    final rowDicts = csvData.map((row) {
+      final rowDict = {};
+      for (int i = 0; i < headers.length; i++) {
+        rowDict[headers[i]] = row[i];
+      }
+      return rowDict;
+    });
+
+    return rowDicts.toList();
   }
 }
