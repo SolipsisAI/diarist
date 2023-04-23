@@ -11,6 +11,7 @@ class NotesProvider with ChangeNotifier {
   List<Note> _notes = [];
 
   List<Note> get notes => _notes;
+  late RealmResults<Note> notesCollection;
 
   late Realm realm;
 
@@ -19,8 +20,7 @@ class NotesProvider with ChangeNotifier {
     final realmPath = '${dir.path}/default.realm';
     final config = Configuration.local([Note.schema], path: realmPath);
     realm = Realm(config);
-    final notesCollection =
-        realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
+    notesCollection = realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
     _notes = notesCollection.toList();
     notifyListeners();
   }
@@ -39,9 +39,13 @@ class NotesProvider with ChangeNotifier {
     return note;
   }
 
-  Future<Note> updateNote(Note note, {Map<String, Object>? result}) async {
+  Future<Note> updateNote(Note note,
+      {Map<String, Object>? result, bool? updateDates = true}) async {
     realm.write(() {
-      note.updatedAt = currentDateTime();
+      final bool shouldUpdateDates = updateDates != null && updateDates;
+      if (shouldUpdateDates) {
+        note.updatedAt = currentDateTime();
+      }
 
       if (result != null) {
         note.emotionLabel = result['emotionLabel'] as String;
@@ -56,5 +60,16 @@ class NotesProvider with ChangeNotifier {
 
     notifyListeners();
     return note;
+  }
+
+  void upsertFromDict(Map<dynamic, dynamic> row, headers) {
+    final Note note = NoteJ.fromListRow(row, headers);
+
+    realm.write(() {
+      realm.add<Note>(note, update: true);
+    });
+
+    _notes = notesCollection.toList();
+    notifyListeners();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:diarist/views/notes_screen.dart';
+import 'package:diarist/views/import_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,9 @@ class HomeScreen extends StatelessWidget {
                     .updateNote(note, result: result);
               },
             );
+          case 2:
+            return ImportScreen(
+                importRow: context.read<NotesProvider>().upsertFromDict);
           default:
             return Text(
               pageTitle,

@@ -5,6 +5,8 @@ import '../components/notes_list.dart';
 
 part 'note.g.dart';
 
+const fieldMapping = {'date': 'createdAt', 'modifiedDate': 'updatedAt'};
+
 @RealmModel()
 @JsonSerializable()
 class _Note {
@@ -56,4 +58,18 @@ extension NoteJ on Note {
   static Note fromJson(Map<String, dynamic> json) =>
       toRealmObject(_$NoteFromJson(json));
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+
+  static Note fromListRow(Map<dynamic, dynamic> row, List<String> headers) {
+    final Map<String, dynamic> json = {};
+    for (var i = 0; i < headers.length; i++) {
+      var header = headers[i];
+
+      if (fieldMapping.containsKey(header)) {
+        header = fieldMapping[header]!;
+      }
+
+      json[header] = row[headers[i]];
+    }
+    return fromJson(json);
+  }
 }
