@@ -69,6 +69,7 @@ class NotesProvider with ChangeNotifier {
       realm.add<Note>(note, update: true);
     });
 
+    _notes.insert(0, note);
     notifyListeners();
   }
 }
