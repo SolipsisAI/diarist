@@ -22,6 +22,7 @@ class _ImportScreenState extends State<ImportScreen>
   late CSVImporter importer;
   late String filePath;
   late List<Map<dynamic, dynamic>> csvData;
+  double progress = 0;
 
   @override
   void initState() {
@@ -58,7 +59,10 @@ class _ImportScreenState extends State<ImportScreen>
 
   void importFile() {
     for (var i = 1; i < csvData.length; i++) {
-      widget.importRow(csvData[i], ["uuid", "date", "text", "modifiedDate"]);
+      setState(() {
+        progress = importer.importRowDict(
+            csvData[i], ["uuid", "date", "text", "modifiedDate"]);
+      });
     }
     print('Imported');
   }
@@ -78,7 +82,7 @@ class _ImportScreenState extends State<ImportScreen>
             ElevatedButton(
                 onPressed: selectFile, child: const Text('Select DayOne CSV')),
             LinearProgressIndicator(
-              value: importer.progress,
+              value: progress,
               semanticsLabel: 'Linear progress indicator',
             ),
             ElevatedButton(onPressed: importFile, child: const Text('Import')),
