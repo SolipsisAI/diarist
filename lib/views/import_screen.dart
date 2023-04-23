@@ -20,7 +20,7 @@ class _ImportScreenState extends State<ImportScreen>
   late AnimationController controller;
   late PlatformFile file;
   late CSVImporter importer;
-  late String filePath;
+  String filePath = "";
   late List<Map<dynamic, dynamic>> csvData;
   double progress = 0;
 
@@ -49,8 +49,11 @@ class _ImportScreenState extends State<ImportScreen>
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      file = result.files.first;
-      filePath = file.path!;
+      setState(() {
+        file = result.files.first;
+        filePath = file.path!;
+      });
+
       csvData = await importer.readCsv(filePath);
     } else {
       // User canceled the picker
@@ -75,20 +78,40 @@ class _ImportScreenState extends State<ImportScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const Text(
-              'Select a file',
-              style: TextStyle(fontSize: 20, color: Colors.white),
+            Text(
+              filePath.isEmpty ? "Select a file" : "Selected $filePath",
+              style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
             ElevatedButton(
                 onPressed: selectFile, child: const Text('Select DayOne CSV')),
-            LinearProgressIndicator(
-              value: progress,
-              semanticsLabel: 'Linear progress indicator',
-            ),
-            ElevatedButton(onPressed: importFile, child: const Text('Import')),
+            filePath.isNotEmpty
+                ? ImportMenu(progress: progress, importFile: importFile)
+                : Container()
           ],
         ),
       ),
+    );
+  }
+}
+
+class ImportMenu extends StatelessWidget {
+  const ImportMenu({Key? key, required this.progress, required this.importFile})
+      : super(key: key);
+
+  final double progress;
+  final dynamic importFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        LinearProgressIndicator(
+          value: progress,
+          semanticsLabel: 'Import progress',
+          minHeight: 20,
+        ),
+        ElevatedButton(onPressed: importFile, child: const Text('Import')),
+      ],
     );
   }
 }
