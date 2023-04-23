@@ -11,6 +11,7 @@ class NotesProvider with ChangeNotifier {
   List<Note> _notes = [];
 
   List<Note> get notes => _notes;
+  late RealmResults<Note> notesCollection;
 
   late Realm realm;
 
@@ -19,8 +20,7 @@ class NotesProvider with ChangeNotifier {
     final realmPath = '${dir.path}/default.realm';
     final config = Configuration.local([Note.schema], path: realmPath);
     realm = Realm(config);
-    final notesCollection =
-        realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
+    notesCollection = realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
     _notes = notesCollection.toList();
     notifyListeners();
   }
@@ -69,7 +69,7 @@ class NotesProvider with ChangeNotifier {
       realm.add<Note>(note, update: true);
     });
 
-    _notes.insert(0, note);
+    _notes = notesCollection.toList();
     notifyListeners();
   }
 }
