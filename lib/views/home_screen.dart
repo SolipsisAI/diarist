@@ -36,18 +36,18 @@ class HomeScreen extends StatelessWidget {
             return DashboardScreen(
               stats: [
                 StatData(
-                    2, 2, 'Notes', context.watch<NotesProvider>().notes.length),
+                    1, 1, 'Notes', context.watch<NotesProvider>().notes.length),
                 // Emotion Labels
-                StatData(2, 1, 'Sadness',
+                StatData(1, 1, 'Sadness',
                     context.watch<NotesProvider>().sadness.length),
                 StatData(
-                    1, 2, 'Joy', context.watch<NotesProvider>().joy.length),
+                    1, 1, 'Joy', context.watch<NotesProvider>().joy.length),
                 StatData(
                     1, 1, 'Love', context.watch<NotesProvider>().love.length),
                 StatData(
-                    2, 2, 'Anger', context.watch<NotesProvider>().anger.length),
+                    1, 1, 'Anger', context.watch<NotesProvider>().anger.length),
                 StatData(
-                    1, 2, 'Fear', context.watch<NotesProvider>().fear.length),
+                    1, 1, 'Fear', context.watch<NotesProvider>().fear.length),
                 StatData(1, 1, 'Surprise',
                     context.watch<NotesProvider>().surprise.length),
               ],
