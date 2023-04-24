@@ -40,9 +40,9 @@ class DashboardTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(15),
             child: Column(children: [
-              Text('$count', style: const TextStyle(fontSize: 50)),
+              Text('$count', style: const TextStyle(fontSize: 60)),
               Text(name, style: const TextStyle(fontSize: 20))
             ])));
   }
