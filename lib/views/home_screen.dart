@@ -35,34 +35,21 @@ class HomeScreen extends StatelessWidget {
           case 0:
             return DashboardScreen(
               stats: [
-                {
-                  'name': 'Notes',
-                  'count': context.watch<NotesProvider>().notes.length
-                },
-                {
-                  'name': 'Sadness',
-                  'count': context.watch<NotesProvider>().sadness.length
-                },
-                {
-                  'name': 'Joy',
-                  'count': context.watch<NotesProvider>().joy.length
-                },
-                {
-                  'name': 'Love',
-                  'count': context.watch<NotesProvider>().love.length
-                },
-                {
-                  'name': 'Anger',
-                  'count': context.watch<NotesProvider>().anger.length
-                },
-                {
-                  'name': 'Fear',
-                  'count': context.watch<NotesProvider>().fear.length
-                },
-                {
-                  'name': 'Surprise',
-                  'count': context.watch<NotesProvider>().surprise.length
-                },
+                StatData(
+                    2, 2, 'Notes', context.watch<NotesProvider>().notes.length),
+                // Emotion Labels
+                StatData(2, 1, 'Sadness',
+                    context.watch<NotesProvider>().sadness.length),
+                StatData(
+                    1, 2, 'Joy', context.watch<NotesProvider>().joy.length),
+                StatData(
+                    1, 1, 'Love', context.watch<NotesProvider>().love.length),
+                StatData(
+                    2, 2, 'Anger', context.watch<NotesProvider>().anger.length),
+                StatData(
+                    1, 2, 'Fear', context.watch<NotesProvider>().fear.length),
+                StatData(1, 1, 'Surprise',
+                    context.watch<NotesProvider>().surprise.length),
               ],
             );
           case 1:

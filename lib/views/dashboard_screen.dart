@@ -6,7 +6,7 @@ import 'common.dart';
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key, required this.stats}) : super(key: key);
 
-  final List<Map<String, dynamic>> stats;
+  final List<StatData> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,9 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 ...stats.mapIndexed((index, stat) {
                   return StaggeredGridTile.count(
-                      crossAxisCellCount: 2,
-                      mainAxisCellCount: 2,
-                      child: DashboardTile(
-                          count: stat['count'], name: stat['name']));
+                      crossAxisCellCount: stat.crossAxisCount,
+                      mainAxisCellCount: stat.mainAxisCount,
+                      child: DashboardTile(count: stat.count, name: stat.name));
                 })
               ]),
         ));
@@ -39,31 +38,21 @@ class DashboardTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        top: false,
-        bottom: false,
+    return Card(
         child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                SizedBox(
-                    child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Padding(
-                            padding: const EdgeInsets.all(30),
-                            child: Semantics(
-                                label: name,
-                                child: Column(
-                                  children: [
-                                    Text("$count",
-                                        style: const TextStyle(
-                                            fontSize: 60,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(name,
-                                        style: const TextStyle(fontSize: 30))
-                                  ],
-                                )))))
-              ],
-            )));
+            child: Column(children: [
+              Text('$count', style: const TextStyle(fontSize: 50)),
+              Text(name, style: const TextStyle(fontSize: 20))
+            ])));
   }
+}
+
+class StatData {
+  const StatData(
+      this.crossAxisCount, this.mainAxisCount, this.name, this.count);
+  final int crossAxisCount;
+  final int mainAxisCount;
+  final String name;
+  final int count;
 }
