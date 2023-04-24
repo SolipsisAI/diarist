@@ -33,7 +33,7 @@ DateTime toDateTime(String datestring) {
 }
 
 String toDateString(DateTime datetime) {
-  final _datetime = (datetime);
+  final _datetime = (datetime.toLocal());
   return DateFormat.yMMMEd('en_US').add_jm().format(_datetime);
 }
 
