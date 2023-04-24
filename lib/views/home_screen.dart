@@ -34,7 +34,9 @@ class HomeScreen extends StatelessWidget {
         final pageTitle = getTitleByIndex(controller.selectedIndex);
         switch (controller.selectedIndex) {
           case 0:
-            return DashboardScreen();
+            return DashboardScreen(
+              notesCount: context.watch<NotesProvider>().notes.length,
+            );
           case 1:
             // Main text-editing view
             return NotesScreen(

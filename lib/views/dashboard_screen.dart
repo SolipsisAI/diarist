@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({Key? key, required this.notesCount}) : super(key: key);
+
+  final int notesCount;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Container(
-            child: Column(
-      children: [DashboardTile()],
-    )));
+        child: Column(
+      children: [DashboardTile(notesCount: notesCount)],
+    ));
   }
 }
 
 class DashboardTile extends StatelessWidget {
-  const DashboardTile();
+  const DashboardTile({Key? key, required this.notesCount}) : super(key: key);
+
+  final int notesCount;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Padding(
-      padding: EdgeInsets.all(8),
-      child: Column(children: [Text("Hello")]),
-    ));
+    return Card(
+      child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(children: [
+            Text("$notesCount", style: const TextStyle(fontSize: 50)),
+            const Text("notes", style: TextStyle(fontSize: 25)),
+          ])),
+    );
   }
 }
