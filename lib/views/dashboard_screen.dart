@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'common.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key, required this.stats}) : super(key: key);
@@ -11,22 +10,21 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-        title: 'Dashboard',
-        child: SingleChildScrollView(
-          child: StaggeredGrid.count(
-              crossAxisCount: 4,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              children: [
-                ...stats.mapIndexed((index, stat) {
-                  return StaggeredGridTile.count(
-                      crossAxisCellCount: stat.crossAxisCount,
-                      mainAxisCellCount: stat.mainAxisCount,
-                      child: DashboardTile(count: stat.count, name: stat.name));
-                })
-              ]),
-        ));
+    return Scaffold(
+        body: SingleChildScrollView(
+      child: StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          children: [
+            ...stats.mapIndexed((index, stat) {
+              return StaggeredGridTile.count(
+                  crossAxisCellCount: stat.crossAxisCount,
+                  mainAxisCellCount: stat.mainAxisCount,
+                  child: DashboardTile(count: stat.count, name: stat.name));
+            })
+          ]),
+    ));
   }
 }
 

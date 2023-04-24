@@ -18,10 +18,6 @@ class NotesProvider with ChangeNotifier {
   List<Note> _fear = [];
   List<Note> _surprise = [];
 
-//  final team =
-//    realm.query<Team>('name == \$0', ['Millennium Falcon Crew']).first;
-// final humanCrewMembers = team.crew.query('name != \$0', ['Chewbacca']);
-
   List<Note> get notes => _notes;
 
   // Emotion labels
