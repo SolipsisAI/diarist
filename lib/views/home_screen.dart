@@ -1,10 +1,10 @@
 import 'package:diarist/views/notes_screen.dart';
 import 'package:diarist/views/import_screen.dart';
+import 'package:diarist/views/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:provider/provider.dart';
 import '../components/common_ui.dart';
-import '../models/note.dart';
 import '../provider/notes_provider.dart';
 import '../utils/isolate_utils.dart';
 
@@ -33,8 +33,25 @@ class HomeScreen extends StatelessWidget {
         final pageTitle = getTitleByIndex(controller.selectedIndex);
         switch (controller.selectedIndex) {
           case 0:
-            // TODO: Show list of entries here
-            return const Text("Home");
+            return DashboardScreen(
+              stats: [
+                StatData(
+                    1, 1, 'Notes', context.watch<NotesProvider>().notes.length),
+                // Emotion Labels
+                StatData(1, 1, 'Sadness',
+                    context.watch<NotesProvider>().sadness.length),
+                StatData(
+                    1, 1, 'Joy', context.watch<NotesProvider>().joy.length),
+                StatData(
+                    1, 1, 'Love', context.watch<NotesProvider>().love.length),
+                StatData(
+                    1, 1, 'Anger', context.watch<NotesProvider>().anger.length),
+                StatData(
+                    1, 1, 'Fear', context.watch<NotesProvider>().fear.length),
+                StatData(1, 1, 'Surprise',
+                    context.watch<NotesProvider>().surprise.length),
+              ],
+            );
           case 1:
             // Main text-editing view
             return NotesScreen(
