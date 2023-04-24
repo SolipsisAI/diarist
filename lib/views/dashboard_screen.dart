@@ -11,7 +11,6 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
       children: [
         DashboardTile(count: notesCount, name: "Notes"),
-        DashboardTile(count: 24, name: "Day Streak")
       ],
     ));
   }
