@@ -17,9 +17,9 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(title),
+      // ),
       body: Padding(
         padding: EdgeInsets.only(top: topPadding),
         child: child,

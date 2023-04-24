@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'common.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -42,8 +43,8 @@ class DashboardTile extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(children: [
-              Text('$count', style: const TextStyle(fontSize: 60)),
-              Text(name, style: const TextStyle(fontSize: 20))
+              AutoSizeText('$count', style: const TextStyle(fontSize: 40)),
+              AutoSizeText(name, style: const TextStyle(fontSize: 10))
             ])));
   }
 }
