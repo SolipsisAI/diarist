@@ -35,7 +35,36 @@ class HomeScreen extends StatelessWidget {
         switch (controller.selectedIndex) {
           case 0:
             return DashboardScreen(
-              notesCount: context.watch<NotesProvider>().notes.length,
+              stats: [
+                {
+                  'name': 'Notes',
+                  'count': context.watch<NotesProvider>().notes.length
+                },
+                {
+                  'name': 'Sadness',
+                  'count': context.watch<NotesProvider>().sadness.length
+                },
+                {
+                  'name': 'Joy',
+                  'count': context.watch<NotesProvider>().joy.length
+                },
+                {
+                  'name': 'Love',
+                  'count': context.watch<NotesProvider>().love.length
+                },
+                {
+                  'name': 'Anger',
+                  'count': context.watch<NotesProvider>().anger.length
+                },
+                {
+                  'name': 'Fear',
+                  'count': context.watch<NotesProvider>().fear.length
+                },
+                {
+                  'name': 'Surprise',
+                  'count': context.watch<NotesProvider>().surprise.length
+                },
+              ],
             );
           case 1:
             // Main text-editing view

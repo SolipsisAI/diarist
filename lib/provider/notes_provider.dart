@@ -10,9 +10,29 @@ class NotesProvider with ChangeNotifier {
 
   List<Note> _notes = [];
 
-  List<Note> get notes => _notes;
-  late RealmResults<Note> notesCollection;
+  // Emotion Labels
+  List<Note> _sadness = [];
+  List<Note> _joy = [];
+  List<Note> _love = [];
+  List<Note> _anger = [];
+  List<Note> _fear = [];
+  List<Note> _surprise = [];
 
+//  final team =
+//    realm.query<Team>('name == \$0', ['Millennium Falcon Crew']).first;
+// final humanCrewMembers = team.crew.query('name != \$0', ['Chewbacca']);
+
+  List<Note> get notes => _notes;
+
+  // Emotion labels
+  List<Note> get sadness => _sadness;
+  List<Note> get joy => _joy;
+  List<Note> get love => _love;
+  List<Note> get anger => _anger;
+  List<Note> get fear => _fear;
+  List<Note> get surprise => _surprise;
+
+  late RealmResults<Note> notesCollection;
   late Realm realm;
 
   void init() async {
@@ -20,8 +40,20 @@ class NotesProvider with ChangeNotifier {
     final realmPath = '${dir.path}/default.realm';
     final config = Configuration.local([Note.schema], path: realmPath);
     realm = Realm(config);
+
     notesCollection = realm.query<Note>('TRUEPREDICATE SORT(createdAt DESC)');
+
     _notes = notesCollection.toList();
+
+    _sadness =
+        notesCollection.query('emotionLabel = \$0', ['sadness']).toList();
+    _joy = notesCollection.query('emotionLabel = \$0', ['joy']).toList();
+    _love = notesCollection.query('emotionLabel = \$0', ['love']).toList();
+    _anger = notesCollection.query('emotionLabel = \$0', ['anger']).toList();
+    _fear = notesCollection.query('emotionLabel = \$0', ['fear']).toList();
+    _surprise =
+        notesCollection.query('emotionLabel = \$0', ['surprise']).toList();
+
     notifyListeners();
   }
 

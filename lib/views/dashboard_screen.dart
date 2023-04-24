@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({Key? key, required this.notesCount}) : super(key: key);
+  const DashboardScreen({Key? key, required this.stats}) : super(key: key);
 
-  final int notesCount;
+  final List<Map<String, dynamic>> stats;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(
-      children: [
-        DashboardTile(count: notesCount, name: "Notes"),
-      ],
+      children: stats
+          .map((s) => DashboardTile(count: s['count'], name: s['name']))
+          .toList(),
     ));
   }
 }
