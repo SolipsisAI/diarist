@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'common.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key, required this.stats}) : super(key: key);
@@ -7,12 +10,23 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-      children: stats
-          .map((s) => DashboardTile(count: s['count'], name: s['name']))
-          .toList(),
-    ));
+    return AppScaffold(
+        title: 'Dashboard',
+        child: SingleChildScrollView(
+          child: StaggeredGrid.count(
+              crossAxisCount: 4,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              children: [
+                ...stats.mapIndexed((index, stat) {
+                  return StaggeredGridTile.count(
+                      crossAxisCellCount: 2,
+                      mainAxisCellCount: 2,
+                      child: DashboardTile(
+                          count: stat['count'], name: stat['name']));
+                })
+              ]),
+        ));
   }
 }
 
