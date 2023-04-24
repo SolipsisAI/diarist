@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:provider/provider.dart';
 import '../components/common_ui.dart';
-import '../models/note.dart';
 import '../provider/notes_provider.dart';
 import '../utils/isolate_utils.dart';
 
