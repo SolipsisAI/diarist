@@ -33,7 +33,7 @@ class NotesProvider with ChangeNotifier {
       realm.add(note);
     });
 
-    _notes.insert(0, note);
+    _notes = notesCollection.toList();
     notifyListeners();
 
     return note;
