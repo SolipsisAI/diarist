@@ -9,15 +9,17 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(
-      children: [DashboardTile(notesCount: notesCount)],
+      children: [DashboardTile(count: notesCount, name: "Notes")],
     ));
   }
 }
 
 class DashboardTile extends StatelessWidget {
-  const DashboardTile({Key? key, required this.notesCount}) : super(key: key);
+  const DashboardTile({Key? key, required this.count, required this.name})
+      : super(key: key);
 
-  final int notesCount;
+  final int count;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,8 @@ class DashboardTile extends StatelessWidget {
       child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            Text("$notesCount", style: const TextStyle(fontSize: 50)),
-            const Text("notes", style: TextStyle(fontSize: 25)),
+            Text("$count", style: const TextStyle(fontSize: 50)),
+            Text(name, style: const TextStyle(fontSize: 25)),
           ])),
     );
   }
