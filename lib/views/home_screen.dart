@@ -1,5 +1,6 @@
 import 'package:diarist/views/notes_screen.dart';
 import 'package:diarist/views/import_screen.dart';
+import 'package:diarist/views/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +34,7 @@ class HomeScreen extends StatelessWidget {
         final pageTitle = getTitleByIndex(controller.selectedIndex);
         switch (controller.selectedIndex) {
           case 0:
-            // TODO: Show list of entries here
-            return const Text("Home");
+            return DashboardScreen();
           case 1:
             // Main text-editing view
             return NotesScreen(
