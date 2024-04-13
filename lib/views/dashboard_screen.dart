@@ -13,9 +13,9 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         body: SingleChildScrollView(
       child: StaggeredGrid.count(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
+          crossAxisCount: 3,
+          mainAxisSpacing: 3,
+          crossAxisSpacing: 3,
           children: [
             ...stats.mapIndexed((index, stat) {
               return StaggeredGridTile.count(
@@ -41,7 +41,7 @@ class DashboardTile extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(children: [
-              AutoSizeText('$count', style: const TextStyle(fontSize: 40)),
+              AutoSizeText('$count', style: const TextStyle(fontSize: 20)),
               AutoSizeText(name, style: const TextStyle(fontSize: 10))
             ])));
   }
