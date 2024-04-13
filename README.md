@@ -17,7 +17,8 @@ This is the Flutter app for Diarist.
 - [Troubleshooting](#troubleshooting)
   - [`numpy` not found](#numpy-not-found)
 
-![screenshots/ios-screenshot.png]
+# Screenshots
+![ios](screenshots/ios-screenshot.png)
 
 # Development
 
